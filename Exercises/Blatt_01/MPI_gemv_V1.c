@@ -87,8 +87,8 @@ int main(int argc, char **argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     // Define scalar values
-    double alpha = 1;
-    double beta = 1;
+    double alpha = 3;
+    double beta = 5;
 
     // Define dimensions of matrix A
     struct Matrix A;
