@@ -59,36 +59,38 @@ mesh *create_rect_mesh(index m, index n) {
             index edge_right = nof_h_edges + i * nodes_per_row + (j + 1);
             index edge_diag = nof_h_edges + nof_v_edges + i * n + j;
 
-            // Dummy affiliation
-            index affiliation = 0;
+            // For elements: store the process number in the empty_aff field
+            // For boundaries and fixed edges: leave the empty_aff empty
+            index process = i * n + j;
+            index empty_aff = 0;
 
             // Write elements
             index elem_index = (i * n + j) * 2;
             write_elem(new_mesh, elem_index, node_bl1, node_br2, node_tr3,
-                       edge_bottom, edge_right, edge_diag, affiliation);
+                       edge_bottom, edge_right, edge_diag, process);
             write_elem(new_mesh, elem_index + 1, node_bl1, node_tr3, node_tl4,
-                       edge_diag, edge_top, edge_left, affiliation);
+                       edge_diag, edge_top, edge_left, process);
 
             // Treat boundaries
             if (i == 0) { // Dirichlet
                 index bdry_index = j;
-                write_bdry(new_mesh, bdry_index, node_bl1, node_br2, edge_bottom, affiliation);
+                write_bdry(new_mesh, bdry_index, node_bl1, node_br2, edge_bottom, empty_aff);
                 write_edge(new_mesh, edge_bottom, node_bl1, node_br2);
-                write_fixed(new_mesh, node_bl1, node_br2, edge_bottom, affiliation);
+                write_fixed(new_mesh, node_bl1, node_br2, edge_bottom, empty_aff);
             }
             if (i == m-1) {
                 index bdry_index = n + 2 * m + j;
-                write_bdry(new_mesh, bdry_index, node_tr3, node_tl4, edge_top, affiliation);
+                write_bdry(new_mesh, bdry_index, node_tr3, node_tl4, edge_top, empty_aff);
             }
             if (j == 0) { // Dirichlet
                 index bdry_index = n + i * 2;
-                write_bdry(new_mesh, bdry_index, node_bl1, node_tl4, edge_left, affiliation);
+                write_bdry(new_mesh, bdry_index, node_bl1, node_tl4, edge_left, empty_aff);
                 write_edge(new_mesh, edge_left, node_bl1, node_tl4);
-                write_fixed(new_mesh, node_bl1, node_tl4, edge_left, affiliation);
+                write_fixed(new_mesh, node_bl1, node_tl4, edge_left, empty_aff);
             }
             if (j == n-1) {
                 index bdry_index = n + i * 2 + 1;
-                write_bdry(new_mesh, bdry_index, node_br2, node_tr3, edge_right, affiliation);
+                write_bdry(new_mesh, bdry_index, node_br2, node_tr3, edge_right, empty_aff);
             }
 
             // Write edges
