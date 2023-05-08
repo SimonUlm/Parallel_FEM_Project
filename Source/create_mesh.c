@@ -1,45 +1,21 @@
 #include "hpc.h"
-#include <stdio.h>
 
+// Declare help functions
 void write_elem(mesh *wMesh, index elem,
                 index n1, index n2, index n3,
                 index m1, index m2, index m3,
-                index t1) {
-    wMesh->elem[elem * 7] = n1;
-    wMesh->elem[elem * 7 + 1] = n2;
-    wMesh->elem[elem * 7 + 2] = n3;
-    wMesh->elem[elem * 7 + 3] = m1;
-    wMesh->elem[elem * 7 + 4] = m2;
-    wMesh->elem[elem * 7 + 5] = m3;
-    wMesh->elem[elem * 7 + 6] = t1;
-}
-
+                index t1);
 void write_bdry(mesh *wMesh, index bdry,
                 index n1, index n2,
-                index m1, index t1) {
-    wMesh->bdry[bdry * 4] = n1;
-    wMesh->bdry[bdry * 4 + 1] = n2;
-    wMesh->bdry[bdry * 4 + 2] = m1;
-    wMesh->bdry[bdry * 4 + 3] = t1;
-}
-
-void write_edge(mesh *wMesh, index edge, index n1, index n2) {
-    wMesh->edge2no[edge * 2] = n1;
-    wMesh->edge2no[edge * 2 + 1] = n2;
-}
-
+                index m1, index t1);
+void write_edge(mesh *wMesh, index edge, index n1, index n2);
 void write_fixed(mesh *wMesh,
                  index n1, index n2,
-                 index m1, index t1) {
-    static index fixed = 0;
-    wMesh->fixed[fixed * 4] = n1;
-    wMesh->fixed[fixed * 4 + 1] = n2;
-    wMesh->fixed[fixed * 4 + 2] = m1;
-    wMesh->fixed[fixed * 4 + 3] = t1;
-    fixed++;
-}
+                 index m1, index t1);
 
 
+
+// Main
 mesh *create_rect_mesh(index m, index n) {
     index ncoord = ((m + 1) * (n + 1));
     index nelem = 2 * m * n;
@@ -123,6 +99,47 @@ mesh *create_rect_mesh(index m, index n) {
     }
 
     return new_mesh;
+}
+
+
+
+// Define help functions
+void write_elem(mesh *wMesh, index elem,
+                index n1, index n2, index n3,
+                index m1, index m2, index m3,
+                index t1) {
+    wMesh->elem[elem * 7] = n1;
+    wMesh->elem[elem * 7 + 1] = n2;
+    wMesh->elem[elem * 7 + 2] = n3;
+    wMesh->elem[elem * 7 + 3] = m1;
+    wMesh->elem[elem * 7 + 4] = m2;
+    wMesh->elem[elem * 7 + 5] = m3;
+    wMesh->elem[elem * 7 + 6] = t1;
+}
+
+void write_bdry(mesh *wMesh, index bdry,
+                index n1, index n2,
+                index m1, index t1) {
+    wMesh->bdry[bdry * 4] = n1;
+    wMesh->bdry[bdry * 4 + 1] = n2;
+    wMesh->bdry[bdry * 4 + 2] = m1;
+    wMesh->bdry[bdry * 4 + 3] = t1;
+}
+
+void write_edge(mesh *wMesh, index edge, index n1, index n2) {
+    wMesh->edge2no[edge * 2] = n1;
+    wMesh->edge2no[edge * 2 + 1] = n2;
+}
+
+void write_fixed(mesh *wMesh,
+                 index n1, index n2,
+                 index m1, index t1) {
+    static index fixed = 0;
+    wMesh->fixed[fixed * 4] = n1;
+    wMesh->fixed[fixed * 4 + 1] = n2;
+    wMesh->fixed[fixed * 4 + 2] = m1;
+    wMesh->fixed[fixed * 4 + 3] = t1;
+    fixed++;
 }
 
 
