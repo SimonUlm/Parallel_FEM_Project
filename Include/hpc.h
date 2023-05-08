@@ -191,6 +191,9 @@ printIGeMatrix(size_t m, size_t n,
                const size_t *A,
                ptrdiff_t incRowA, ptrdiff_t incColA);
 
+mesh *
+create_rect_mesh(index m, index n);
+
 
 
 #define HPC_MAX(a,b) (((a) > (b)) ? (a) : (b))
