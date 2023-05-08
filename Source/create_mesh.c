@@ -36,7 +36,6 @@ void write_fixed(mesh *wMesh,
     wMesh->fixed[fixed * 4 + 1] = n2;
     wMesh->fixed[fixed * 4 + 2] = m1;
     wMesh->fixed[fixed * 4 + 3] = t1;
-    printf("%li\n", fixed);
     fixed++;
 }
 
