@@ -55,7 +55,8 @@ HPC = \
  mesh_util.o \
  blas_level1.o \
  blas_level2.o \
- blas_aux.o
+ blas_aux.o \
+ create_mesh.o
 
 
 $(HPC): ../Include/hpc.h Makefile
