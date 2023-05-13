@@ -1,4 +1,5 @@
 #include "hpc.h"
+#include "Mesh.hpp"
 
 
 int main() {
@@ -10,4 +11,7 @@ int main() {
     mesh *newMesh = create_rect_mesh(m, n);
 
     mesh_print(newMesh, brief);
+
+    using namespace Meshes;
+
 }
