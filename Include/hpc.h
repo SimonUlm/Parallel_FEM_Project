@@ -11,7 +11,7 @@
 
 #include <stdbool.h>
 
-#include "Mesh.hpp"
+#include "mesh.hpp"
 
 #define index ptrdiff_t
 
@@ -86,7 +86,7 @@ mesh *mesh_free (mesh *M);
 mesh *mesh_load (char *fname);
 index *mesh_getFixed(const index nCoord, const index *bdry, 
                      const index nBdry, index *nFixed);
-index mesh_print (const Mesh::RectangularMesh *M, index brief);
+index mesh_print (const Mesh::RectangularMesh &M, index brief);
 mesh *mesh_refine(const mesh *In);
 index mesh_getEdge2no(const index nElem, const index *Elem, 
                       index *nEdges, index** edge2no);

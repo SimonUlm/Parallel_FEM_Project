@@ -1,5 +1,5 @@
 #include "hpc.h"
-#include "Mesh.hpp"
+#include "mesh.hpp"
 
 using namespace Mesh;
 
@@ -10,5 +10,6 @@ int main() {
     index brief = 0;
 
     RectangularMesh coarse_mesh(m, n);
-    mesh_print(&coarse_mesh, brief);
+    coarse_mesh.create();
+    mesh_print(coarse_mesh, brief);
 }
