@@ -1,7 +1,10 @@
 #include "hpc.h"
+#include "Mesh.hpp"
+
+using namespace Mesh;
 
 // Print mesh information
-index mesh_print(const mesh *M, index brief) {
+index mesh_print(const RectangularMesh *M, index brief) {
     // Aux variables
     index j, k, ncoord, nelem, nbdry, nfixed, *Elem, *Bdry, *Fixed, total;
     double *Coord;
@@ -68,7 +71,7 @@ index mesh_print(const mesh *M, index brief) {
         }
     }
 
-    // If there are fixed nodes (usually dirichlet nodes) print them
+    // If there are fixed_nodes nodes (usually dirichlet nodes) print them
     if (nfixed) {
         printf("\nFixed Nodes:\n");
         for (j = 0; j < nfixed; j++) {
