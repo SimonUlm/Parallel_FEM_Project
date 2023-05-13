@@ -30,7 +30,7 @@ mesh *mesh_alloc_with_edges(index ncoord, index nelem, index nbdry, index nedges
     M->elem = (index *) malloc(nelem * 7 * sizeof(index));
     M->bdry = (index *) malloc(nbdry * 4 * sizeof(index));
     M->edge2no = (index *) malloc(nedges * 2 * sizeof(index));
-    M->fixed = (index *) malloc(nfixed * 4 * sizeof(index));
+    M->fixed = (index *) malloc(nfixed * sizeof(index));
     return ((!M->coord || !M->elem || !M->bdry) ? mesh_free(M) : M);
 }
 

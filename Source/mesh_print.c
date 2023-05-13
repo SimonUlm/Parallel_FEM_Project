@@ -82,20 +82,6 @@ index mesh_print(const mesh *M, index brief) {
         }
     }
 
-    // Print fixed edges (new)
-    printf("\nFixed Edges:\n");
-    printf("Endpoints (n1, n2), Edge Number (ed1), Type\n");
-    for (j = 0; j < nfixed; j++) {
-        for (k = 0; k < 4; k++) {
-            printf(" %zu", Fixed[4 * j + k]);
-        }
-        printf("\n");
-        if (brief && j > 10) {
-            printf("  ...\n");
-            break;
-        }
-    }
-
     // Print overall storage requirements
     printf("\nMemory\n");
     printf("Coordinates : %12zu Byte\n", ncoord * 2 * sizeof(double));

@@ -9,9 +9,7 @@ void write_bdry(mesh *wMesh, index bdry,
                 index n1, index n2,
                 index m1, index t1);
 void write_edge(mesh *wMesh, index edge, index n1, index n2);
-void write_fixed(mesh *wMesh,
-                 index n1, index n2,
-                 index m1, index t1);
+void write_fixed(mesh *wMesh, index n);
 
 
 
@@ -22,7 +20,7 @@ mesh *create_rect_mesh(index m, index n)
     index nelem = 2 * m * n;
     index nedges = 3 * m * n + m + n;
     index nbdry = 2 * (m + n);
-    index nfixed = m + n;
+    index nfixed = m + n + 1;
 
     mesh *new_mesh = mesh_alloc_with_edges(ncoord, nelem, nbdry, nedges, nfixed);
 
@@ -31,7 +29,6 @@ mesh *create_rect_mesh(index m, index n)
     index nof_h_edges = (m + 1) * n; // number of horizontal edges
     index nof_v_edges = m * (n + 1); // number of vertical edges
     index nodes_per_row = n + 1;
-    index coords_per_row = nodes_per_row * 2;
 
     // Iterating over rectangles (2 elements at a time)
     for (index i = 0; i < m; ++i) {
@@ -41,28 +38,35 @@ mesh *create_rect_mesh(index m, index n)
             double x = 0;
             double y = 0;
             if (i == 0 && j == 0) {
-            	// Write first node of rectangle
-            	new_mesh->coord[0] = x;
-            	new_mesh->coord[1] = y;
+            	// Write bottom left node of rectangle for root rectangle
+                node_index = 0;
+            	new_mesh->coord[node_index * 2] = x;
+            	new_mesh->coord[node_index * 2 + 1] = y;
+                write_fixed(new_mesh, node_index);
             }
             
             if (j == 0) {
-            	// Write upper left node for first rectangle in row
-            	new_mesh->coord[coords_per_row * (i+1)] = x;
-            	new_mesh->coord[coords_per_row * (i+1) + 1] = (double) (i+1) / m;
+            	// Write top left node for first column
+                node_index = nodes_per_row * (i+1);
+            	new_mesh->coord[node_index * 2] = x;
+            	new_mesh->coord[node_index * 2 + 1] = (double) (i+1) / m;
+                write_fixed(new_mesh, node_index);
             }
             
             if (i == 0) {
-            	// Write lower right node for first rectangle in column
-            	new_mesh->coord[(j+1) * 2] = (double) (j+1) / n;
-            	new_mesh->coord[(j+1) * 2 + 1] = y;
+            	// Write bottom right node for first row
+                node_index = j + 1;
+            	new_mesh->coord[node_index * 2] = (double) (j+1) / n;
+            	new_mesh->coord[node_index * 2 + 1] = y;
+                write_fixed(new_mesh, node_index);
             }
             
             // Write upper right node for each rectangle
             x = (double) (j+1) / n;
             y = (double) (i+1) / m;
-            new_mesh->coord[coords_per_row * (i+1) + (j+1) * 2] = x;
-            new_mesh->coord[coords_per_row * (i+1) + (j+1) * 2 + 1] = y;
+            node_index = nodes_per_row * (i+1) + (j+1);
+            new_mesh->coord[node_index * 2] = x;
+            new_mesh->coord[node_index * 2 + 1] = y;
 
 
             // Four nodes numbers
@@ -95,7 +99,6 @@ mesh *create_rect_mesh(index m, index n)
                 index bdry_index = j;
                 write_bdry(new_mesh, bdry_index, node_bl1, node_br2, edge_bottom, empty_aff);
                 write_edge(new_mesh, edge_bottom, node_bl1, node_br2);
-                write_fixed(new_mesh, node_bl1, node_br2, edge_bottom, empty_aff);
             }
             if (i == m-1) {
                 index bdry_index = n + 2 * m + j;
@@ -105,7 +108,6 @@ mesh *create_rect_mesh(index m, index n)
                 index bdry_index = n + i * 2;
                 write_bdry(new_mesh, bdry_index, node_bl1, node_tl4, edge_left, empty_aff);
                 write_edge(new_mesh, edge_left, node_bl1, node_tl4);
-                write_fixed(new_mesh, node_bl1, node_tl4, edge_left, empty_aff);
             }
             if (j == n-1) {
                 index bdry_index = n + i * 2 + 1;
@@ -155,15 +157,10 @@ void write_edge(mesh *wMesh, index edge, index n1, index n2)
     wMesh->edge2no[edge * 2 + 1] = n2;
 }
 
-void write_fixed(mesh *wMesh,
-                 index n1, index n2,
-                 index m1, index t1) 
+void write_fixed(mesh *wMesh, index n)
 {
     static index fixed = 0;
-    wMesh->fixed[fixed * 4] = n1;
-    wMesh->fixed[fixed * 4 + 1] = n2;
-    wMesh->fixed[fixed * 4 + 2] = m1;
-    wMesh->fixed[fixed * 4 + 3] = t1;
+    wMesh->fixed[fixed] = n;
     fixed++;
 }
 
