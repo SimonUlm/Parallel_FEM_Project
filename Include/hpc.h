@@ -11,7 +11,9 @@
 
 #include <stdbool.h>
 
-#define index ptrdiff_t
+#include <mpi.h>
+
+#define index int
 
 
 // =================== primary HPC routines and data structures ================
@@ -193,6 +195,12 @@ printIGeMatrix(size_t m, size_t n,
 
 mesh *
 create_rect_mesh(index m, index n);
+
+mesh *
+scatter_mesh(mesh *global_mesh, MPI_Comm comm, int rank, int nof_processes);
+
+void
+print_mpi(mesh *mesh_data, MPI_Comm comm, int rank, int nof_processes, int brief);
 
 
 
