@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "hpc.h"
 #include "mesh.hpp"
 
@@ -9,7 +11,8 @@ int main() {
 
     index brief = 0;
 
-    RectangularMesh coarse_mesh(m, n);
-    coarse_mesh.create();
-    mesh_print(coarse_mesh, brief);
+    RectangularMesh mesh(m, n);
+    mesh.create();
+    mesh.refine();
+    mesh_print(mesh, brief);
 }
