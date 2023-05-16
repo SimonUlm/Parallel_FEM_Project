@@ -2,7 +2,7 @@
 
 // Allocate mesh data structure
 mesh *mesh_alloc(index ncoord, index nelem, index nbdry) {
-    mesh *M = (mesh*) malloc(sizeof(mesh));  /* allocate the mesh struct */
+    mesh *M = malloc(sizeof(mesh));  /* allocate the mesh struct */
     if (!M) return (NULL);                    /* out of memory */
     M->ncoord = ncoord;
     M->nelem = nelem;
@@ -17,9 +17,9 @@ mesh *mesh_alloc(index ncoord, index nelem, index nbdry) {
     return ((!M->coord || !M->elem || !M->bdry) ? mesh_free(M) : M);
 }
 
-// Allocate mesh data structure with edges and fixed_nodes
+// Allocate mesh data structure with edges and fixed
 mesh *mesh_alloc_with_edges(index ncoord, index nelem, index nbdry, index nedges, index nfixed) {
-    mesh *M = (mesh *) malloc(sizeof(mesh));  /* allocate the mesh struct */
+    mesh *M = malloc(sizeof(mesh));  /* allocate the mesh struct */
     if (!M) return (NULL);                    /* out of memory */
     M->ncoord = ncoord;
     M->nelem = nelem;

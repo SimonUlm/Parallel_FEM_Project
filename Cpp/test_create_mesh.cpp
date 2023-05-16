@@ -1,7 +1,7 @@
 #include <cstdio>
 
-#include "hpc.h"
-#include "mesh.hpp"
+#include "Include/hpc.hpp"
+#include "Include/mesh.hpp"
 
 using namespace Mesh;
 

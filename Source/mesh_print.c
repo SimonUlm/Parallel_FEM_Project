@@ -1,23 +1,26 @@
 #include "hpc.h"
-#include "mesh.hpp"
-
-using namespace Mesh;
 
 // Print mesh information
-index mesh_print(const RectangularMesh &M, index brief) {
+index mesh_print(const mesh *M, index brief) {
     // Aux variables
     index j, k, ncoord, nelem, nbdry, nfixed, *Elem, *Bdry, *Fixed, total;
     double *Coord;
 
+    // Check if mesh is given
+    if (!M) {
+        printf("(null)\n");
+        return (0);
+    }
+
     // Assign mesh attributes locally
-    ncoord = M.nodes.count;
-    nelem = M.elements.count;
-    nbdry = M.boundary.count;
-    nfixed = M.fixed_nodes.count;
-    Coord = &M.nodes(0).x;
-    Elem = &M.elements(0).n1;
-    Bdry = &M.boundary(0).n1;
-    Fixed = &M.fixed_nodes(0);
+    ncoord = M->ncoord;
+    nelem = M->nelem;
+    nbdry = M->nbdry;
+    nfixed = M->nfixed;
+    Coord = M->coord;
+    Elem = M->elem;
+    Bdry = M->bdry;
+    Fixed = M->fixed;
 
     // Start printing
     printf("\n=========== Print Mesh Data ===========\n");
@@ -65,7 +68,7 @@ index mesh_print(const RectangularMesh &M, index brief) {
         }
     }
 
-    // If there are fixed_nodes nodes (usually dirichlet nodes) print them
+    // If there are fixed nodes (usually dirichlet nodes) print them
     if (nfixed) {
         printf("\nFixed Nodes:\n");
         for (j = 0; j < nfixed; j++) {
@@ -84,9 +87,9 @@ index mesh_print(const RectangularMesh &M, index brief) {
     printf("Coordinates : %12zu Byte\n", ncoord * 2 * sizeof(double));
     printf("Elements    : %12zu Byte\n", nelem * 7 * sizeof(index));
     printf("Boundary    : %12zu Byte\n", nbdry * 4 * sizeof(index));
-    printf("Edge2no     : %12zu Byte\n", M.edges.count* 2 * sizeof(index));
+    printf("Edge2no     : %12zu Byte\n", M->nedges * 2 * sizeof(index));
     total = ncoord * 2 * sizeof(double)
-            + (7 * nelem + 4 * nbdry + M.edges.count * 2) * sizeof(index);
+            + (7 * nelem + 4 * nbdry + M->nedges * 2) * sizeof(index);
     printf("Total       : %12.6g MByte\n", (double) total / 1024. / 1024.);
 
     return (1);

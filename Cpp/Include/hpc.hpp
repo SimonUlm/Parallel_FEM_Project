@@ -11,6 +11,8 @@
 
 #include <stdbool.h>
 
+#include "mesh.hpp"
+
 #define index ptrdiff_t
 
 
@@ -51,7 +53,7 @@ typedef struct mesh_data  /* mesh */
     index nelem ;     /* number of elements                                */
     index nedges ;    /* number of edges                                   */
     index nbdry ;     /* number of boundary elements                       */
-    index nfixed;     /* number of fixed nodes                             */
+    index nfixed;     /* number of fixed_nodes nodes                             */
     double *coord ;   /* coordinates (x1,y1,x2,y2, ... ,x_ncoord,y_ncoord) */
     index *elem ;     /* elements ([n1,n2,n3,m1,m2,m3,t1], ... )           */
     index *bdry ;     /* bdry ([n1,n2,m1,t1], [n3,n4,m2,t2], ...)          */
@@ -84,7 +86,7 @@ mesh *mesh_free (mesh *M);
 mesh *mesh_load (char *fname);
 index *mesh_getFixed(const index nCoord, const index *bdry, 
                      const index nBdry, index *nFixed);
-index mesh_print (const mesh *M, index brief);
+index mesh_print (const Mesh::RectangularMesh &M, index brief);
 mesh *mesh_refine(const mesh *In);
 index mesh_getEdge2no(const index nElem, const index *Elem, 
                       index *nEdges, index** edge2no);
@@ -190,9 +192,6 @@ void
 printIGeMatrix(size_t m, size_t n,
                const size_t *A,
                ptrdiff_t incRowA, ptrdiff_t incColA);
-
-mesh *
-create_rect_mesh(index m, index n);
 
 
 
