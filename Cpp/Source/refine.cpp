@@ -1,4 +1,4 @@
-#include "../Include/mesh.hpp"
+#include "mesh.hpp"
 
 namespace Mesh{
 
@@ -19,9 +19,6 @@ namespace Mesh{
                     + nodes(edges(i).n2)) * 0.5;
 
         // Create new elements
-        long succeeding[3] = {1, 2, 0};
-        long preceeding[3] = {2, 0, 1};
-        //
         for (long i = 0; i < elements.count; ++i) {
             // old element
             Element element = elements(i);

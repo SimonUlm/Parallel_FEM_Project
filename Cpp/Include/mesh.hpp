@@ -1,10 +1,9 @@
 #ifndef HPC2_MESH_HPP
 #define HPC2_MESH_HPP
 
-#include <cstdio>
-
 #include <algorithm>
 #include <cassert>
+
 
 using namespace std;
 
@@ -196,6 +195,9 @@ namespace Mesh{
 
         // Defined in refine.cpp
         void refine();
+
+        // Defined in print.cpp
+        void print();
     };
 }
 
