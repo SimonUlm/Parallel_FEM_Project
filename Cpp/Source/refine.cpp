@@ -30,16 +30,16 @@ namespace Mesh{
                     element.get_m(k) + nodes.count, // n2
                     element.get_predecessor_m(k) + nodes.count, // n3
                     element.get_m(k) * 2 + (element.get_n(k) > element.get_successor_n(k)), // m1
-                    edges.count * 2 + i * 3 + k, // m2
+                    edges.count * 2 + i * 3 + k - 1, // m2
                     element.get_predecessor_m(k) * 2 + (element.get_n(k) > element.get_predecessor_n(k)), // m3
                     element.t // t
                 };
 
             // new inner triangle
             new_mesh.elements(4*i+3) = Element{
-                element.m1, // n1
-                element.m2, // n2
-                element.m3, // n3
+                element.m1 + nodes.count, // n1
+                element.m2 + nodes.count, // n2
+                element.m3 + nodes.count, // n3
                 edges.count * 2 + i * 3 + 1, // m1
                 edges.count * 2 + i * 3 + 2, // m2
                 edges.count * 2 + i * 3 + 0, // m3

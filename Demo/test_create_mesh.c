@@ -8,6 +8,7 @@ int main() {
     index brief = 0;
 
     mesh *newMesh = create_rect_mesh(m, n);
+    mesh *refined = mesh_refine(newMesh);
 
-    mesh_print(newMesh, brief);
+    mesh_print(refined, brief);
 }

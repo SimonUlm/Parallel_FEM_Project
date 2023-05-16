@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "mesh.hpp"
 
 namespace Mesh {
