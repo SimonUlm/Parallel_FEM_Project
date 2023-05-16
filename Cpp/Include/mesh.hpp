@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <mpi.h>
+
 
 
 using namespace std;
@@ -125,6 +127,9 @@ namespace Mesh{
     public:
         long count;
 
+        explicit List() :
+                count(0), data(nullptr) {
+        }
         explicit List(long count) :
                 count(count), data(nullptr) {
             if (count != 0)
@@ -134,7 +139,7 @@ namespace Mesh{
             delete [] data;
         }
         List(const List &) = delete;
-        List & operator=(const List &) = delete;
+        List & operator=(const List &other) = delete;
 
         T & operator()(long index) const {
             assert(index < count || index == 0);
@@ -165,6 +170,9 @@ namespace Mesh{
         List<BoundaryEdge> boundary;
         List<long> fixed_nodes;
 
+        RectangularMesh() :
+                m(0), n(0) {
+        }
         RectangularMesh(long m, long n) :
                 m(m), n(n),
                 nodes((m + 1) * (n + 1)), elements(2 * m * n), edges(3 * m * n + m + n),
@@ -176,8 +184,15 @@ namespace Mesh{
                 boundary(nbdry), fixed_nodes(0) {
         }
         //~RectangularMesh() {
-            //printf("Destructor called with m = %ld, n = %ld\n", m, n);
+        //    printf("Destructor called with m = %ld, n = %ld\n", m, n);
         //}
+        RectangularMesh & operator=(const RectangularMesh &other) = delete;
+
+        RectangularMesh & operator=(RectangularMesh &&other) noexcept {
+            swap(*this, other);
+            return *this;
+        }
+        RectangularMesh(const RectangularMesh &) = delete;
 
         // Used to replace coarse mesh by fine mesh in refine.cpp
         friend void swap(RectangularMesh &left, RectangularMesh &right) {
@@ -198,7 +213,15 @@ namespace Mesh{
 
         // Defined in print.cpp
         void print();
+
+        // Defined in scatter.cpp
+        void scatter(RectangularMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem);
     };
 }
+
+
+
+// Other declarations
+void mpi_print_serial(Mesh::RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_processes);
 
 #endif //HPC2_MESH_HPP
