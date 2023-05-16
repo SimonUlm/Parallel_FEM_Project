@@ -70,6 +70,6 @@ namespace Mesh{
         }
 
         // Write refined mesh to current object, while the coarse mesh gets destructed
-        swap(*this, new_mesh);
+        *this = std::move(new_mesh);
     }
 }

@@ -7,8 +7,6 @@
 
 
 
-using namespace std;
-
 namespace Mesh{
 
     struct Node {
@@ -29,7 +27,7 @@ namespace Mesh{
         long m1, m2, m3;
         long t;
 
-        long get_n(long n) {
+        long get_n(long n) const {
             switch (n) {
                 case 1:
                     return n1;
@@ -42,7 +40,7 @@ namespace Mesh{
             }
         }
 
-        long get_successor_n(long n) {
+        long get_successor_n(long n) const {
             switch (n) {
                 case 1:
                     return n2;
@@ -55,7 +53,7 @@ namespace Mesh{
             }
         }
 
-        long get_predecessor_n(long n) {
+        long get_predecessor_n(long n) const {
             switch (n) {
                 case 1:
                     return n3;
@@ -68,7 +66,7 @@ namespace Mesh{
             }
         }
 
-        long get_m(long m) {
+        long get_m(long m) const {
             switch (m) {
                 case 1:
                     return m1;
@@ -81,7 +79,7 @@ namespace Mesh{
             }
         }
 
-        long get_successor_m(long m) {
+        long get_successor_m(long m) const {
             switch (m) {
                 case 1:
                     return m2;
@@ -94,7 +92,7 @@ namespace Mesh{
             }
         }
 
-        long get_predecessor_m(long m) {
+        long get_predecessor_m(long m) const {
             switch (m) {
                 case 1:
                     return m3;
@@ -138,23 +136,26 @@ namespace Mesh{
         ~List() {
             delete [] data;
         }
+        List(List &&) = delete;
         List(const List &) = delete;
-        List & operator=(const List &other) = delete;
+
+        List & operator=(List &&other) noexcept {
+            delete [] data;
+            data = other.data;
+            count = other.count;
+            other.data = nullptr;
+            other.count = 0;
+            return *this;
+        }
+        List & operator=(const List &) = delete;
 
         T & operator()(long index) const {
             assert(index < count || index == 0);
             return data[index];
         }
-
         T & operator()(long index) {
             assert(index < count || index == 0);
             return data[index];
-        }
-
-        // Used to replace coarse mesh by fine mesh in refine.cpp
-        friend void swap(List &left, List &right) {
-            std::swap(left.data, right.data);
-            std::swap(left.count, right.count);
         }
     };
 
@@ -183,27 +184,20 @@ namespace Mesh{
                 nodes(nnodes), elements(nelem), edges(0),
                 boundary(nbdry), fixed_nodes(0) {
         }
-        //~RectangularMesh() {
-        //    printf("Destructor called with m = %ld, n = %ld\n", m, n);
-        //}
-        RectangularMesh & operator=(const RectangularMesh &other) = delete;
-
-        RectangularMesh & operator=(RectangularMesh &&other) noexcept {
-            swap(*this, other);
-            return *this;
-        }
+        RectangularMesh(RectangularMesh &&) = delete;
         RectangularMesh(const RectangularMesh &) = delete;
 
-        // Used to replace coarse mesh by fine mesh in refine.cpp
-        friend void swap(RectangularMesh &left, RectangularMesh &right) {
-            swap(left.m, right.m);
-            swap(left.n, right.n);
-            swap(left.nodes, right.nodes);
-            swap(left.elements, right.elements);
-            swap(left.edges, right.edges);
-            swap(left.boundary, right.boundary);
-            swap(left.fixed_nodes, right.fixed_nodes);
+        RectangularMesh & operator=(RectangularMesh &&other) noexcept {
+            m = other.m;
+            n = other.n;
+            nodes = std::move(other.nodes);
+            elements = std::move(other.elements);
+            edges = std::move(other.edges);
+            boundary = std::move(other.boundary);
+            fixed_nodes = std::move(other.fixed_nodes);
+            return *this;
         }
+        RectangularMesh & operator=(const RectangularMesh &) = delete;
 
         // Defined in create.cpp
         void create();
