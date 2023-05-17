@@ -2,7 +2,7 @@
 
 namespace Mesh{
 
-    void RectangularMesh::refine() {
+    void RectangularMesh::Refine() {
         // Allocate new mesh
         long nnodes = nodes.count + edges.count;
         long nelem = elements.count * 4;

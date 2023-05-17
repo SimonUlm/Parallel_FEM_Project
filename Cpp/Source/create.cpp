@@ -2,7 +2,7 @@
 
 namespace Mesh {
 
-    void RectangularMesh::create() {
+    void RectangularMesh::Create() {
         long node_index = 0;
         long fixed_index = 0;
 

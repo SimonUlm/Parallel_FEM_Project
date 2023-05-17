@@ -5,7 +5,7 @@
 namespace Mesh {
 
 // Print mesh information
-    void RectangularMesh::print() {
+    void RectangularMesh::Print() {
         long brief = 0;
 
         // Aux variables
@@ -68,7 +68,7 @@ namespace Mesh {
             }
         }
 
-        // If there are fixed_nodes nodes (usually dirichlet nodes) print them
+        // If there are fixed_nodes nodes (usually dirichlet nodes) Print them
         if (nfixed) {
             printf("\nFixed Nodes:\n");
             for (j = 0; j < nfixed; j++) {

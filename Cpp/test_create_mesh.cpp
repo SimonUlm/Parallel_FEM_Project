@@ -9,7 +9,7 @@ int main() {
     int n = 3;
 
     RectangularMesh mesh(m, n);
-    mesh.create();
-    mesh.refine();
-    mesh.print();
+    mesh.Create();
+    mesh.Refine();
+    mesh.Print();
 }

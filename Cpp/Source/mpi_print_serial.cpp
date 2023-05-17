@@ -3,7 +3,7 @@
 
 using namespace Mesh;
 
-void mpi_print_serial(RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_processes) {
+void MpiPrintSerial(RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_processes) {
     int dummy = 0;
     MPI_Status status;
 
@@ -13,7 +13,7 @@ void mpi_print_serial(RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_pr
     }
 
     // Print data
-    mesh.print();
+    mesh.Print();
 
     // Signal next process
     if (rank != nof_processes - 1) {

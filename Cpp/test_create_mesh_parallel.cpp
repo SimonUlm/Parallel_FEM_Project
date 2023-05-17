@@ -21,16 +21,16 @@ int main(int argc, char **argv) {
     if (rank == 0)
     {
         global_mesh = RectangularMesh(m, n);
-        global_mesh.create();
-        global_mesh.refine();
+        global_mesh.Create();
+        global_mesh.Refine();
         nof_local_elem = (int) global_mesh.elements.count / nof_processes;
     }
     MPI_Bcast(&nof_local_elem, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     RectangularMesh local_mesh(1, 1, 0, nof_local_elem, 0);
-    global_mesh.scatter(local_mesh, MPI_COMM_WORLD, rank, nof_local_elem);
+    global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_local_elem);
 
-    mpi_print_serial(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
+    MpiPrintSerial(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
 
     MPI_Finalize();
 }

@@ -199,23 +199,23 @@ namespace Mesh{
         }
         RectangularMesh & operator=(const RectangularMesh &) = delete;
 
-        // Defined in create.cpp
-        void create();
+        // Defined in Create.cpp
+        void Create();
 
-        // Defined in refine.cpp
-        void refine();
+        // Defined in Refine.cpp
+        void Refine();
 
-        // Defined in print.cpp
-        void print();
+        // Defined in Print.cpp
+        void Print();
 
-        // Defined in scatter.cpp
-        void scatter(RectangularMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem);
+        // Defined in Scatter.cpp
+        void Scatter(RectangularMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem);
     };
 }
 
 
 
 // Other declarations
-void mpi_print_serial(Mesh::RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_processes);
+void MpiPrintSerial(Mesh::RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_processes);
 
 #endif //HPC2_MESH_HPP

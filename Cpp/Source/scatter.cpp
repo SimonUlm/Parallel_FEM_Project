@@ -3,7 +3,7 @@
 
 using namespace Mesh;
 
-void  RectangularMesh::scatter(RectangularMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem) {
+void  RectangularMesh::Scatter(RectangularMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem) {
 
     if (rank == 0) {
         MPI_Scatter(&elements(0), nof_local_elem * 7, MPI_LONG,
