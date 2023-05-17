@@ -2,7 +2,7 @@
 
 namespace Mesh {
 
-    void RectangularMesh::Create() {
+    void RectangularMesh::Create(Node bottom_left_node, Node top_right_node) {
         long node_index = 0;
         long fixed_index = 0;
 
@@ -10,42 +10,40 @@ namespace Mesh {
         long nof_v_edges = m * (n + 1); // number of vertical edges
         long nodes_per_row = n + 1;
 
+        double delta_x = top_right_node.x - bottom_left_node.x;
+        double delta_y = top_right_node.y - bottom_left_node.y;
+
         // Iterating over rectangles (2 elements at a time)
         for (long i = 0; i < m; ++i) {
             for (long j = 0; j < n; ++j) {
 
                 // Coordinates of bottom left node
-                double x = 0;
-                double y = 0;
                 if (i == 0 && j == 0) {
                     // Write bottom left node of rectangle for root rectangle
-                    nodes(node_index).x = x;
-                    nodes(node_index).y = y;
+                    nodes(node_index) = bottom_left_node;
                     fixed_nodes(fixed_index++) = node_index;
                 }
 
                 if (j == 0) {
                     // Write top left node for first column
                     node_index = nodes_per_row * (i + 1);
-                    nodes(node_index).x = x;
-                    nodes(node_index).y = (double) (i + 1) / m;
+                    nodes(node_index).x = bottom_left_node.x;
+                    nodes(node_index).y = bottom_left_node.y + ((double) (i + 1) / m) * delta_y;
                     fixed_nodes(fixed_index++) = node_index;
                 }
 
                 if (i == 0) {
                     // Write bottom right node for first row
                     node_index = j + 1;
-                    nodes(node_index).x = (double) (j + 1) / n;
-                    nodes(node_index).y = y;
+                    nodes(node_index).x = bottom_left_node.x + ((double) (j + 1) / n) * delta_x;
+                    nodes(node_index).y = bottom_left_node.y;
                     fixed_nodes(fixed_index++) = node_index;
                 }
 
                 // Write upper right node for each rectangle
-                x = (double) (j + 1) / n;
-                y = (double) (i + 1) / m;
                 node_index = nodes_per_row * (i + 1) + (j + 1);
-                nodes(node_index).x = x;
-                nodes(node_index).y = y;
+                nodes(node_index).x = bottom_left_node.x + ((double) (j + 1) / n) * delta_x;
+                nodes(node_index).y = bottom_left_node.y + ((double) (i + 1) / m) * delta_y;
 
 
                 // Four nodes numbers
