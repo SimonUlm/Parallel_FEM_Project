@@ -1,6 +1,4 @@
-#include <cstdio>
-
-#include "Include/mesh.hpp"
+#include "mesh.hpp"
 
 using namespace Mesh;
 

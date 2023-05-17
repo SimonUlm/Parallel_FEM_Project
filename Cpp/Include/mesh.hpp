@@ -3,9 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
-#ifdef MPI
 #include <mpi.h>
-#endif
 
 
 
@@ -189,16 +187,7 @@ namespace Mesh{
         RectangularMesh(RectangularMesh &&) = delete;
         RectangularMesh(const RectangularMesh &) = delete;
 
-        RectangularMesh & operator=(RectangularMesh &&other) noexcept {
-            m = other.m;
-            n = other.n;
-            nodes = std::move(other.nodes);
-            elements = std::move(other.elements);
-            edges = std::move(other.edges);
-            boundary = std::move(other.boundary);
-            fixed_nodes = std::move(other.fixed_nodes);
-            return *this;
-        }
+        RectangularMesh & operator=(RectangularMesh &&other) = default;
         RectangularMesh & operator=(const RectangularMesh &) = delete;
 
         // Defined in Create.cpp
@@ -211,17 +200,13 @@ namespace Mesh{
         void Print();
 
         // Defined in Scatter.cpp
-#ifdef MPI
         void Scatter(RectangularMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem);
-#endif
     };
 }
 
 
 
 // Other declarations
-#ifdef MPI
 void MpiPrintSerial(Mesh::RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_processes);
-#endif
 
 #endif //HPC2_MESH_HPP
