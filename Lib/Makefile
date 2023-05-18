@@ -14,7 +14,10 @@
 #       cd ../Demo ; make
 #
 
-CC = gcc
+CC = g++
+ifeq ($(MPI), true)
+    CC = mpigCC
+endif
 
 LIBRARY = libhpc
 
@@ -38,31 +41,24 @@ AR_TARGET = $(LIBRARY).a
 all: install
 
 HPC = \
- sed_buildS.o \
- sed_dupl.o \
- sed_print.o \
- sed_gs_constr.o \
- sed_util.o  \
- gem_util.o  \
- hpc_cumsum.o \
- hpc_malloc.o \
- mesh_buildRhs.o \
- mesh_load.o  \
- mesh_getEdge2no.o \
- mesh_print.o  \
- mesh_refine.o  \
- mesh_getFixed.o  \
- mesh_util.o \
- blas_level1.o \
- blas_level2.o \
- blas_aux.o \
- create_mesh.o
+ mesh_create.o \
+ mesh_print.o \
+ mesh_refine.o \
+ mesh_scatter.o \
+ mpi_print_serial.o 
 
 
-$(HPC): ../Include/hpc.h Makefile
+$(HPC): ../Include/mesh.hpp Makefile
 
-%.o: ../Source/%.c ../Include/hpc.h
+ifneq ($(MPI), true)
+    %.o: ../Source/%.cpp ../Include/mesh.hpp
 	$(CC) $(CF) $(I) -c $<
+endif
+
+ifeq ($(MPI), true)
+    %.o: ../Source/%.c ../Include/mesh.hpp
+	$(CC) $(CF) $(I) -D MPI -c $<
+endif
 
 static: $(AR_TARGET)
 

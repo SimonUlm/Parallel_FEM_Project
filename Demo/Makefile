@@ -1,5 +1,8 @@
 
-CC = gcc
+CC = g++
+ifeq ($(MPI), true)
+    CC = mpigCC
+endif
 
 ifdef OPENMP
   CFLAGS += -fopenmp 
@@ -23,8 +26,16 @@ all: lib hpc_demo0
 lib:
 	( cd ../Lib ; $(MAKE) )
 
-hpc_demo0: lib test_create_mesh.c Makefile
-	$(CC) $(CF) $(I) -o hpc_demo0 test_create_mesh.c $(CS)
+ifneq ($(MPI), true)
+    hpc_demo0: lib test_create_mesh.cpp Makefile
+	    $(CC) $(CF) $(I) -o hpc_demo0 test_create_mesh.cpp $(CS)
+endif
+
+ifeq ($(MPI), true)
+    hpc_demo0: lib test_create_mesh.cpp Makefile
+	    $(CC) $(CF) $(I) -o -D _MPI hpc_demo0 test_create_mesh.cpp $(CS)
+endif
+
 
 clean:
 	- $(RM) *.o
