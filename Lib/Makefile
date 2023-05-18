@@ -56,7 +56,7 @@ ifneq ($(MPI), true)
 endif
 
 ifeq ($(MPI), true)
-    %.o: ../Source/%.c ../Include/mesh.hpp
+    %.o: ../Source/%.cpp ../Include/mesh.hpp
 	$(CC) $(CF) $(I) -D MPI -c $<
 endif
 
