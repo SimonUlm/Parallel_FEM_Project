@@ -47,7 +47,9 @@ HPC = \
  mesh_scatter.o \
  mpi_print_serial.o \
  skeleton_print.o \
- skeleton_create.o
+ skeleton_create.o \
+ mesh_objects_print.o \
+ mesh_objects_util.o
 
 
 $(HPC): ../Include/hpc.hpp Makefile

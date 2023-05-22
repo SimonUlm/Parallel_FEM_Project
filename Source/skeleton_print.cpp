@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "skeleton.hpp"
+#include "hpc.hpp"
 
 namespace Mesh {
 
@@ -10,7 +10,7 @@ namespace Mesh {
         // Start printing
         printf("\n=========== Print Skeleton Data ===========\n");
         
-        long n_nodes = icouples.n_nodes;
+        long n_nodes = icouples.get_n_nodes();
         // Print mesh sizes
         printf("Skeleton size:\n");
         printf("Number of Couples: %zu\nNumber of ICouples: %zu\nNumber of Nodes per ICouple: %zu\n",
@@ -35,4 +35,19 @@ namespace Mesh {
         long total = n_couples * 6 * sizeof(long) + n_icouples * n_nodes * sizeof(long);
         printf("Total       : %12.6g MByte\n", (double) total / 1024. / 1024.);
     }
+    
+    void Couple::Print() {
+    	printf(" %zu %zu %zu", index, c1, c2);
+        printf(" %zu %zu %zu", L, R, color);
+        printf("\n");
+    }
+    
+    void ICouple::Print() {
+    	for (long i = 0; i < n_couples; ++i) {
+            for(long j = 0; j < n_nodes; ++j) {
+            	printf(" %zu", nodes(i*n_nodes+j));
+            }
+            printf("\n");
+        }
+    } 
 }

@@ -3,6 +3,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdio>
+
+#include "hpc.hpp"
 
 
 namespace Mesh{
@@ -17,6 +20,8 @@ namespace Mesh{
         Node operator*(const double mult) const {
             return Node{mult * x, mult * y};
         }
+        
+        void Print();       
     };
 
     struct Element {
@@ -24,51 +29,19 @@ namespace Mesh{
         long m1, m2, m3;
         long t;
 
-        long get_n(long n) const {
-            switch (n) {
-                case 1:
-                    return n1;
-                case 2:
-                    return n2;
-                case 3:
-                    return n3;
-                default:
-                    return n1;
-            }
-        }
+        long get_n(long n);
 
-        long get_successor_n(long n) const {
-            n = (n == 3) ? 0 : n;
-            return get_n(n+1);
-        }
+        long get_successor_n(long n);
+        
+        long get_predecessor_n(long n); 
 
-        long get_predecessor_n(long n) const {
-            n = (n == 1) ? 4 : n;
-            return get_n(n-1);
-        }
+        long get_m(long m); 
 
-        long get_m(long m) const {
-            switch (m) {
-                case 1:
-                    return m1;
-                case 2:
-                    return m2;
-                case 3:
-                    return m3;
-                default:
-                    return m1;
-            }
-        }
+        long get_successor_m(long m); 
 
-        long get_successor_m(long m) const {
-            m = (m == 3) ? 0 : m;
-            return get_m(m+1);
-        }
-
-        long get_predecessor_m(long m) const {
-            m = (m == 1) ? 4 : m;
-            return get_m(m-1);
-        }
+        long get_predecessor_m(long m); 
+        
+        void Print();
     };
 
     struct Edge {
@@ -80,6 +53,8 @@ namespace Mesh{
         long n1, n2;
         long m;
         long t;
+        
+        void Print();
     };
     
 }

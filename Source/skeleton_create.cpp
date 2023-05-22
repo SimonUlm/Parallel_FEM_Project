@@ -1,5 +1,4 @@
-#include "mesh.hpp"
-#include "skeleton.hpp"
+#include "hpc.hpp"
 
 namespace Mesh {
 
@@ -23,7 +22,8 @@ namespace Mesh {
             	    long color = j%2;
             	    couples(couple_index).set_entries(
             	    	couple_index, c1, c2, l_proc, r_proc, color
-            	    );     	    
+            	    );
+            	    icouples.init_entries(couple_index);     	    
             	    couple_index++; 	    
             	}
             	if (i < m-1) {
@@ -35,7 +35,8 @@ namespace Mesh {
             	    long color = i%2 + 2;
             	    couples(couple_index).set_entries(
             	    	couple_index, c1, c2, l_proc, r_proc, color
-            	    );    	    
+            	    );
+            	    icouples.init_entries(couple_index);   	    
             	    couple_index++; 	    
             	}
             

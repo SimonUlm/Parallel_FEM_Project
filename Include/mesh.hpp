@@ -7,8 +7,7 @@
 #include <mpi.h>
 #endif
 
-#include "mesh_objects.hpp"
-#include "mesh_list.hpp"
+#include "hpc.hpp"
 
 
 namespace Mesh{

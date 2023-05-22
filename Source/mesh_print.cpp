@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "mesh.hpp"
+#include "hpc.hpp"
 
 namespace Mesh {
 
@@ -9,7 +9,7 @@ namespace Mesh {
         long brief = 0;
 
         // Aux variables
-        long j, k, ncoord, nelem, nbdry, nfixed, *Elem, *Bdry, *Fixed, total;
+        long j, k, ncoord, nelem, nbdry, nfixed, total;
         double *Coord;
 
         // Assign mesh attributes locally
@@ -17,10 +17,6 @@ namespace Mesh {
         nelem = elements.count;
         nbdry = boundary.count;
         nfixed = fixed_nodes.count;
-        Coord = &nodes(0).x;
-        Elem = &elements(0).n1;
-        Bdry = &boundary(0).n1;
-        Fixed = &fixed_nodes(0);
 
         // Start printing
         printf("\n=========== Print Mesh Data ===========\n");
@@ -32,8 +28,8 @@ namespace Mesh {
 
         // Print coordinates
         printf("\nCoordinates (x,y):\n");
-        for (j = 0; j < ncoord; j++) {
-            printf("    (%lg,  %lg)\n", Coord[2 * j], Coord[2 * j + 1]);
+        for (j = 0; j < n; ++j) {
+            nodes(j).Print();
             if (brief && j > 10) {
                 printf("  ...\n");
                 break;
@@ -44,10 +40,7 @@ namespace Mesh {
         printf("\nElements:\n");
         printf("Vertices (n1,n2,n3), Mid. Points (m1,m2,m3), Affiliation\n");
         for (j = 0; j < nelem; j++) {
-            for (k = 0; k < 7; k++) {
-                printf(" %zu", Elem[7 * j + k]);
-            }
-            printf("\n");
+            elements(j).Print();
             if (brief && j > 10) {
                 printf("  ...\n");
                 break;
@@ -58,10 +51,7 @@ namespace Mesh {
         printf("\nBoundary Elements:\n");
         printf("Endpoints (n1, n2), Edge Number (ed1), Type\n");
         for (j = 0; j < nbdry; j++) {
-            for (k = 0; k < 4; k++) {
-                printf(" %zu", Bdry[4 * j + k]);
-            }
-            printf("\n");
+            boundary(j).Print();
             if (brief && j > 10) {
                 printf("  ...\n");
                 break;
@@ -72,9 +62,7 @@ namespace Mesh {
         if (nfixed) {
             printf("\nFixed Nodes:\n");
             for (j = 0; j < nfixed; j++) {
-
-                printf(" %zu\n", Fixed[j]);
-
+                printf(" %zu\n", fixed_nodes(j));
                 if (brief && j > 10) {
                     printf("  ...\n");
                     break;

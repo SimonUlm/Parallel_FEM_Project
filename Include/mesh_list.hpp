@@ -1,6 +1,8 @@
 #ifndef HPC2_MESH_LIST_HPP
 #define HPC2_MESH_LIST_HPP
 
+#include "hpc.hpp"
+
 
 namespace Mesh{
     template<typename T>
