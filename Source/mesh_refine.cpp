@@ -8,6 +8,7 @@ namespace Mesh{
         long nelem = elements.count * 4;
         long nbdry = boundary.count * 2;
         Mesh new_mesh(m, n, nnodes, nelem, nbdry);
+        new_mesh.refine_factor = refine_factor + 1;
 
         // Copy old coordinates
         for (long i = 0; i < nodes.count; ++i)

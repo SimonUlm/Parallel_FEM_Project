@@ -11,7 +11,6 @@
 #include "mesh_list.hpp"
 
 
-
 namespace Mesh{
     /**
      * @brief Abstract Mesh Class
@@ -22,6 +21,7 @@ namespace Mesh{
 	 * @brief Number of rectangles for this mesh
 	*/
 	long m, n;
+	long refine_factor = 0;
 	
 	List<Node> nodes;
         List<Element> elements;
@@ -54,6 +54,12 @@ namespace Mesh{
 
         // Defined in Print.cpp
         void Print();
+        
+        long get_m() {return m;}
+        long get_n() {return n;}
+        
+        
+        
     };
 
     class GlobalMesh: public Mesh {

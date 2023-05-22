@@ -45,18 +45,20 @@ HPC = \
  mesh_print.o \
  mesh_refine.o \
  mesh_scatter.o \
- mpi_print_serial.o 
+ mpi_print_serial.o \
+ skeleton_print.o \
+ skeleton_create.o
 
 
-$(HPC): ../Include/mesh.hpp Makefile
+$(HPC): ../Include/hpc.hpp Makefile
 
 ifneq ($(MPI), true)
-    %.o: ../Source/%.cpp ../Include/mesh.hpp
+    %.o: ../Source/%.cpp ../Include/hpc.hpp
 	$(CC) $(CF) $(I) -c $<
 endif
 
 ifeq ($(MPI), true)
-    %.o: ../Source/%.cpp ../Include/mesh.hpp
+    %.o: ../Source/%.cpp ../Include/hpc.hpp
 	$(CC) $(CF) $(I) -D MPI -c $<
 endif
 
