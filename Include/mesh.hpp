@@ -21,20 +21,19 @@ namespace Mesh{
 	*/
 	long m, n;
 	long refine_factor = 0;
-	
-	List<Node> nodes;
+
+    public:
+        List<Node> nodes;
         List<Element> elements;
         List<Edge> edges;
         List<BoundaryEdge> boundary;
         List<long> fixed_nodes;
-    public:    
+
         Mesh() :
             m(0), n(0) {}
         
         Mesh(long m, long n, long nnodes, long nelem, long nbdry) :
-            m(m), n(n),
-            nodes(nnodes), elements(nelem), edges(0),
-            boundary(nbdry), fixed_nodes(0) {}
+            Mesh(m, n, nnodes, nelem, nbdry, 0, 0) {}
         
         Mesh(long m, long n, long nnodes, long nelem, long nbdry, long nedges, long nfixed) :
             m(m), n(n),
@@ -77,8 +76,8 @@ namespace Mesh{
     public:
         using Mesh::Mesh;
         
-        GlobalMesh(long m, long n) : 
-            Mesh(m, n, 
+        GlobalMesh(long m, long n) :
+                Mesh(m, n,
                  (m + 1) * (n + 1), // nnodes
                  2 * m * n,         // nelem
                  2 * (m + n),       // nbdrdy
@@ -92,9 +91,9 @@ namespace Mesh{
         void Refine();
 
         // Defined in Scatter.cpp
-        #ifdef _MPI
-        void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem);
-        #endif
+#ifdef _MPI
+        void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes);
+#endif
     };
 }
 
