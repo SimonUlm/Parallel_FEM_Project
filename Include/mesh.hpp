@@ -9,24 +9,23 @@
 
 #include "hpc.hpp"
 
-
 namespace Mesh{
     /**
      * @brief Abstract Mesh Class
      */
     class Mesh {
     protected:
-	/**
-	 * @brief Number of rectangles for this mesh
-	*/
-	long m, n;
-	long refine_factor = 0;
+		/**
+	 	* @brief Number of rectangles for this mesh
+		*/
+		long m, n;
+		long refine_factor = 0;
 	
-	List<Node> nodes;
-        List<Element> elements;
-        List<Edge> edges;
-        List<BoundaryEdge> boundary;
-        List<long> fixed_nodes;
+		Util::List<Node> nodes;
+        Util::List<Element> elements;
+        Util::List<Edge> edges;
+        Util::List<BoundaryEdge> boundary;
+        Util::List<long> fixed_nodes;
     public:    
         Mesh() :
             m(0), n(0) {}

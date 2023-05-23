@@ -5,10 +5,11 @@
 
 #include "hpc.hpp"
 
-namespace Mesh{
+namespace Skeleton{
+	
 	enum global_or_local { GLOBAL, LOCAL };
 
-    class Couple {
+    class ComBorder {
     private:
     	long index, c1, c2, L, R, color;
     public:       
@@ -22,8 +23,8 @@ namespace Mesh{
             color = couple_color;
         }
         
-        void copy_entries(Couple& couple) {
-        	couple.set_entries(index, c1, c2, L, R, color);
+        void copy_entries(ComBorder& border) {
+        	border.set_entries(index, c1, c2, L, R, color);
         }
         
         long get_L() {return L;}
@@ -33,22 +34,22 @@ namespace Mesh{
         
     };
     
-    class ICouple {
+    class ComBorderNodes {
     private:
     	// all couples are stored as one long list of nodes
         // stuff to refactor as list of lists
     	long n_nodes;	// nodes per couple
-    	long n_couples;
-        List<long> nodes;
+    	long n_borders;
+        Util::List<long> nodes;
     public:
-        ICouple(long n_couples) :
-                nodes(n_couples), n_nodes(1), n_couples(n_couples) {}
+        ComBorderNodes(long n_borders) :
+                nodes(n_borders), n_nodes(1), n_borders(n_borders) {}
         
-        ICouple(long n_couples, long n_nodes) :
-                nodes(n_couples*n_nodes), n_nodes(n_nodes), n_couples(n_couples) {}
+        ComBorderNodes(long n_borders, long n_nodes) :
+                nodes(n_borders*n_nodes), n_nodes(n_nodes), n_borders(n_borders) {}
                 
         long get_n_nodes() {return n_nodes;}
-        long get_n_couples() {return n_couples;}
+        long get_n_borders() {return n_borders;}
         
         void init_entries(long index) {
             for (long i = 0; i < n_nodes; ++i) {
@@ -56,34 +57,55 @@ namespace Mesh{
             }
         }
         
-        void set_entry(long ix_icouple, long ix_node, long node) {
-            nodes(ix_icouple*n_nodes + ix_node) = node;    
+        void set_entry(long ix_border, long ix_node, long node) {
+            nodes(ix_border*n_nodes + ix_node) = node;    
         }
         
-        long get_entry(long ix_icouple, long ix_node) {
-            return nodes(ix_icouple*n_nodes + ix_node);    
+        long get_entry(long ix_border, long ix_node) {
+            return nodes(ix_border*n_nodes + ix_node);    
         }
                 
         void Print();	
     };
     
+    
+    /* Skeleton Class */
+    /*!  \class Skeleton skeleton.hpp "Include/skeleton.hpp"
+     *   \brief The skeleton is used for the communciation between the distributed
+     *	  processes
+     *	 
+     *	 The Skeleton class contains a list of the \a ComBorders which contain the
+     *	 information of the corresponding processes and the edge nodes. Additionally
+     *   Additionally it contains an instance of ComBorderNodes which handles the 
+     *   intervening nodes on each comunication border.
+     *
+     */
     class Skeleton {
     private:
-        long n_couples, n_icouples;
-        List<Couple> couples;
-        ICouple icouples;
+        long n_borders;
+        Util::List<ComBorder> comBorders;
+        ComBorderNodes comBorderNodes;
         
     public:
+    	/*!  
+    	 *   Skeleton Constructor for unrefined meshes
+    	 */
         Skeleton(long m, long n) :
-                 couples(2*n*m-n-m), icouples(2*n*m-n-m),
-                 n_couples(2*n*m-n-m), n_icouples(2*n*m-n-m) {}
+                 comBorders(2*n*m-n-m), comBorderNodes(2*n*m-n-m),
+                 n_borders(2*n*m-n-m) {}
+        /*!  
+    	 *   Skeleton Constructor for refined meshes
+    	 */
         Skeleton(long m, long n, long refine_factor) :
-                 couples(2*n*m-n-m), 
-                 icouples(2*n*m-n-m, pow(2, refine_factor) - 1),
-                 n_couples(2*n*m-n-m), n_icouples(2*n*m-n-m) {}
-        Skeleton(long n_couples, long nodes_per_couple, enum global_or_local usecase) :
-				 couples(n_couples), icouples(n_couples * nodes_per_couple), 
-		         n_couples(n_couples), n_icouples(n_couples) {assert(usecase == LOCAL);}
+                 comBorders(2*n*m-n-m), 
+                 comBorderNodes(2*n*m-n-m, pow(2, refine_factor) - 1),
+                 n_borders(2*n*m-n-m) {}
+        /*!  
+    	 *   Skeleton Constructor for local Skeltons
+    	 */
+        Skeleton(long n_borders, long nodes_per_border, enum global_or_local usecase) :
+				 comBorders(n_borders), comBorderNodes(n_borders * nodes_per_border), 
+		         n_borders(n_borders) {assert(usecase == LOCAL);}
                  
         Skeleton(Skeleton &&) = delete;
         Skeleton(const Skeleton &) = delete;
@@ -91,19 +113,38 @@ namespace Mesh{
         Skeleton & operator=(Skeleton &&other) = default;
         Skeleton & operator=(const Skeleton &) = delete;
         
-        long get_n_couples() {return n_couples;}
-        long get_n_icouples() {return n_icouples;}
+        /*!  
+    	 *   Return the number of borders of this Skeleton
+    	 */
+        long get_n_borders() {return n_borders;}
         
-        void copy_couple_entries(long ix_couple, Couple& couple) {
-        	couples(ix_couple).copy_entries(couple);
+        /*!  
+    	 *   Function to copy of border to another Skelton (used for creating
+    	 *   local Skeletons)
+    	 */
+        void copy_border_entries(long ix_border, ComBorder& border) {
+        	comBorders(ix_border).copy_entries(border);
         }
         
-        Couple& get_couple(long ix_couple) {
-        	return couples(ix_couple);
+        /*!  
+    	 *   Return reference of border (used for copying from global skeleton)
+    	 */
+        ComBorder& get_border(long ix_border) {
+        	return comBorders(ix_border);
         }
-                 
-        void Create(Mesh &mesh);
+        
+        /*!  
+    	 *   Creating global Skeleton from mesh
+    	 */         
+        void Create(Mesh::Mesh &mesh);
+        
+        /*!  
+    	 *   Transforms global Skeleton to local Skeleton
+    	 */
         void CreateLocal(long process, long* local2global, long length_l2g);
+        /*!  
+    	 *   Prints Data of Skeleton
+    	 */
         void Print();
     };
 }
