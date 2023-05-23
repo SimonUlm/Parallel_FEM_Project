@@ -49,7 +49,8 @@ HPC = \
  skeleton_print.o \
  skeleton_create.o \
  mesh_objects_print.o \
- mesh_objects_util.o
+ mesh_objects_util.o \
+ skeleton_create_local.o
 
 
 $(HPC): ../Include/hpc.hpp Makefile

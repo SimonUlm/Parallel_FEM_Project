@@ -6,6 +6,8 @@
 #include "hpc.hpp"
 
 namespace Mesh{
+	enum global_or_local { GLOBAL, LOCAL };
+
     class Couple {
     private:
     	long index, c1, c2, L, R, color;
@@ -19,6 +21,13 @@ namespace Mesh{
             R = right_proc;
             color = couple_color;
         }
+        
+        void copy_entries(Couple& couple) {
+        	couple.set_entries(index, c1, c2, L, R, color);
+        }
+        
+        long get_L() {return L;}
+        long get_R() {return R;}
         
         void Print();
         
@@ -61,10 +70,10 @@ namespace Mesh{
     class Skeleton {
     private:
         long n_couples, n_icouples;
-    public:
-    	List<Couple> couples;
+        List<Couple> couples;
         ICouple icouples;
-    
+        
+    public:
         Skeleton(long m, long n) :
                  couples(2*n*m-n-m), icouples(2*n*m-n-m),
                  n_couples(2*n*m-n-m), n_icouples(2*n*m-n-m) {}
@@ -72,14 +81,29 @@ namespace Mesh{
                  couples(2*n*m-n-m), 
                  icouples(2*n*m-n-m, pow(2, refine_factor) - 1),
                  n_couples(2*n*m-n-m), n_icouples(2*n*m-n-m) {}
+        Skeleton(long n_couples, long nodes_per_couple, enum global_or_local usecase) :
+				 couples(n_couples), icouples(n_couples * nodes_per_couple), 
+		         n_couples(n_couples), n_icouples(n_couples) {assert(usecase == LOCAL);}
                  
         Skeleton(Skeleton &&) = delete;
         Skeleton(const Skeleton &) = delete;
         
+        Skeleton & operator=(Skeleton &&other) = default;
+        Skeleton & operator=(const Skeleton &) = delete;
+        
         long get_n_couples() {return n_couples;}
         long get_n_icouples() {return n_icouples;}
+        
+        void copy_couple_entries(long ix_couple, Couple& couple) {
+        	couples(ix_couple).copy_entries(couple);
+        }
+        
+        Couple& get_couple(long ix_couple) {
+        	return couples(ix_couple);
+        }
                  
         void Create(Mesh &mesh);
+        void CreateLocal(long process, long* local2global, long length_l2g);
         void Print();
     };
 }

@@ -36,7 +36,7 @@ namespace Mesh {
             	        node += pow(2, r-1) * j; 		// accounting column
             	        node += pow(2, r-1) * n_n * i;		// accounting row
             	        for (long k = 0; k < pow(2, r-1); ++k) {
-			    icouples.set_entry(couple_index, index, node);
+			    			icouples.set_entry(couple_index, index, node);
             	            node += 1;
             	            index += 1;
             	        }    
@@ -62,7 +62,7 @@ namespace Mesh {
             	        node += pow(2, r-1) * j; 		// accounting column
             	        node += pow(2, r-1) * n * i;		// accounting row
             	        for (long k = 0; k < pow(2, r-1); ++k) {
-			    icouples.set_entry(couple_index, index, node);
+			    			icouples.set_entry(couple_index, index, node);
             	            node += 1;
             	            index += 1;
             	        }    
