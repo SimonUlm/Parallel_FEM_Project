@@ -3,3 +3,5 @@
 /.idea/
 /build_MPI/
 /cmake-build-debug/
+*.o
+*.a

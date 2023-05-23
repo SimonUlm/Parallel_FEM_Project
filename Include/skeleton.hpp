@@ -46,17 +46,25 @@ namespace Mesh{
             	nodes(index*n_nodes + i) = i+1;
             }
         }
+        
+        void set_entry(long ix_icouple, long ix_node, long node) {
+            nodes(ix_icouple*n_nodes + ix_node) = node;    
+        }
+        
+        long get_entry(long ix_icouple, long ix_node) {
+            return nodes(ix_icouple*n_nodes + ix_node);    
+        }
                 
         void Print();	
     };
     
     class Skeleton {
     private:
-    	List<Couple> couples;
-        ICouple icouples;
-        
         long n_couples, n_icouples;
     public:
+    	List<Couple> couples;
+        ICouple icouples;
+    
         Skeleton(long m, long n) :
                  couples(2*n*m-n-m), icouples(2*n*m-n-m),
                  n_couples(2*n*m-n-m), n_icouples(2*n*m-n-m) {}
