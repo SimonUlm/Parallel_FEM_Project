@@ -8,10 +8,7 @@ int main() {
 
     GlobalMesh mesh(m, n);
     mesh.Create(Node{1, 1}, Node{2 ,2});
-    mesh.Print();
     mesh.Refine();
-    long refine_factor = 1;
-    Skeleton skeleton(m, n, refine_factor);
-    skeleton.Create(mesh);
-    skeleton.Print();
+    mesh.Refine();
+    mesh.Print();
 }

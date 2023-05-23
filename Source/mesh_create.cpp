@@ -60,9 +60,12 @@ namespace Mesh {
                 long edge_diag = nof_h_edges + nof_v_edges + i * n + j;
 
                 // For elements: store the process number in the affiliation field
+                // For boundary: store 1 into the dirichlet boundary edges
                 // For boundary and fixed_nodes edges: leave the affiliation empty
                 long process = i * n + j;
+                long dirichlet = 1;
                 long empty_aff = 0;
+
 
                 // Write elements
                 long elem_index = (i * n + j) * 2;
@@ -75,7 +78,7 @@ namespace Mesh {
                 if (i == 0) {
                     long bdry_index = j;
                     boundary(bdry_index) = BoundaryEdge{node_bl1, node_br2,
-                                                        edge_bottom, empty_aff};
+                                                        edge_bottom, dirichlet};
                     edges(edge_bottom) = Edge{node_bl1, node_br2};
                 }
                 if (i == m - 1) {
@@ -86,7 +89,7 @@ namespace Mesh {
                 if (j == 0) {
                     long bdry_index = n + i * 2;
                     boundary(bdry_index) = BoundaryEdge{node_bl1, node_tl4,
-                                                        edge_left, empty_aff};
+                                                        edge_left, dirichlet};
                     edges(edge_left) = Edge{node_bl1, node_tl4};
                 }
                 if (j == n - 1) {

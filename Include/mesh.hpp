@@ -50,6 +50,10 @@ namespace Mesh{
 
         // Defined in Print.cpp
         void Print();
+
+        // Defined in Collect.cpp
+        void CollectEdges();
+        void CollectFixedNodes();
         
         long get_m() {return m;}
         long get_n() {return n;}
