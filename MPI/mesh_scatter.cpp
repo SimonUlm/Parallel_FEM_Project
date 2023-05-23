@@ -38,6 +38,8 @@ void GlobalMesh::Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof
 
     // Gather relevant information and write into local mesh
     CollectLocalElements(local_mesh, rank);
+    local_mesh.CollectEdges();
+    local_mesh.CollectFixedNodes();
 }
 
 void GlobalMesh::CollectLocalElements(LocalMesh &local_mesh, int rank) {
