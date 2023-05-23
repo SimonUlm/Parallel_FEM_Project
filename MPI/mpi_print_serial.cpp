@@ -5,7 +5,7 @@
 
 using namespace Mesh;
 
-void MpiPrintSerial(RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_processes) {
+void MpiPrintSerial(LocalMesh &mesh, MPI_Comm comm, int rank, int nof_processes) {
     int dummy = 0;
     MPI_Status status;
 

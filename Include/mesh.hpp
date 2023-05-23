@@ -59,6 +59,20 @@ namespace Mesh{
         long get_n() {return n;}
     };
 
+    class LocalMesh: public Mesh {
+    private:
+        /**
+     * @brief Local Number of rectangles
+    */
+        long k, l;
+        /**
+	 * @brief Rank of Local process
+	*/
+        long rank;
+    public:
+        using Mesh::Mesh;
+    };
+
     class GlobalMesh: public Mesh {
     public:
         using Mesh::Mesh;
@@ -79,22 +93,8 @@ namespace Mesh{
 
         // Defined in Scatter.cpp
         #ifdef _MPI
-        void Scatter(RectangularMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem);
+        void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_local_elem);
         #endif
-    };
-    
-    class LocalMesh: public Mesh {
-    private:
-    	/**
-	 * @brief Local Number of rectangles
-	*/
-        long k, l;
-        /**
-	 * @brief Rank of Local process
-	*/
-        long rank;
-    public:
-        using Mesh::Mesh;
     };
 }
 
@@ -102,7 +102,7 @@ namespace Mesh{
 
 // Other declarations
 #ifdef _MPI
-void MpiPrintSerial(Mesh::RectangularMesh &mesh, MPI_Comm comm, int rank, int nof_processes);
+void MpiPrintSerial(Mesh::LocalMesh &mesh, MPI_Comm comm, int rank, int nof_processes);
 #endif
 
 #endif //HPC2_MESH_HPP
