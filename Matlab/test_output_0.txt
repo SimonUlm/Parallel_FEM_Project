@@ -1,0 +1,95 @@
+( cd ../Lib ; make )
+make[1]: Entering directory '/home/oliver/hpc2-1/Lib'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/oliver/hpc2-1/Lib'
+gcc    -O3 -I../Include -o hpc_demo0 test_create_mesh.c  ../Lib/libhpc.a -lm
+./hpc_demo0
+
+=========== Print Mesh Data ===========
+Mesh size:
+Number of Coordinates: 20
+Number of Elements: 24
+Number of Boundary-Elements: 14
+
+Coordinates (x,y):
+    (0,  0)
+    (0.333333,  0)
+    (0.666667,  0)
+    (1,  0)
+    (0,  0.25)
+    (0.333333,  0.25)
+    (0.666667,  0.25)
+    (1,  0.25)
+    (0,  0.5)
+    (0.333333,  0.5)
+    (0.666667,  0.5)
+    (1,  0.5)
+    (0,  0.75)
+    (0.333333,  0.75)
+    (0.666667,  0.75)
+    (1,  0.75)
+    (0,  1)
+    (0.333333,  1)
+    (0.666667,  1)
+    (1,  1)
+
+Elements:
+Vertices (n1,n2,n3), Mid. Points (m1,m2,m3), Affiliation
+ 0 1 5 0 16 31 0
+ 0 5 4 31 3 15 0
+ 1 2 6 1 17 32 1
+ 1 6 5 32 4 16 1
+ 2 3 7 2 18 33 2
+ 2 7 6 33 5 17 2
+ 4 5 9 3 20 34 3
+ 4 9 8 34 6 19 3
+ 5 6 10 4 21 35 4
+ 5 10 9 35 7 20 4
+ 6 7 11 5 22 36 5
+ 6 11 10 36 8 21 5
+ 8 9 13 6 24 37 6
+ 8 13 12 37 9 23 6
+ 9 10 14 7 25 38 7
+ 9 14 13 38 10 24 7
+ 10 11 15 8 26 39 8
+ 10 15 14 39 11 25 8
+ 12 13 17 9 28 40 9
+ 12 17 16 40 12 27 9
+ 13 14 18 10 29 41 10
+ 13 18 17 41 13 28 10
+ 14 15 19 11 30 42 11
+ 14 19 18 42 14 29 11
+
+Boundary Elements:
+Endpoints (n1, n2), Edge Number (ed1), Type
+ 0 1 0 0
+ 1 2 1 0
+ 2 3 2 0
+ 0 4 15 0
+ 3 7 18 0
+ 4 8 19 0
+ 7 11 22 0
+ 8 12 23 0
+ 11 15 26 0
+ 12 16 27 0
+ 15 19 30 0
+ 17 16 12 0
+ 18 17 13 0
+ 19 18 14 0
+
+Fixed Nodes:
+ 0
+ 4
+ 1
+ 2
+ 3
+ 8
+ 12
+ 16
+
+Memory
+Coordinates :          320 Byte
+Elements    :         1344 Byte
+Boundary    :          448 Byte
+Edge2no     :          688 Byte
+Total       :   0.00267029 MByte
