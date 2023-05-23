@@ -47,18 +47,12 @@ namespace Mesh{
 
         Mesh & operator=(Mesh &&other) = default;
         Mesh & operator=(const Mesh &) = delete;
-        
-        // Defined in Refine.cpp
-        void Refine();
 
         // Defined in Print.cpp
         void Print();
         
         long get_m() {return m;}
         long get_n() {return n;}
-        
-        
-        
     };
 
     class GlobalMesh: public Mesh {
@@ -75,6 +69,9 @@ namespace Mesh{
         
         // Defined in Create.cpp
         void Create(Node bottom_left_node = Node{0, 0}, Node top_right_node = Node{1, 1});
+
+        // Defined in Refine.cpp
+        void Refine();
 
         // Defined in Scatter.cpp
         #ifdef _MPI

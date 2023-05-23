@@ -2,12 +2,13 @@
 
 namespace Mesh{
 
-    void Mesh::Refine() {
+    void GlobalMesh::Refine() {
         // Allocate new mesh
         long nnodes = nodes.count + edges.count;
         long nelem = elements.count * 4;
         long nbdry = boundary.count * 2;
-        Mesh new_mesh(m, n, nnodes, nelem, nbdry);
+
+        GlobalMesh new_mesh(m, n, nnodes, nelem, nbdry);
         new_mesh.refine_factor = refine_factor + 1;
 
         // Copy old coordinates
