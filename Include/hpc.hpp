@@ -4,6 +4,6 @@
 #include "mesh_objects.hpp"
 #include "mesh_list.hpp"
 #include "mesh.hpp"
-#include "skeleton.hpp"
+//#include "skeleton.hpp"
 
 #endif //HPC2_HPC_HPP

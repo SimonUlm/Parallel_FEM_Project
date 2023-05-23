@@ -69,7 +69,7 @@ namespace Mesh{
 	*/
         long rank;
     public:
-        using Mesh::Mesh;
+        List<long> local_to_global;
     };
 
     class GlobalMesh: public Mesh {
@@ -93,6 +93,10 @@ namespace Mesh{
         // Defined in Scatter.cpp
 #ifdef _MPI
         void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes);
+    private:
+        void CollectLocalElements(LocalMesh &local_mesh, int rank);
+        void RenumberLocalElements(LocalMesh &local_mesh);
+        void WriteLocalNodes(LocalMesh &local_mesh);
 #endif
     };
 }

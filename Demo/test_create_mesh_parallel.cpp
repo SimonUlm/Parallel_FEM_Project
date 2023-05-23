@@ -15,20 +15,17 @@ int main(int argc, char **argv) {
     int m = 3;
     int n = 2;
 
-    RectangularMesh global_mesh;
+    GlobalMesh global_mesh;
+    LocalMesh local_mesh;
 
-    int nof_local_elem;
     if (rank == 0)
     {
-        global_mesh = RectangularMesh(m, n);
+        global_mesh = GlobalMesh(m, n);
         global_mesh.Create();
         global_mesh.Refine();
-        nof_local_elem = (int) global_mesh.elements.count / nof_processes;
     }
-    MPI_Bcast(&nof_local_elem, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-    RectangularMesh local_mesh(1, 1, 0, nof_local_elem, 0);
-    global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_local_elem);
+    global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
 
     MpiPrintSerial(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
 
