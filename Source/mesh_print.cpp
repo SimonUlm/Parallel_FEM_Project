@@ -28,7 +28,7 @@ namespace Mesh {
 
         // Print coordinates
         printf("\nCoordinates (x,y):\n");
-        for (j = 0; j < n; ++j) {
+        for (j = 0; j < ncoord; ++j) {
             nodes(j).Print();
             if (brief && j > 10) {
                 printf("  ...\n");
