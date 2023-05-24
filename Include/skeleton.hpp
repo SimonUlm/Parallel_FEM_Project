@@ -9,9 +9,21 @@ namespace Skeleton{
 	
 	enum global_or_local { GLOBAL, LOCAL };
 
+    /* ComBorder */
+    /*!  \class ComBorder skeleton.hpp "Include/skeleton.hpp"
+     *   \brief ComBorder manages the crosspoints and processes for each border
+     *	 
+     *	 The ComBorder class contains the two crosspoints for this border and the corresponding processes
+     *   Additionally a color is saved so each border of each process is different
+     */
     class ComBorder {
     private:
-    	long index, c1, c2, L, R, color;
+    	long index; /*!< index of border */
+        long c1; /*!< starting crosspoint */
+        long c2; /*!< end crosspoint */
+        long L; /*!< Left or lower process */
+        long R; /*!< Right or upper process */
+        long color; /*!< Color of to time communication */
     public:       
         void set_entries(long i, long start_node, long end_node, 
                          long left_proc, long right_proc, long couple_color) {
@@ -23,6 +35,9 @@ namespace Skeleton{
             color = couple_color;
         }
         
+        /*!  
+    	 *   \brief Prints Data of ComBorder
+    	 */
         void copy_entries(ComBorder& border) {
         	border.set_entries(index, c1, c2, L, R, color);
         }
@@ -30,27 +45,52 @@ namespace Skeleton{
         long get_L() {return L;}
         long get_R() {return R;}
         
+        /*!  
+    	 *   Prints Data of ComBorder
+    	 */     
         void Print();
         
     };
     
+    /* ComBorderNodes */
+    /*!  \class ComBorderNodes skeleton.hpp "Include/skeleton.hpp"
+     *   \brief ComBorderNodes manages all corresponding nodes on all communciation borders of the skeleton
+     *	 
+     *	 The ComBorderNodes class consists a List of nodes. This list is not seperated into single ComBorder's but is
+     *   handled as a consectuive list. The seperation into each border is handled by the setter and getter of this class
+     *
+     */
     class ComBorderNodes {
     private:
     	// all couples are stored as one long list of nodes
         // stuff to refactor as list of lists
-    	long n_nodes;	// nodes per couple
-    	long n_borders;
-        Util::List<long> nodes;
+    	long n_nodes;	/*!< Number of nodes per ComBorder */
+    	long n_borders; /*!< Number of ComBorder's */
+        Util::List<long> nodes; /*!< Consectuive list of all nodes on the ComBorder's */
     public:
+        /*!  
+    	 *   Constructor for unrefined Mesh (Check if still working with 0??)
+         *   
+         *   \param n_borders Number of ComBorder's in this Skeleton
+    	 */
         ComBorderNodes(long n_borders) :
-                nodes(n_borders), n_nodes(1), n_borders(n_borders) {}
+                nodes(0), n_nodes(0), n_borders(n_borders) {}
         
+        /*!  
+    	 *   Constructor for refined Mesh
+         *   
+         *   \param n_borders Number of ComBorder's in this Skeleton
+         *   \param n_nodes Number of nodes per ComBorder (calculated from refinement factor)
+    	 */
         ComBorderNodes(long n_borders, long n_nodes) :
                 nodes(n_borders*n_nodes), n_nodes(n_nodes), n_borders(n_borders) {}
                 
         long get_n_nodes() {return n_nodes;}
         long get_n_borders() {return n_borders;}
         
+        /*!  
+    	 *   Initialize nodes with ascending numbers per border
+    	 */
         void init_entries(long index) {
             for (long i = 0; i < n_nodes; ++i) {
             	nodes(index*n_nodes + i) = i+1;
@@ -64,7 +104,12 @@ namespace Skeleton{
         long get_entry(long ix_border, long ix_node) {
             return nodes(ix_border*n_nodes + ix_node);    
         }
-                
+
+        /*!  
+    	 *   \brief Prints Data of ComBorderNodes
+         *   
+         *   The nodes for each border are printed into a new line
+    	 */      
         void Print();	
     };
     
@@ -82,19 +127,25 @@ namespace Skeleton{
      */
     class Skeleton {
     private:
-        long n_borders;
-        Util::List<ComBorder> comBorders;
-        ComBorderNodes comBorderNodes;
+        long n_borders; /*!< Number of borders in this Skeleton */
+        Util::List<ComBorder> comBorders; /*!< List of ComBorder */
+        ComBorderNodes comBorderNodes; /*!< ComBorderNodes consist a list of nodes corresponding to each border */
         
     public:
     	/*!  
     	 *   Skeleton Constructor for unrefined meshes
+         *   \param m Number of processes in vertical direction
+         *   \param n Number of processes in horizontal direction
     	 */
         Skeleton(long m, long n) :
                  comBorders(2*n*m-n-m), comBorderNodes(2*n*m-n-m),
                  n_borders(2*n*m-n-m) {}
         /*!  
     	 *   Skeleton Constructor for refined meshes
+         *
+         *   \param m Number of processes in vertical direction
+         *   \param n Number of processes in horizontal direction
+         *   \param refine_factor Number of performed refinements
     	 */
         Skeleton(long m, long n, long refine_factor) :
                  comBorders(2*n*m-n-m), 
@@ -102,6 +153,9 @@ namespace Skeleton{
                  n_borders(2*n*m-n-m) {}
         /*!  
     	 *   Skeleton Constructor for local Skeltons
+         *
+         *   \param n_borders Number of ComBorder's
+         *   \param nodes_per_border Number of nodes on ComBorder edge 
     	 */
         Skeleton(long n_borders, long nodes_per_border, enum global_or_local usecase) :
 				 comBorders(n_borders), comBorderNodes(n_borders * nodes_per_border), 
@@ -114,34 +168,57 @@ namespace Skeleton{
         Skeleton & operator=(const Skeleton &) = delete;
         
         /*!  
-    	 *   Return the number of borders of this Skeleton
+    	 *   \brief Return the number of borders of this Skeleton
     	 */
         long get_n_borders() {return n_borders;}
         
         /*!  
-    	 *   Function to copy of border to another Skelton (used for creating
-    	 *   local Skeletons)
+    	 *   \brief Function to copy of ComBorder entries
+         *
+         *   This function is used in CreateLocal to copy values of the ComBorder's to the tempoary local
+         *   Skeleton
     	 */
         void copy_border_entries(long ix_border, ComBorder& border) {
         	comBorders(ix_border).copy_entries(border);
         }
         
         /*!  
-    	 *   Return reference of border (used for copying from global skeleton)
+    	 *   \brief Get a reference of a ComBorder
+         *
+         *   This function is used to sent a ComBorder from the tempoary local Skeleton to the global one
+         *   to copy entries from the global Skeleton to the local Skeleton
+         *
+         *   \param ix_border Index of ComBorder
+         *   \return Refererence of ComBorder with given index
     	 */
         ComBorder& get_border(long ix_border) {
         	return comBorders(ix_border);
         }
         
         /*!  
-    	 *   Creating global Skeleton from mesh
+    	 *   \brief Creating global Skeleton from Mesh
+         *
+         *   Creates the global Skeleton from given Mesh. With the number of processes of the Mesh
+         *   the Crosspoints and Processes of the ComBorder's are calculated. With the refinement
+         *   factor the ComBorderNodes are calcualted and saved.
+         *
+         *   \param mesh Mesh for which the Skeleton is created
+         *
     	 */         
         void Create(Mesh::Mesh &mesh);
         
         /*!  
-    	 *   Transforms global Skeleton to local Skeleton
+    	 *   \brief Transforms global Skeleton to local Skeleton
+         *         
+         *   Creates a tempory Skeleton copies the ComBorder's which correspond with the local process
+         *   to the tempory Skeleton. At the end the old global Skeleton is overwritten with the local one
+         *
+         *   \param process Number of Local Process
+         *   \param local2global
+         *   \param langth_l2g
     	 */
         void CreateLocal(long process, long* local2global, long length_l2g);
+
         /*!  
     	 *   Prints Data of Skeleton
     	 */
