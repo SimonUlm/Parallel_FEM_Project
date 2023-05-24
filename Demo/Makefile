@@ -1,7 +1,7 @@
 
 CC = g++
 ifeq ($(MPI), true)
-    CC = mpigCC
+    CC = mpiCC
 endif
 
 ifdef OPENMP
@@ -27,13 +27,13 @@ lib:
 	( cd ../Lib ; $(MAKE) )
 
 ifneq ($(MPI), true)
-    hpc_demo0: lib test_create_mesh.cpp Makefile
-	    $(CC) $(CF) $(I) -o hpc_demo0 test_create_mesh.cpp $(CS)
+    hpc_demo0: lib main_test.cpp Makefile
+	    $(CC) $(CF) $(I) -o hpc_demo0 main_test.cpp $(CS)
 endif
 
 ifeq ($(MPI), true)
-    hpc_demo0: lib test_create_mesh.cpp Makefile
-	    $(CC) $(CF) $(I) -o -D _MPI hpc_demo0 test_create_mesh.cpp $(CS)
+    hpc_demo0: lib main_test.cpp Makefile
+	    $(CC) $(CF) $(I) -D_MPI -o hpc_demo0 main_test.cpp $(CS)
 endif
 
 

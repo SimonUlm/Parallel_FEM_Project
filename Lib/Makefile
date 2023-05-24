@@ -16,7 +16,7 @@
 
 CC = g++
 ifeq ($(MPI), true)
-    CC = mpigCC
+    CC = mpiCC
 endif
 
 LIBRARY = libhpc
@@ -41,16 +41,8 @@ AR_TARGET = $(LIBRARY).a
 all: install
 
 HPC = \
- mesh_create.o \
- mesh_print.o \
- mesh_refine.o \
- mesh_scatter.o \
- mpi_print_serial.o \
- skeleton_print.o \
- skeleton_create.o \
- mesh_objects_print.o \
- mesh_objects_util.o \
- skeleton_create_local.o
+ *.o
+
 
 
 $(HPC): ../Include/hpc.hpp Makefile
@@ -62,7 +54,9 @@ endif
 
 ifeq ($(MPI), true)
     %.o: ../Source/%.cpp ../Include/hpc.hpp
-	$(CC) $(CF) $(I) -D MPI -c $<
+	$(CC) $(CF) $(I) -D_MPI -c $<
+    %.o: ../MPI/%.cpp ../Include/hpc.hpp
+	$(CC) $(CF) $(I) -D_MPI -c $<
 endif
 
 static: $(AR_TARGET)

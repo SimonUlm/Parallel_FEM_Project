@@ -2,6 +2,7 @@
 #define HPC2_MESH_HPP
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #ifdef _MPI
 #include <mpi.h>
@@ -30,7 +31,7 @@ namespace Mesh{
         Mesh() :
             m(0), n(0) {}
 
-        explicit Mesh(std::array<long, 7> mesh_data) :
+        Mesh(std::array<long, 7> mesh_data) :
             Mesh(mesh_data[0], mesh_data[1],
                  mesh_data[2], mesh_data[3], mesh_data[4],
                  mesh_data[5], mesh_data[6]) {}

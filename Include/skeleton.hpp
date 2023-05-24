@@ -66,8 +66,9 @@ namespace Skeleton{
         // stuff to refactor as list of lists
     	long n_nodes;	/*!< Number of nodes per ComBorder */
     	long n_borders; /*!< Number of ComBorder's */
-        Util::List<long> nodes; /*!< Consectuive list of all nodes on the ComBorder's */
+        
     public:
+    	Util::List<long> nodes; /*!< Consectuive list of all nodes on the ComBorder's */
         /*!
     	 *   Constructor for unrefined Mesh (Check if still working with 0??)
          *
@@ -131,7 +132,8 @@ namespace Skeleton{
         Util::List<ComBorder> comBorders; /*!< List of ComBorder */
         ComBorderNodes comBorderNodes; /*!< ComBorderNodes consist a list of nodes corresponding to each border */
         
-    public:
+        
+    public:	
     	/*!  
     	 *   Skeleton Constructor for unrefined meshes
          *   \param m Number of processes in vertical direction
@@ -195,6 +197,9 @@ namespace Skeleton{
         	return comBorders(ix_border);
         }
         
+        void set_border_node(long ix_border, long ix_node, long node) {
+        	comBorderNodes.set_entry(ix_border, ix_node, node);
+        }
         /*!  
     	 *   \brief Creating global Skeleton from Mesh
          *
@@ -217,7 +222,11 @@ namespace Skeleton{
          *   \param local2global
          *   \param langth_l2g
     	 */
-        void CreateLocal(long process, long* local2global, long length_l2g);
+        void CreateLocal(int rank, Mesh::LocalMesh &local_mesh);
+        
+        #ifdef _MPI
+        void Scatter(Mesh::LocalMesh &local_mesh);
+        #endif
 
         /*!
     	 *   Prints Data of Skeleton

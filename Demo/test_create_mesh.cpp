@@ -9,11 +9,8 @@ int main() {
     mesh.Create();
     mesh.Refine();
     mesh.Refine();
+    mesh.Print();
     Skeleton::Skeleton skeleton(m, n, mesh.get_refine_factor());
     skeleton.Create(mesh);
-    skeleton.Print();
-    long* local2global = 0;
-    long length = 0;
-    skeleton.CreateLocal(1, local2global, length);
     skeleton.Print();
 }
