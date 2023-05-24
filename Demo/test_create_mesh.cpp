@@ -1,4 +1,5 @@
 #include "hpc.hpp"
+#include <cstdio>
 
 int main() {
     int m = 4;
@@ -12,6 +13,7 @@ int main() {
     skeleton.Create(mesh);
     long* local2global = 0;
     long length = 0;
-    skeleton.CreateLocal(1, local2global, length);
+    skeleton.CreateLocal(1, local2global, length, 1);
+    printf("=== GLOBAL:\n");
     skeleton.Print();
 }

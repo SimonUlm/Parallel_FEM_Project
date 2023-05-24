@@ -50,7 +50,7 @@ namespace Skeleton{
                 
         long get_n_nodes() {return n_nodes;}
         long get_n_borders() {return n_borders;}
-        
+       
         void init_entries(long index) {
             for (long i = 0; i < n_nodes; ++i) {
             	nodes(index*n_nodes + i) = i+1;
@@ -141,7 +141,7 @@ namespace Skeleton{
         /*!  
     	 *   Transforms global Skeleton to local Skeleton
     	 */
-        void CreateLocal(long process, long* local2global, long length_l2g);
+        void CreateLocal(long process, long* local2global, long length_l2g, bool print_skel);
         /*!  
     	 *   Prints Data of Skeleton
     	 */
