@@ -113,8 +113,7 @@ namespace Skeleton{
     	 */
         void Print();	
     };
-    
-    
+
     /* Skeleton Class */
     /*!  \class Skeleton skeleton.hpp "Include/skeleton.hpp"
      *   \brief The skeleton is used for the communciation between the distributed
@@ -131,7 +130,6 @@ namespace Skeleton{
         long n_borders; /*!< Number of borders in this Skeleton */
         Util::List<ComBorder> comBorders; /*!< List of ComBorder */
         ComBorderNodes comBorderNodes; /*!< ComBorderNodes consist a list of nodes corresponding to each border */
-        
         
     public:	
     	/*!  
@@ -225,7 +223,7 @@ namespace Skeleton{
         void CreateLocal(int rank, Mesh::LocalMesh &local_mesh);
         
         #ifdef _MPI
-        void Scatter(Mesh::LocalMesh &local_mesh);
+        void Scatter(int rank, Mesh::LocalMesh &local_mesh);
         #endif
 
         /*!

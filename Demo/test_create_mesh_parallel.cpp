@@ -27,6 +27,12 @@ int main(int argc, char **argv) {
 
     global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
 
+    Skeleton::Skeleton skeleton(m, n, 1);
+    if (rank == 0)
+        skeleton.Create(global_mesh);
+
+    skeleton.Scatter(rank, local_mesh);
+
     MpiPrintSerial(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
 
     MPI_Finalize();
