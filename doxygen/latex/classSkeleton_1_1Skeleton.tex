@@ -1,0 +1,103 @@
+\hypertarget{classSkeleton_1_1Skeleton}{}\doxysection{Skeleton\+::Skeleton Class Reference}
+\label{classSkeleton_1_1Skeleton}\index{Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSkeleton_1_1Skeleton_afa1f511bd1c79cf5389ae9f347aa0ade}{Skeleton}} (long m, long n)
+\item 
+\mbox{\hyperlink{classSkeleton_1_1Skeleton_a8aa461a476df2178255f24d2af27dca4}{Skeleton}} (long m, long n, long refine\+\_\+factor)
+\item 
+\mbox{\hyperlink{classSkeleton_1_1Skeleton_ae0980d5099ad3d935a5c936241ea7c79}{Skeleton}} (long n\+\_\+borders, long nodes\+\_\+per\+\_\+border, enum global\+\_\+or\+\_\+local usecase)
+\item 
+\mbox{\Hypertarget{classSkeleton_1_1Skeleton_ad8dd29565099bb3fee9568d046bbbc04}\label{classSkeleton_1_1Skeleton_ad8dd29565099bb3fee9568d046bbbc04}} 
+{\bfseries Skeleton} (\mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \&\&)=delete
+\item 
+\mbox{\Hypertarget{classSkeleton_1_1Skeleton_a1c3b7f099253b9dc8afd2d5d254b0a33}\label{classSkeleton_1_1Skeleton_a1c3b7f099253b9dc8afd2d5d254b0a33}} 
+{\bfseries Skeleton} (const \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \&)=delete
+\item 
+\mbox{\Hypertarget{classSkeleton_1_1Skeleton_acfa41c4101bd20d4990e9edbe43db1dc}\label{classSkeleton_1_1Skeleton_acfa41c4101bd20d4990e9edbe43db1dc}} 
+\mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \& {\bfseries operator=} (\mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \&\&other)=default
+\item 
+\mbox{\Hypertarget{classSkeleton_1_1Skeleton_a3e7cd5551505d1b04ab333fd30bb4ea9}\label{classSkeleton_1_1Skeleton_a3e7cd5551505d1b04ab333fd30bb4ea9}} 
+\mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \& {\bfseries operator=} (const \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \&)=delete
+\item 
+long \mbox{\hyperlink{classSkeleton_1_1Skeleton_a2a27f02453fcd4cb73019c20e08179b7}{get\+\_\+n\+\_\+borders}} ()
+\item 
+void \mbox{\hyperlink{classSkeleton_1_1Skeleton_a83fc83e8f6545af0c4ee83884ad1df40}{copy\+\_\+border\+\_\+entries}} (long ix\+\_\+border, \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}} \&border)
+\item 
+\mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}} \& \mbox{\hyperlink{classSkeleton_1_1Skeleton_a5b4f744d3d110275e2e320d9f4c8563b}{get\+\_\+border}} (long ix\+\_\+border)
+\item 
+void \mbox{\hyperlink{classSkeleton_1_1Skeleton_a3ddac5755608c64d8d2dd93c356851c2}{Create}} (\mbox{\hyperlink{classMesh_1_1Mesh}{Mesh\+::\+Mesh}} \&mesh)
+\item 
+void \mbox{\hyperlink{classSkeleton_1_1Skeleton_a9e99f8f42e745b18eaf7825ab99c5712}{Create\+Local}} (long process, long $\ast$local2global, long length\+\_\+l2g)
+\item 
+void \mbox{\hyperlink{classSkeleton_1_1Skeleton_a2f5a16c5472a0ab9d542c997e2038f23}{Print}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSkeleton_1_1Skeleton_afa1f511bd1c79cf5389ae9f347aa0ade}\label{classSkeleton_1_1Skeleton_afa1f511bd1c79cf5389ae9f347aa0ade}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!Skeleton@{Skeleton}}
+\index{Skeleton@{Skeleton}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{Skeleton()}{Skeleton()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Skeleton\+::\+Skeleton\+::\+Skeleton (\begin{DoxyParamCaption}\item[{long}]{m,  }\item[{long}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} Constructor for unrefined meshes \mbox{\Hypertarget{classSkeleton_1_1Skeleton_a8aa461a476df2178255f24d2af27dca4}\label{classSkeleton_1_1Skeleton_a8aa461a476df2178255f24d2af27dca4}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!Skeleton@{Skeleton}}
+\index{Skeleton@{Skeleton}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{Skeleton()}{Skeleton()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Skeleton\+::\+Skeleton\+::\+Skeleton (\begin{DoxyParamCaption}\item[{long}]{m,  }\item[{long}]{n,  }\item[{long}]{refine\+\_\+factor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} Constructor for refined meshes \mbox{\Hypertarget{classSkeleton_1_1Skeleton_ae0980d5099ad3d935a5c936241ea7c79}\label{classSkeleton_1_1Skeleton_ae0980d5099ad3d935a5c936241ea7c79}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!Skeleton@{Skeleton}}
+\index{Skeleton@{Skeleton}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{Skeleton()}{Skeleton()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Skeleton\+::\+Skeleton\+::\+Skeleton (\begin{DoxyParamCaption}\item[{long}]{n\+\_\+borders,  }\item[{long}]{nodes\+\_\+per\+\_\+border,  }\item[{enum global\+\_\+or\+\_\+local}]{usecase }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} Constructor for local Skeltons 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSkeleton_1_1Skeleton_a83fc83e8f6545af0c4ee83884ad1df40}\label{classSkeleton_1_1Skeleton_a83fc83e8f6545af0c4ee83884ad1df40}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!copy\_border\_entries@{copy\_border\_entries}}
+\index{copy\_border\_entries@{copy\_border\_entries}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{copy\_border\_entries()}{copy\_border\_entries()}}
+{\footnotesize\ttfamily void Skeleton\+::\+Skeleton\+::copy\+\_\+border\+\_\+entries (\begin{DoxyParamCaption}\item[{long}]{ix\+\_\+border,  }\item[{\mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}} \&}]{border }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Function to copy of border to another Skelton (used for creating local Skeletons) \mbox{\Hypertarget{classSkeleton_1_1Skeleton_a3ddac5755608c64d8d2dd93c356851c2}\label{classSkeleton_1_1Skeleton_a3ddac5755608c64d8d2dd93c356851c2}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!Create@{Create}}
+\index{Create@{Create}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{Create()}{Create()}}
+{\footnotesize\ttfamily void Skeleton\+::\+Skeleton\+::\+Create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMesh_1_1Mesh}{Mesh\+::\+Mesh}} \&}]{mesh }\end{DoxyParamCaption})}
+
+Creating global \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} from mesh \mbox{\Hypertarget{classSkeleton_1_1Skeleton_a9e99f8f42e745b18eaf7825ab99c5712}\label{classSkeleton_1_1Skeleton_a9e99f8f42e745b18eaf7825ab99c5712}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!CreateLocal@{CreateLocal}}
+\index{CreateLocal@{CreateLocal}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{CreateLocal()}{CreateLocal()}}
+{\footnotesize\ttfamily void Skeleton\+::\+Skeleton\+::\+Create\+Local (\begin{DoxyParamCaption}\item[{long}]{process,  }\item[{long $\ast$}]{local2global,  }\item[{long}]{length\+\_\+l2g }\end{DoxyParamCaption})}
+
+Transforms global \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} to local \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \mbox{\Hypertarget{classSkeleton_1_1Skeleton_a5b4f744d3d110275e2e320d9f4c8563b}\label{classSkeleton_1_1Skeleton_a5b4f744d3d110275e2e320d9f4c8563b}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!get\_border@{get\_border}}
+\index{get\_border@{get\_border}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{get\_border()}{get\_border()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}}\& Skeleton\+::\+Skeleton\+::get\+\_\+border (\begin{DoxyParamCaption}\item[{long}]{ix\+\_\+border }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return reference of border (used for copying from global skeleton) \mbox{\Hypertarget{classSkeleton_1_1Skeleton_a2a27f02453fcd4cb73019c20e08179b7}\label{classSkeleton_1_1Skeleton_a2a27f02453fcd4cb73019c20e08179b7}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!get\_n\_borders@{get\_n\_borders}}
+\index{get\_n\_borders@{get\_n\_borders}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{get\_n\_borders()}{get\_n\_borders()}}
+{\footnotesize\ttfamily long Skeleton\+::\+Skeleton\+::get\+\_\+n\+\_\+borders (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return the number of borders of this \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \mbox{\Hypertarget{classSkeleton_1_1Skeleton_a2f5a16c5472a0ab9d542c997e2038f23}\label{classSkeleton_1_1Skeleton_a2f5a16c5472a0ab9d542c997e2038f23}} 
+\index{Skeleton::Skeleton@{Skeleton::Skeleton}!Print@{Print}}
+\index{Print@{Print}!Skeleton::Skeleton@{Skeleton::Skeleton}}
+\doxysubsubsection{\texorpdfstring{Print()}{Print()}}
+{\footnotesize\ttfamily void Skeleton\+::\+Skeleton\+::\+Print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Prints Data of \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/skeleton.\+hpp\item 
+Source/skeleton\+\_\+create.\+cpp\item 
+Source/skeleton\+\_\+create\+\_\+local.\+cpp\item 
+Source/skeleton\+\_\+print.\+cpp\end{DoxyCompactItemize}

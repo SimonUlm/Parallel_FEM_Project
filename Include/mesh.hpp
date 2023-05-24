@@ -9,26 +9,24 @@
 
 #include "hpc.hpp"
 
-
 namespace Mesh{
     /**
      * @brief Abstract Mesh Class
      */
     class Mesh {
     protected:
-	/**
-	 * @brief Number of rectangles for this mesh
-	*/
-	long m, n;
-	long refine_factor = 0;
+		/**
+	 	* @brief Number of rectangles for this mesh
+		*/
+		long m, n;
+		long refine_factor = 0;
 
-        List<Node> nodes;
-        List<Element> elements;
-        List<Edge> edges;
-        List<BoundaryEdge> boundary;
-        List<long> fixed_nodes;
-
-    public:
+		Util::List<Node> nodes;
+        Util::List<Element> elements;
+        Util::List<Edge> edges;
+        Util::List<BoundaryEdge> boundary;
+        Util::List<long> fixed_nodes;
+    public:    
         Mesh() :
             m(0), n(0) {}
 
@@ -36,7 +34,7 @@ namespace Mesh{
             Mesh(mesh_data[0], mesh_data[1],
                  mesh_data[2], mesh_data[3], mesh_data[4],
                  mesh_data[5], mesh_data[6]) {}
-        
+
         Mesh(long m, long n, long nnodes, long nelem, long nbdry) :
             Mesh(m, n, nnodes, nelem, nbdry, 0, 0) {}
         
@@ -58,9 +56,13 @@ namespace Mesh{
         // Defined in Collect.cpp
         void CollectEdges();
         void CollectFixedNodes();
-        
+
         long get_m() {return m;}
         long get_n() {return n;}
+        long get_refine_factor() {return refine_factor;}
+
+        
+        
     };
 
     class LocalMesh: public Mesh {
@@ -76,14 +78,14 @@ namespace Mesh{
     public:
         friend class GlobalMesh;
 
-        List<long> local_to_global;
+        Util::List<long> local_to_global;
     };
 
     class GlobalMesh: public Mesh {
     public:
         using Mesh::Mesh;
         friend class LocalMesh;
-        
+
         GlobalMesh(long m, long n) :
                 Mesh(m, n,
                  (m + 1) * (n + 1), // nnodes

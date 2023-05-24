@@ -5,3 +5,5 @@
 /build_MPI/
 /cmake-build-debug/
 /cmake-build-debug-coverage
+*.o
+*.a
