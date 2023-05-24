@@ -22,13 +22,13 @@ namespace Mesh{
 	long m, n;
 	long refine_factor = 0;
 
-    public:
         List<Node> nodes;
         List<Element> elements;
         List<Edge> edges;
         List<BoundaryEdge> boundary;
         List<long> fixed_nodes;
 
+    public:
         Mesh() :
             m(0), n(0) {}
         
@@ -69,12 +69,15 @@ namespace Mesh{
 	*/
         long rank;
     public:
+        friend class GlobalMesh;
+
         List<long> local_to_global;
     };
 
     class GlobalMesh: public Mesh {
     public:
         using Mesh::Mesh;
+        friend class LocalMesh;
         
         GlobalMesh(long m, long n) :
                 Mesh(m, n,
@@ -95,8 +98,6 @@ namespace Mesh{
         void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes);
     private:
         void CollectLocalElements(LocalMesh &local_mesh, int rank);
-        void RenumberLocalElements(LocalMesh &local_mesh);
-        void WriteLocalNodes(LocalMesh &local_mesh);
 #endif
     };
 }
