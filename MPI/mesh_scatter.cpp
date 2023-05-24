@@ -86,7 +86,7 @@ void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, int rank) {
     }
 
     // Create local_to_global member
-    local_mesh.local_to_global = List<long>(node_count);
+    local_mesh.local_to_global = Util::List<long>(node_count);
     node_count = 0;
     for (long i = 0; i < nodes.count; ++i) {
         if (node_flags[i]) {
@@ -96,7 +96,7 @@ void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, int rank) {
     }
 
     // Transfer and renumber elements
-    local_mesh.elements = List<Element>(elem_count);
+    local_mesh.elements = Util::List<Element>(elem_count);
     elem_count = 0;
     for (long i = 0; i < elements.count; ++i) {
         if (elements(i).t == rank) {
@@ -119,7 +119,7 @@ void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, int rank) {
 
     // Transfer and renumber boundary edges
     if (bdry_count != 0) {
-        local_mesh.boundary = List<BoundaryEdge>(bdry_count);
+        local_mesh.boundary = Util::List<BoundaryEdge>(bdry_count);
         bdry_count = 0;
         for (long i = 0; i < boundary.count; ++i) {
             if (edge_flags[boundary(i).m]) {
@@ -133,7 +133,7 @@ void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, int rank) {
     }
 
     // Transfer nodes
-    local_mesh.nodes = List<Node>(node_count);
+    local_mesh.nodes = Util::List<Node>(node_count);
     for (long i = 0; i < node_count; ++i)
         local_mesh.nodes(i) = nodes(local_mesh.local_to_global(i));
 }

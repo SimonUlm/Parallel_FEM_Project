@@ -13,7 +13,7 @@ namespace Mesh {
                     nof_edges = elements(i).get_m(k);
 
         // Allocate storage for edge information (+ 1 because we started counting at 0)
-        edges = List<Edge>(nof_edges + 1);
+        edges = Util::List<Edge>(nof_edges + 1);
 
         // Get endpoints for each edge, i.e. compute edgeno for the edges
         for (long i = 0; i < elements.count; ++i)
@@ -41,7 +41,7 @@ namespace Mesh {
             ++count_fixed;
 
         // Write to fixed nodes
-        fixed_nodes = List<long>(count_fixed);
+        fixed_nodes = Util::List<long>(count_fixed);
         long index = 0;
         for (long j = 0; j < nodes.count; ++j)
             if (flags[j])

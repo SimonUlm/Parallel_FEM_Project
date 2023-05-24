@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <mpi.h>
 
-#include "mesh.hpp"
+#include "hpc.hpp"
 
 using namespace Mesh;
 
