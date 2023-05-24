@@ -9,37 +9,36 @@ using namespace Mesh;
 
 void GlobalMesh::Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes) {
 
-    // Allocate global mesh on local level
-    long mesh_data[7];
-    if (rank == 0) {
-        mesh_data[0] = m;
-        mesh_data[1] = n;
-        mesh_data[2] = nodes.count;
-        mesh_data[3] = elements.count;
-        mesh_data[4] = boundary.count;
-        mesh_data[5] = edges.count;
-        mesh_data[6] = fixed_nodes.count;
-    }
-    MPI_Bcast(mesh_data, 7, MPI_LONG, 0, MPI_COMM_WORLD);
-    if (rank != 0) {
-        m = mesh_data[0];
-        n = mesh_data[1];
-        nodes = List<Node>(mesh_data[2]);
-        elements = List<Element>(mesh_data[3]);
-        boundary = List<BoundaryEdge>(mesh_data[4]);
-        edges = List<Edge>(mesh_data[5]);
-        fixed_nodes = List<long>(mesh_data[6]);
-    }
+    // Declare temporary global mesh structure that is used by all processes. This approach is chosen to make sure
+    // the global mesh gets destructed at the end of the scatter method on all local processes to save memory.
+    GlobalMesh global_mesh_temp;
 
-    // Send global mesh to all nodes
-    MPI_Bcast(&nodes(0).x, (int) nodes.count * 2, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&elements(0).n1, (int) elements.count * 7, MPI_LONG, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&boundary(0).n1, (int) boundary.count * 4, MPI_LONG, 0, MPI_COMM_WORLD);
+    // Allocate global mesh on each process
+    std::array<long, 7> mesh_data{};
+    if (rank == 0)
+        mesh_data = {m, n, nodes.count, elements.count, boundary.count, edges.count, fixed_nodes.count};
+    MPI_Bcast(mesh_data.data(), 7, MPI_LONG, 0, MPI_COMM_WORLD);
+    if (rank == 0)
+        global_mesh_temp = std::move(*this);
+    else
+        global_mesh_temp = GlobalMesh(mesh_data);
+
+    // Send global mesh to all processes
+    MPI_Bcast(&global_mesh_temp.nodes(0).x, (int) global_mesh_temp.nodes.count * 2,
+              MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&global_mesh_temp.elements(0).n1, (int) global_mesh_temp.elements.count * 7,
+              MPI_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&global_mesh_temp.boundary(0).n1, (int) global_mesh_temp.boundary.count * 4,
+              MPI_LONG, 0, MPI_COMM_WORLD);
 
     // Gather relevant information and write into local mesh
-    TransferGlobalToLocal(local_mesh, rank);
+    global_mesh_temp.TransferGlobalToLocal(local_mesh, rank);
     local_mesh.CollectEdges();
     local_mesh.CollectFixedNodes();
+
+    // Make sure the root process gets its global mesh back
+    if (rank == 0)
+        *this = std::move(global_mesh_temp);
 }
 
 void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, int rank) {

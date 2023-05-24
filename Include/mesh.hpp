@@ -31,6 +31,11 @@ namespace Mesh{
     public:
         Mesh() :
             m(0), n(0) {}
+
+        explicit Mesh(std::array<long, 7> mesh_data) :
+            Mesh(mesh_data[0], mesh_data[1],
+                 mesh_data[2], mesh_data[3], mesh_data[4],
+                 mesh_data[5], mesh_data[6]) {}
         
         Mesh(long m, long n, long nnodes, long nelem, long nbdry) :
             Mesh(m, n, nnodes, nelem, nbdry, 0, 0) {}
