@@ -110,11 +110,4 @@ namespace Mesh{
     };
 }
 
-
-
-// Other declarations
-#ifdef _MPI
-void MpiPrintSerial(Mesh::LocalMesh &mesh, MPI_Comm comm, int rank, int nof_processes);
-#endif
-
 #endif //HPC2_MESH_HPP

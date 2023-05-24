@@ -20,36 +20,35 @@ namespace Skeleton {
         Skeleton local_skel(n_borders_loc, nodes_per_border, LOCAL);
 
         // Loop again to generate entries in local_skel
-        long border_ix = 0;
+        long local_border_ix = 0;
         long global_node_ix = 0;
         long local_node_ix = 0;
         Util::List<long> &local2global = local_mesh.local_to_global;
         long length_l2g = local2global.count;
 
-        printf("Noch alles in Ordnung mit Prozess %d\n", rank);
-
         for (long i = 0; i < n_borders; ++i) {
-            if ((comBorders(i).get_L() == rank) || (comBorders(i).get_R() == rank)) {
-                copy_border_entries(i, local_skel.get_border(border_ix));
+            if (comBorders(i).get_L() != rank && comBorders(i).get_R() != rank)
+                continue;
 
-                // Copy border nodes and map from global to local node index
-                for (long array_ix = 0; array_ix < nodes_per_border; ++array_ix) {
-                    global_node_ix = comBorderNodes.get_entry(i, array_ix);
-                    for (long j = 0; j < length_l2g; ++j) {
-                        if (local2global(j) == global_node_ix) {
-                            local_node_ix = j;
-                            break;
-                        }
-                        if (j == length_l2g - 1) {
-                            std::cerr << "Skeleton.CreateLocal(...): MAPPING FAILED\n" << std::endl;
-                            abort();
-                        }
+            copy_border_entries(i, local_skel.get_border(local_border_ix));
+
+            // Copy border nodes and map from global to local node index
+            for (long array_ix = 0; array_ix < nodes_per_border; ++array_ix) {
+                global_node_ix = comBorderNodes.get_entry(i, array_ix);
+                for (long j = 0; j < length_l2g; ++j) {
+                    if (local2global(j) == global_node_ix) {
+                        local_node_ix = j;
+                        break;
                     }
-                    // Write local node ix to local skel
-                    local_skel.set_border_node(border_ix, array_ix, local_node_ix);
+                    if (j == length_l2g - 1) {
+                        std::cerr << "Skeleton.CreateLocal(...): MAPPING FAILED\n" << std::endl;
+                        abort();
+                    }
                 }
-                border_ix += 1;
+                // Write local node ix to local skel
+                local_skel.set_border_node(local_border_ix, array_ix, local_node_ix);
             }
+            local_border_ix += 1;
         }
 
         // Write local skeleton to current object

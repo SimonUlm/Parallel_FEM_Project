@@ -5,7 +5,7 @@
 
 using namespace Mesh;
 
-void MpiPrintSerial(LocalMesh &mesh, MPI_Comm comm, int rank, int nof_processes) {
+void MpiPrintSerial(LocalMesh &mesh, Skeleton::Skeleton &skeleton, MPI_Comm comm, int rank, int nof_processes) {
     int dummy = 0;
     MPI_Status status;
 
@@ -16,6 +16,7 @@ void MpiPrintSerial(LocalMesh &mesh, MPI_Comm comm, int rank, int nof_processes)
 
     // Print data
     mesh.Print();
+    skeleton.Print();
 
     // Signal next process
     if (rank != nof_processes - 1) {

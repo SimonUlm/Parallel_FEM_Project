@@ -131,7 +131,7 @@ namespace Skeleton{
         Util::List<ComBorder> comBorders; /*!< List of ComBorder */
         ComBorderNodes comBorderNodes; /*!< ComBorderNodes consist a list of nodes corresponding to each border */
         
-    public:	
+    public:
     	/*!  
     	 *   Skeleton Constructor for unrefined meshes
          *   \param m Number of processes in vertical direction
@@ -158,7 +158,7 @@ namespace Skeleton{
          *   \param nodes_per_border Number of nodes on ComBorder edge
     	 */
         Skeleton(long n_borders, long nodes_per_border, enum global_or_local usecase) :
-				 comBorders(n_borders), comBorderNodes(n_borders * nodes_per_border), 
+				 comBorders(n_borders), comBorderNodes(n_borders, nodes_per_border),
 		         n_borders(n_borders) {assert(usecase == LOCAL);}
                  
         Skeleton(Skeleton &&) = delete;
