@@ -141,7 +141,7 @@ namespace Skeleton{
         /*!  
     	 *   Transforms global Skeleton to local Skeleton
     	 */
-        void CreateLocal(long process, long* local2global, long length_l2g, bool print_skel);
+        void CreateLocal(long process, long* local2global, long length_l2g);
         /*!  
     	 *   Prints Data of Skeleton
     	 */

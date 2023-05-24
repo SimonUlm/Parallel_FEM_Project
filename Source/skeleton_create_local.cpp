@@ -4,7 +4,7 @@
 
 namespace Skeleton {
     void Skeleton::CreateLocal(long process, long* local2global, 
-			       long length_l2g, bool print_skel = false) {
+			       long length_l2g) {
 	// Determine size of local skeleton
 	long n_borders_loc = 0;
 
@@ -52,12 +52,6 @@ namespace Skeleton {
 	// Write local skeleton to current object 
 	// Global skeleton locally obsolete
 	*this = std::move(local_skel);
-
-	// Print skeleton
-	if (print_skel == true) {
-	    printf("\n=== Process %ld:\n", process);
-	    Print();
-	}
     }
 } // Namespace Skeleton
 
