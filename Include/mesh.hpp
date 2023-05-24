@@ -97,7 +97,7 @@ namespace Mesh{
 #ifdef _MPI
         void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes);
     private:
-        void CollectLocalElements(LocalMesh &local_mesh, int rank);
+        void TransferGlobalToLocal(LocalMesh &local_mesh, int rank);
 #endif
     };
 }

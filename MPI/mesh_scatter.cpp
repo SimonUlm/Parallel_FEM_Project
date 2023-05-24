@@ -37,45 +37,56 @@ void GlobalMesh::Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof
     MPI_Bcast(&boundary(0).n1, (int) boundary.count * 4, MPI_LONG, 0, MPI_COMM_WORLD);
 
     // Gather relevant information and write into local mesh
-    CollectLocalElements(local_mesh, rank);
+    TransferGlobalToLocal(local_mesh, rank);
     local_mesh.CollectEdges();
     local_mesh.CollectFixedNodes();
 }
 
-void GlobalMesh::CollectLocalElements(LocalMesh &local_mesh, int rank) {
+void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, int rank) {
 
-    // Create three temporary arrays that maps global to local nodes
+    // Create four temporary arrays that maps global to local nodes
     // 1. Flag array that determines whether a global edge is also local
     std::unique_ptr<bool[]> edge_flags(new bool[edges.count]{});
     // 2. Flag array that determines whether a global node is also local
     std::unique_ptr<bool[]> node_flags(new bool[nodes.count]{});
-    // 3. Array that maps global to local nodes
-    std::unique_ptr<long[]> global_to_local(new long[nodes.count]{});
+    // 3. Array that maps global to local edges
+    std::unique_ptr<long[]> global_to_local_edges(new long[edges.count]{});
+    // 4. Array that maps global to local nodes
+    std::unique_ptr<long[]> global_to_local_nodes(new long[nodes.count]{});
 
     // Count elements and remember the global nodes and boundary edges that belong to the local mesh
     int elem_count = 0;
     for (long i = 0; i < elements.count; ++i) {
         if (elements(i).t == rank) {
-            edge_flags[elements(i).m1] = true;
-            edge_flags[elements(i).m2] = true;
-            edge_flags[elements(i).m3] = true;
             node_flags[elements(i).n1] = true;
             node_flags[elements(i).n2] = true;
             node_flags[elements(i).n3] = true;
+            edge_flags[elements(i).m1] = true;
+            edge_flags[elements(i).m2] = true;
+            edge_flags[elements(i).m3] = true;
             ++elem_count;
         }
     }
 
-    // Create temporary global-to-local array
+    // Create temporary global_to_local_edges
+    int edge_count = 0;
+    for (long i = 0; i < edges.count; ++i) {
+        if (edge_flags[i]) {
+            global_to_local_edges[i] = edge_count;
+            ++edge_count;
+        }
+    }
+
+    // Create temporary global_to_local_nodes
     int node_count = 0;
     for (long i = 0; i < nodes.count; ++i) {
         if (node_flags[i]) {
-            global_to_local[i] = node_count;
+            global_to_local_nodes[i] = node_count;
             ++node_count;
         }
     }
 
-    // Create local-to-global array
+    // Create local_to_global member
     local_mesh.local_to_global = List<long>(node_count);
     node_count = 0;
     for (long i = 0; i < nodes.count; ++i) {
@@ -91,9 +102,12 @@ void GlobalMesh::CollectLocalElements(LocalMesh &local_mesh, int rank) {
     for (long i = 0; i < elements.count; ++i) {
         if (elements(i).t == rank) {
             local_mesh.elements(elem_count) = elements(i);
-            local_mesh.elements(elem_count).n1 = global_to_local[elements(i).n1];
-            local_mesh.elements(elem_count).n2 = global_to_local[elements(i).n2];
-            local_mesh.elements(elem_count).n3 = global_to_local[elements(i).n3];
+            local_mesh.elements(elem_count).n1 = global_to_local_nodes[elements(i).n1];
+            local_mesh.elements(elem_count).n2 = global_to_local_nodes[elements(i).n2];
+            local_mesh.elements(elem_count).n3 = global_to_local_nodes[elements(i).n3];
+            local_mesh.elements(elem_count).m1 = global_to_local_edges[elements(i).m1];
+            local_mesh.elements(elem_count).m2 = global_to_local_edges[elements(i).m2];
+            local_mesh.elements(elem_count).m3 = global_to_local_edges[elements(i).m3];
             ++elem_count;
         }
     }
@@ -111,8 +125,9 @@ void GlobalMesh::CollectLocalElements(LocalMesh &local_mesh, int rank) {
         for (long i = 0; i < boundary.count; ++i) {
             if (edge_flags[boundary(i).m]) {
                 local_mesh.boundary(bdry_count) = boundary(i);
-                local_mesh.boundary(bdry_count).n1 = global_to_local[boundary(i).n1];
-                local_mesh.boundary(bdry_count).n2 = global_to_local[boundary(i).n2];
+                local_mesh.boundary(bdry_count).n1 = global_to_local_nodes[boundary(i).n1];
+                local_mesh.boundary(bdry_count).n2 = global_to_local_nodes[boundary(i).n2];
+                local_mesh.boundary(bdry_count).m = global_to_local_edges[boundary(i).m];
                 ++bdry_count;
             }
         }
