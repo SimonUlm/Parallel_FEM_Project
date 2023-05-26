@@ -9,6 +9,7 @@
 
 #ifdef _MPI
 void MpiPrintSerial(Mesh::LocalMesh &mesh, Skeleton::Skeleton &skeleton, MPI_Comm comm, int rank, int nof_processes);
+void MpiPrintVectorSerial(std::vector<long> &vector_1, std::vector<long> &vector_2, MPI_Comm comm, int rank, int nof_processes);
 #endif
 
 #endif //HPC2_HPC_HPP

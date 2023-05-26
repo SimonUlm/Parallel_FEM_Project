@@ -3,19 +3,18 @@
 #include "hpc.hpp"
 
 #ifdef _MPI
-
 #include <mpi.h>
 
 namespace Conversion {
 
-    void VectorConverter::AccumulatedToDistributed(std::vector<long> &local_vector) {
+    void VectorConverter::AccumulatedToDistributed(std::vector<long> &local_vector) const {
         assert(vector.size() == local_to_global_->count);
 
         for (long i = 0; i < local_vector.size(); ++i)
             local_vector[i] /= local_nodes_priority_(i);
     }
 
-    void VectorConverter::DistributedToAccumulated(std::vector<long> &local_vector, MPI_Comm comm) {
+    void VectorConverter::DistributedToAccumulated(std::vector<long> &local_vector, MPI_Comm comm) const {
         assert(vector.size() == local_to_global_->count);
 
         std::vector<long> global_vector_send(n_global_nodes_);
@@ -27,7 +26,7 @@ namespace Conversion {
                       MPI_LONG, MPI_SUM, comm);
 
         for (long i = 0; i < local_vector.size(); ++i)
-            local_vector[i] = global_vector_send[(*local_to_global_)(i)];
+            local_vector[i] = global_vector_recv[(*local_to_global_)(i)];
     }
 }
 #endif // _MPI

@@ -62,8 +62,6 @@ namespace Mesh{
         long get_n() {return n;}
         long get_refine_factor() {return refine_factor;}
 
-        
-        
     };
 
     class LocalMesh: public Mesh {
@@ -74,6 +72,10 @@ namespace Mesh{
         friend class GlobalMesh;
 
         Util::List<long> local_to_global;
+
+        long get_n_nodes() {
+            return nodes.count;
+        };
 
         const Conversion::VectorConverter & get_vector_converter() {
             return vector_converter;
@@ -103,7 +105,8 @@ namespace Mesh{
 #ifdef _MPI
         void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes);
     private:
-        void TransferGlobalToLocal(LocalMesh &local_mesh, int rank);
+        void TransferGlobalToLocal(LocalMesh &local_mesh, Util::List<long> &global_nodes_priority,
+                                   MPI_Comm comm, int rank);
 #endif
     };
 }
