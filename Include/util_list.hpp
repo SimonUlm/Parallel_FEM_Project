@@ -24,7 +24,11 @@ namespace Util {
         ~List() {
             delete [] data;
         }
-        List(List &&) = delete;
+        List(List && other) noexcept:
+                data(other.data), count(other.count) {
+            other.data = nullptr;
+            other.count = 0;
+        }
         List(const List &) = delete;
 
         List & operator=(List &&other) noexcept {

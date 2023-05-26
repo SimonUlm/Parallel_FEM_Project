@@ -68,18 +68,16 @@ namespace Mesh{
 
     class LocalMesh: public Mesh {
     private:
-        /**
-     * @brief Local Number of rectangles
-    */
-        long k, l;
-        /**
-	 * @brief Rank of Local process
-	*/
-        long rank;
+        Conversion::VectorConverter vector_converter;
+
     public:
         friend class GlobalMesh;
 
         Util::List<long> local_to_global;
+
+        const Conversion::VectorConverter & get_vector_converter() {
+            return vector_converter;
+        };
     };
 
     class GlobalMesh: public Mesh {

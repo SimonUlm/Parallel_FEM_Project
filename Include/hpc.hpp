@@ -3,6 +3,7 @@
 
 #include "mesh_objects.hpp"
 #include "util_list.hpp"
+#include "vector_converter.hpp"
 #include "mesh.hpp"
 #include "skeleton.hpp"
 
