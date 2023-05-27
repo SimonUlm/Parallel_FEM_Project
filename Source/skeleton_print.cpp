@@ -10,7 +10,7 @@ namespace Skeleton {
         // Start printing
         printf("\n=========== Print Skeleton Data ===========\n");
         
-        long n_nodes = comBorderNodes.get_n_nodes();
+        long n_nodes = com_border_nodes.get_n_nodes();
         // Print mesh sizes
         printf("Skeleton size:\n");
         printf("Number of ComBorders: %zu\nNumber of Nodes per ComBorder: %zu\n",
@@ -20,13 +20,13 @@ namespace Skeleton {
         printf("\nComBorders:\n");
         printf("Index, Start_Node, End_Node, L-Proc, R-Proc, Color\n");
         for (long i = 0; i < n_borders; ++i) {
-            comBorders(i).Print();
+            com_borders(i).Print();
         }
         
         // Print ICouples
         printf("\nComBorderNodes:\n");
         printf("Connecting Nodes\n");
-        comBorderNodes.Print();
+        com_border_nodes.Print();
 
         // Print overall storage requirements
         printf("\nMemory\n");

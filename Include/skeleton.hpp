@@ -128,8 +128,8 @@ namespace Skeleton{
     class Skeleton {
     private:
         long n_borders; /*!< Number of borders in this Skeleton */
-        Util::List<ComBorder> comBorders; /*!< List of ComBorder */
-        ComBorderNodes comBorderNodes; /*!< ComBorderNodes consist a list of nodes corresponding to each border */
+        Util::List<ComBorder> com_borders; /*!< List of ComBorder */
+        ComBorderNodes com_border_nodes; /*!< ComBorderNodes consist a list of nodes corresponding to each border */
         
     public:
     	/*!  
@@ -138,8 +138,8 @@ namespace Skeleton{
          *   \param n Number of processes in horizontal direction
     	 */
         Skeleton(long m, long n) :
-                 comBorders(2*n*m-n-m), comBorderNodes(2*n*m-n-m),
-                 n_borders(2*n*m-n-m) {}
+                com_borders(2 * n * m - n - m), com_border_nodes(2 * n * m - n - m),
+                n_borders(2*n*m-n-m) {}
         /*!  
     	 *   Skeleton Constructor for refined meshes
          *
@@ -148,9 +148,9 @@ namespace Skeleton{
          *   \param refine_factor Number of performed refinements
     	 */
         Skeleton(long m, long n, long refine_factor) :
-                 comBorders(2*n*m-n-m), 
-                 comBorderNodes(2*n*m-n-m, pow(2, refine_factor) - 1),
-                 n_borders(2*n*m-n-m) {}
+                com_borders(2 * n * m - n - m),
+                com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
+                n_borders(2*n*m-n-m) {}
         /*!  
     	 *   Skeleton Constructor for local Skeltons
          *
@@ -158,8 +158,8 @@ namespace Skeleton{
          *   \param nodes_per_border Number of nodes on ComBorder edge
     	 */
         Skeleton(long n_borders, long nodes_per_border, enum global_or_local usecase) :
-				 comBorders(n_borders), comBorderNodes(n_borders, nodes_per_border),
-		         n_borders(n_borders) {assert(usecase == LOCAL);}
+                com_borders(n_borders), com_border_nodes(n_borders, nodes_per_border),
+                n_borders(n_borders) {assert(usecase == LOCAL);}
                  
         Skeleton(Skeleton &&) = delete;
         Skeleton(const Skeleton &) = delete;
@@ -179,7 +179,7 @@ namespace Skeleton{
          *   Skeleton
     	 */
         void copy_border_entries(long ix_border, ComBorder& border) {
-        	comBorders(ix_border).copy_entries(border);
+        	com_borders(ix_border).copy_entries(border);
         }
         
         /*!  
@@ -192,11 +192,11 @@ namespace Skeleton{
          *   \return Refererence of ComBorder with given index
     	 */
         ComBorder& get_border(long ix_border) {
-        	return comBorders(ix_border);
+        	return com_borders(ix_border);
         }
         
         void set_border_node(long ix_border, long ix_node, long node) {
-        	comBorderNodes.set_entry(ix_border, ix_node, node);
+        	com_border_nodes.set_entry(ix_border, ix_node, node);
         }
         /*!  
     	 *   \brief Creating global Skeleton from Mesh

@@ -26,7 +26,7 @@ namespace Skeleton {
             	    long r_proc = i * n + j;				// this process
             	    long color = (j-1)%2;					// color
             	    	
-            	    comBorders(border_index).set_entries(
+            	    com_borders(border_index).set_entries(
             	    	border_index, c1, c2, l_proc, r_proc, color
             	    );
             	    
@@ -36,7 +36,7 @@ namespace Skeleton {
             	        node += pow(2, r-1) * j; 			// accounting column
             	        node += pow(2, r-1) * n_n * i;		// accounting row
             	        for (long k = 0; k < pow(2, r-1); ++k) {
-			    			comBorderNodes.set_entry(border_index, index, node);
+			    			com_border_nodes.set_entry(border_index, index, node);
             	            node += 1;
             	            index += 1;
             	        }    
@@ -52,7 +52,7 @@ namespace Skeleton {
             	    long r_proc = i * n + j;				// this process as upper process
             	    long color = (i-1)%2 + 2;				// color
             	    
-            	    comBorders(border_index).set_entries(
+            	    com_borders(border_index).set_entries(
             	    	border_index, c1, c2, l_proc, r_proc, color
             	    );
             	    
@@ -62,7 +62,7 @@ namespace Skeleton {
             	        node += pow(2, r-1) * j;	// accounting column
             	        node += pow(2, r-1) * n * i;// accounting row
             	        for (long k = 0; k < pow(2, r-1); ++k) {
-			    			comBorderNodes.set_entry(border_index, index, node);
+			    			com_border_nodes.set_entry(border_index, index, node);
             	            node += 1;
             	            index += 1;
             	        }    
