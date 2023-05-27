@@ -65,14 +65,14 @@ namespace Mesh {
 
         // Count elements and remember the global nodes and boundary edges that belong to the local mesh
         int elem_count = 0;
-        for (long i = 0; i < elements.count; ++i) {
-            if (elements(i).t == rank) {
-                node_flags[elements(i).n1] = true;
-                node_flags[elements(i).n2] = true;
-                node_flags[elements(i).n3] = true;
-                edge_flags[elements(i).m1] = true;
-                edge_flags[elements(i).m2] = true;
-                edge_flags[elements(i).m3] = true;
+        for (auto element : elements) {
+            if (element.t == rank) {
+                node_flags[element.n1] = true;
+                node_flags[element.n2] = true;
+                node_flags[element.n3] = true;
+                edge_flags[element.m1] = true;
+                edge_flags[element.m2] = true;
+                edge_flags[element.m3] = true;
                 ++elem_count;
             }
         }
@@ -108,35 +108,35 @@ namespace Mesh {
         // Transfer and renumber elements
         local_mesh.elements = Util::List<Element>(elem_count);
         elem_count = 0;
-        for (long i = 0; i < elements.count; ++i) {
-            if (elements(i).t == rank) {
-                local_mesh.elements(elem_count) = elements(i);
-                local_mesh.elements(elem_count).n1 = global_to_local_nodes[elements(i).n1];
-                local_mesh.elements(elem_count).n2 = global_to_local_nodes[elements(i).n2];
-                local_mesh.elements(elem_count).n3 = global_to_local_nodes[elements(i).n3];
-                local_mesh.elements(elem_count).m1 = global_to_local_edges[elements(i).m1];
-                local_mesh.elements(elem_count).m2 = global_to_local_edges[elements(i).m2];
-                local_mesh.elements(elem_count).m3 = global_to_local_edges[elements(i).m3];
+        for (auto element : elements) {
+            if (element.t == rank) {
+                local_mesh.elements(elem_count) = element;
+                local_mesh.elements(elem_count).n1 = global_to_local_nodes[element.n1];
+                local_mesh.elements(elem_count).n2 = global_to_local_nodes[element.n2];
+                local_mesh.elements(elem_count).n3 = global_to_local_nodes[element.n3];
+                local_mesh.elements(elem_count).m1 = global_to_local_edges[element.m1];
+                local_mesh.elements(elem_count).m2 = global_to_local_edges[element.m2];
+                local_mesh.elements(elem_count).m3 = global_to_local_edges[element.m3];
                 ++elem_count;
             }
         }
 
         // Count boundary edges
         int bdry_count = 0;
-        for (long i = 0; i < boundary.count; ++i)
-            if (edge_flags[boundary(i).m])
+        for (auto boundary_edge : boundary)
+            if (edge_flags[boundary_edge.m])
                 ++bdry_count;
 
         // Transfer and renumber boundary edges
         if (bdry_count != 0) {
             local_mesh.boundary = Util::List<BoundaryEdge>(bdry_count);
             bdry_count = 0;
-            for (long i = 0; i < boundary.count; ++i) {
-                if (edge_flags[boundary(i).m]) {
-                    local_mesh.boundary(bdry_count) = boundary(i);
-                    local_mesh.boundary(bdry_count).n1 = global_to_local_nodes[boundary(i).n1];
-                    local_mesh.boundary(bdry_count).n2 = global_to_local_nodes[boundary(i).n2];
-                    local_mesh.boundary(bdry_count).m = global_to_local_edges[boundary(i).m];
+            for (auto boundary_edge : boundary) {
+                if (edge_flags[boundary_edge.m]) {
+                    local_mesh.boundary(bdry_count) = boundary_edge;
+                    local_mesh.boundary(bdry_count).n1 = global_to_local_nodes[boundary_edge.n1];
+                    local_mesh.boundary(bdry_count).n2 = global_to_local_nodes[boundary_edge.n2];
+                    local_mesh.boundary(bdry_count).m = global_to_local_edges[boundary_edge.m];
                     ++bdry_count;
                 }
             }

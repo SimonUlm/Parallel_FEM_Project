@@ -8,31 +8,32 @@ namespace Mesh {
 
         // Get the number of edges
         long nof_edges = 0;
-        for (long i = 0; i < elements.count; ++i)
+        for (auto element : elements)
             for (long k = 1; k <= 3; ++k)
-                if (elements(i).get_m(k) > nof_edges)
-                    nof_edges = elements(i).get_m(k);
+                if (element.get_m(k) > nof_edges)
+                    nof_edges = element.get_m(k);
 
         // Allocate storage for edge information (+ 1 because we started counting at 0)
         edges = Util::List<Edge>(nof_edges + 1);
 
         // Get endpoints for each edge, i.e. compute edgeno for the edges
-        for (long i = 0; i < elements.count; ++i)
+        for (auto element : elements)
             for (long k = 1; k <= 3; ++k)
-                edges(elements(i).get_m(k)) = Edge{
-                        elements(i).get_n(k), // n1
-                        elements(i).get_successor_n(k) // n2
+                edges(element.get_m(k)) = Edge{
+                        element.get_n(k), // n1
+                        element.get_successor_n(k) // n2
                 };
     }
 
     void Mesh::CollectFixedNodes() {
+
         // Use the affiliation to set a flag for each dirichlet node
         std::unique_ptr<bool[]> flags(new bool[nodes.count]{});
         long count_fixed = 0;
-        for (long i = 0; i < boundary.count; ++i) {
-            if (boundary(i).t == 1) {
-                flags[boundary(i).n1] = true;
-                flags[boundary(i).n2] = true;
+        for (auto boundary_edge : boundary) {
+            if (boundary_edge.t == 1) {
+                flags[boundary_edge.n1] = true;
+                flags[boundary_edge.n2] = true;
                 ++count_fixed;
             }
         }
