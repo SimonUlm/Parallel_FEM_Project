@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <mpi.h>
 
 #include "hpc.hpp"
@@ -28,10 +29,10 @@ int main(int argc, char **argv) {
     global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
 
     std::vector<long> accum_to_distr(local_mesh.get_n_nodes(), 10);
-    local_mesh.get_vector_converter().AccumulatedToDistributed(accum_to_distr);
+    local_mesh.vector_converter().AccumulatedToDistributed(accum_to_distr);
 
     std::vector<long> distr_to_accum(local_mesh.get_n_nodes(), 10);
-    local_mesh.get_vector_converter().DistributedToAccumulated(distr_to_accum, MPI_COMM_WORLD);
+    local_mesh.vector_converter().DistributedToAccumulated(distr_to_accum, MPI_COMM_WORLD);
 
     MpiPrintVectorSerial(accum_to_distr, distr_to_accum, MPI_COMM_WORLD, rank, nof_processes);
 

@@ -57,7 +57,7 @@ namespace Skeleton{
      *   \brief ComBorderNodes manages all corresponding nodes on all communciation borders of the skeleton
      *
      *	 The ComBorderNodes class consists a List of nodes. This list is not seperated into single ComBorder's but is
-     *   handled as a consectuive list. The seperation into each border is handled by the setter and getter of this class
+     *   handled as a consecutive list. The seperation into each border is handled by the setter and getter of this class
      *
      */
     class ComBorderNodes {
@@ -68,7 +68,7 @@ namespace Skeleton{
     	long n_borders; /*!< Number of ComBorder's */
         
     public:
-    	Util::List<long> nodes; /*!< Consectuive list of all nodes on the ComBorder's */
+    	Util::List<long> nodes; /*!< Consecutive list of all nodes on the ComBorder's */
         /*!
     	 *   Constructor for unrefined Mesh (Check if still working with 0??)
          *

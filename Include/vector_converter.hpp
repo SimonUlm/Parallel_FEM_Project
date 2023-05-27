@@ -5,8 +5,13 @@
 #include <mpi.h>
 #endif
 
-namespace Conversion {
+namespace Util {
 
+    /*!  \class VectorConverter vector_converter_.hpp "Include/vector_converter_.hpp"
+     *   \brief Converts different vector types into each other
+     *
+     *	 The VectorConverter class is used for converting accumulated vectors into distributed vectors and vice versa
+     */
     class VectorConverter {
     public:
         VectorConverter() :
@@ -29,14 +34,21 @@ namespace Conversion {
         VectorConverter & operator=(const VectorConverter &) = delete;
 
 #ifdef _MPI
+        /*!
+    	 *   Converts accumulated vector into distributed vector
+    	 */
         void AccumulatedToDistributed(std::vector<long> &vector) const;
+
+        /*!
+    	 *   Converts distributed vector into accumulated vector
+    	 */
         void DistributedToAccumulated(std::vector<long> &vector, MPI_Comm comm) const;
 #endif
 
     private:
-        long n_global_nodes_;
-        Util::List<long> local_nodes_priority_;
-        Util::List<long> *local_to_global_;
+        long n_global_nodes_; /*!< number of global nodes */
+        Util::List<long> local_nodes_priority_; /*!< counts how many processes share each node  */
+        Util::List<long> *local_to_global_; /*!< reference to vector that maps local to global nodes */
     };
 }
 
