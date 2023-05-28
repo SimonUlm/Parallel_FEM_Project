@@ -1,13 +1,24 @@
 \hypertarget{classSkeleton_1_1ComBorderNodes}{}\doxysection{Skeleton\+::Com\+Border\+Nodes Class Reference}
 \label{classSkeleton_1_1ComBorderNodes}\index{Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}}
+
+
+\mbox{\hyperlink{classSkeleton_1_1ComBorderNodes}{Com\+Border\+Nodes}} manages all corresponding nodes on all communciation borders of the skeleton.  
+
+
+
+
+{\ttfamily \#include \char`\"{}Include/skeleton.\+hpp\char`\"{}}
+
+
+
+Collaboration diagram for Skeleton\+::Com\+Border\+Nodes\+:
+% FIG 0
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_ae06daacbdbec1029ae2abf7b32614f27}\label{classSkeleton_1_1ComBorderNodes_ae06daacbdbec1029ae2abf7b32614f27}} 
-{\bfseries Com\+Border\+Nodes} (long n\+\_\+borders)
+\mbox{\hyperlink{classSkeleton_1_1ComBorderNodes_ae06daacbdbec1029ae2abf7b32614f27}{Com\+Border\+Nodes}} (long n\+\_\+borders)
 \item 
-\mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a9ae189589de415671229135e136c41e6}\label{classSkeleton_1_1ComBorderNodes_a9ae189589de415671229135e136c41e6}} 
-{\bfseries Com\+Border\+Nodes} (long n\+\_\+borders, long n\+\_\+nodes)
+\mbox{\hyperlink{classSkeleton_1_1ComBorderNodes_a9ae189589de415671229135e136c41e6}{Com\+Border\+Nodes}} (long n\+\_\+borders, long n\+\_\+nodes)
 \item 
 \mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_ae6755aaa3688f2eaebc316d2c3fe5479}\label{classSkeleton_1_1ComBorderNodes_ae6755aaa3688f2eaebc316d2c3fe5479}} 
 long {\bfseries get\+\_\+n\+\_\+nodes} ()
@@ -15,8 +26,7 @@ long {\bfseries get\+\_\+n\+\_\+nodes} ()
 \mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a5a01a8912da130334053b19ec266a07a}\label{classSkeleton_1_1ComBorderNodes_a5a01a8912da130334053b19ec266a07a}} 
 long {\bfseries get\+\_\+n\+\_\+borders} ()
 \item 
-\mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a61d2c1cfcf2aa846837a169f7babf2c7}\label{classSkeleton_1_1ComBorderNodes_a61d2c1cfcf2aa846837a169f7babf2c7}} 
-void {\bfseries init\+\_\+entries} (long index)
+void \mbox{\hyperlink{classSkeleton_1_1ComBorderNodes_a61d2c1cfcf2aa846837a169f7babf2c7}{init\+\_\+entries}} (long index)
 \item 
 \mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a7023c4a233dd3d403a5c04b496e59eca}\label{classSkeleton_1_1ComBorderNodes_a7023c4a233dd3d403a5c04b496e59eca}} 
 void {\bfseries set\+\_\+entry} (long ix\+\_\+border, long ix\+\_\+node, long node)
@@ -24,10 +34,74 @@ void {\bfseries set\+\_\+entry} (long ix\+\_\+border, long ix\+\_\+node, long no
 \mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a13ab3e5de0494a8e9a0869686d485a93}\label{classSkeleton_1_1ComBorderNodes_a13ab3e5de0494a8e9a0869686d485a93}} 
 long {\bfseries get\+\_\+entry} (long ix\+\_\+border, long ix\+\_\+node)
 \item 
-\mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a1b0afb03836a50be3b1655cd94a1a7a8}\label{classSkeleton_1_1ComBorderNodes_a1b0afb03836a50be3b1655cd94a1a7a8}} 
-void {\bfseries Print} ()
+void \mbox{\hyperlink{classSkeleton_1_1ComBorderNodes_a1b0afb03836a50be3b1655cd94a1a7a8}{Print}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classUtil_1_1List}{Util\+::\+List}}$<$ long $>$ \mbox{\hyperlink{classSkeleton_1_1ComBorderNodes_adb0259dd4fc1c9205a9beaa2d5e4ca46}{nodes}}
 \end{DoxyCompactItemize}
 
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classSkeleton_1_1ComBorderNodes}{Com\+Border\+Nodes}} manages all corresponding nodes on all communciation borders of the skeleton. 
+
+The \mbox{\hyperlink{classSkeleton_1_1ComBorderNodes}{Com\+Border\+Nodes}} class consists a List of nodes. This list is not seperated into single \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}}\textquotesingle{}s but is handled as a consecutive list. The seperation into each border is handled by the setter and getter of this class 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_ae06daacbdbec1029ae2abf7b32614f27}\label{classSkeleton_1_1ComBorderNodes_ae06daacbdbec1029ae2abf7b32614f27}} 
+\index{Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}!ComBorderNodes@{ComBorderNodes}}
+\index{ComBorderNodes@{ComBorderNodes}!Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}}
+\doxysubsubsection{\texorpdfstring{ComBorderNodes()}{ComBorderNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Skeleton\+::\+Com\+Border\+Nodes\+::\+Com\+Border\+Nodes (\begin{DoxyParamCaption}\item[{long}]{n\+\_\+borders }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Constructor for unrefined Mesh
+
+
+\begin{DoxyParams}{Parameters}
+{\em n\+\_\+borders} & Number of \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}}\textquotesingle{}s in this \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a9ae189589de415671229135e136c41e6}\label{classSkeleton_1_1ComBorderNodes_a9ae189589de415671229135e136c41e6}} 
+\index{Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}!ComBorderNodes@{ComBorderNodes}}
+\index{ComBorderNodes@{ComBorderNodes}!Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}}
+\doxysubsubsection{\texorpdfstring{ComBorderNodes()}{ComBorderNodes()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Skeleton\+::\+Com\+Border\+Nodes\+::\+Com\+Border\+Nodes (\begin{DoxyParamCaption}\item[{long}]{n\+\_\+borders,  }\item[{long}]{n\+\_\+nodes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Constructor for refined Mesh
+
+
+\begin{DoxyParams}{Parameters}
+{\em n\+\_\+borders} & Number of \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}}\textquotesingle{}s in this \mbox{\hyperlink{classSkeleton_1_1Skeleton}{Skeleton}} \\
+\hline
+{\em n\+\_\+nodes} & Number of nodes per \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}} (calculated from refinement factor) \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a61d2c1cfcf2aa846837a169f7babf2c7}\label{classSkeleton_1_1ComBorderNodes_a61d2c1cfcf2aa846837a169f7babf2c7}} 
+\index{Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}!init\_entries@{init\_entries}}
+\index{init\_entries@{init\_entries}!Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}}
+\doxysubsubsection{\texorpdfstring{init\_entries()}{init\_entries()}}
+{\footnotesize\ttfamily void Skeleton\+::\+Com\+Border\+Nodes\+::init\+\_\+entries (\begin{DoxyParamCaption}\item[{long}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Initialize nodes with ascending numbers per border \mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_a1b0afb03836a50be3b1655cd94a1a7a8}\label{classSkeleton_1_1ComBorderNodes_a1b0afb03836a50be3b1655cd94a1a7a8}} 
+\index{Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}!Print@{Print}}
+\index{Print@{Print}!Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}}
+\doxysubsubsection{\texorpdfstring{Print()}{Print()}}
+{\footnotesize\ttfamily void Skeleton\+::\+Com\+Border\+Nodes\+::\+Print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Prints \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}} Nodes seperated for each \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}} 
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{classSkeleton_1_1ComBorderNodes_adb0259dd4fc1c9205a9beaa2d5e4ca46}\label{classSkeleton_1_1ComBorderNodes_adb0259dd4fc1c9205a9beaa2d5e4ca46}} 
+\index{Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}!nodes@{nodes}}
+\index{nodes@{nodes}!Skeleton::ComBorderNodes@{Skeleton::ComBorderNodes}}
+\doxysubsubsection{\texorpdfstring{nodes}{nodes}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classUtil_1_1List}{Util\+::\+List}}$<$long$>$ Skeleton\+::\+Com\+Border\+Nodes\+::nodes}
+
+Consecutive list of all nodes on the \mbox{\hyperlink{classSkeleton_1_1ComBorder}{Com\+Border}}\textquotesingle{}s 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 

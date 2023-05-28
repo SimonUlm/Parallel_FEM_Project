@@ -17,4 +17,5 @@ digraph "Mesh::LocalMesh"
   Node6 [label="Util::List\< long \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classUtil_1_1List.html",tooltip=" "];
   Node7 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" nodes" ];
   Node7 [label="Util::List\< Mesh::Node \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classUtil_1_1List.html",tooltip=" "];
+  Node6 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" local_to_global" ];
 }

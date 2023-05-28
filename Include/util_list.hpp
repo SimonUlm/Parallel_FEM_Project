@@ -1,5 +1,7 @@
-#ifndef HPC2_MESH_LIST_HPP
-#define HPC2_MESH_LIST_HPP
+#ifndef HPC2_UTIL_LIST_HPP
+#define HPC2_UTIL_LIST_HPP
+
+#include <cassert>
 
 #include "hpc.hpp"
 
@@ -52,4 +54,4 @@ namespace Util {
     };
 }
 
-#endif //HPC2_MESH_LIST_HPP
+#endif //HPC2_UTIL_LIST_HPP

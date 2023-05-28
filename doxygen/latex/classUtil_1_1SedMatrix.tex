@@ -1,0 +1,59 @@
+\hypertarget{classUtil_1_1SedMatrix}{}\doxysection{Util\+::Sed\+Matrix Class Reference}
+\label{classUtil_1_1SedMatrix}\index{Util::SedMatrix@{Util::SedMatrix}}
+
+
+Matrix class for spares matrixes in compress format with extraxted diagonal.  
+
+
+
+
+{\ttfamily \#include \char`\"{}Include/util\+\_\+matrix.\+hpp\char`\"{}}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_a7d1ee170742e641e64b8fccc01aa8923}\label{classUtil_1_1SedMatrix_a7d1ee170742e641e64b8fccc01aa8923}} 
+{\bfseries Sed\+Matrix} (\mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \&\&)=delete
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_aa705e9df96f07f3c5f229199dbcd8c6d}\label{classUtil_1_1SedMatrix_aa705e9df96f07f3c5f229199dbcd8c6d}} 
+{\bfseries Sed\+Matrix} (const \mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \&)=delete
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_afa26dafda49001d0116a51602b3e7d01}\label{classUtil_1_1SedMatrix_afa26dafda49001d0116a51602b3e7d01}} 
+\mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \& {\bfseries operator=} (\mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \&\&other)=default
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_ade1639c606f9186a575303cadac7c75e}\label{classUtil_1_1SedMatrix_ade1639c606f9186a575303cadac7c75e}} 
+\mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \& {\bfseries operator=} (const \mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \&)=delete
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_aff5b8ebf75bd82294aea3470791fb485}\label{classUtil_1_1SedMatrix_aff5b8ebf75bd82294aea3470791fb485}} 
+double \& {\bfseries operator()} (long i) const
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_afee2cbe4b4a00c52f4e1fbe4ee8aec91}\label{classUtil_1_1SedMatrix_afee2cbe4b4a00c52f4e1fbe4ee8aec91}} 
+double \& {\bfseries operator()} (long i)
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_ae084cd1a09e4987a8343aa07abf63919}\label{classUtil_1_1SedMatrix_ae084cd1a09e4987a8343aa07abf63919}} 
+{\bfseries Sed\+Matrix} (long n, long nzmax, long values)
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_a826025543a54b45fd78836e919d6fae6}\label{classUtil_1_1SedMatrix_a826025543a54b45fd78836e919d6fae6}} 
+long {\bfseries get\+\_\+n} ()
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_a5e6125cd0438c8648da462c7fcec3218}\label{classUtil_1_1SedMatrix_a5e6125cd0438c8648da462c7fcec3218}} 
+long {\bfseries get\+\_\+i} (long k)
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_a95566b9495c838c0b21ad30f736cd3f6}\label{classUtil_1_1SedMatrix_a95566b9495c838c0b21ad30f736cd3f6}} 
+void {\bfseries Print} ()
+\item 
+\mbox{\Hypertarget{classUtil_1_1SedMatrix_a149000283f94d07fa4db062a6092cd9b}\label{classUtil_1_1SedMatrix_a149000283f94d07fa4db062a6092cd9b}} 
+void {\bfseries Init} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Matrix class for spares matrixes in compress format with extraxted diagonal. 
+
+The \mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} class is a storage format for sparses matrixes which. The matrix can be either compressed row or column. It stores the diagonal in extracted form and does not store zero entries ~\newline
+ 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/util\+\_\+matrix.\+hpp\item 
+Source/util\+\_\+matrix\+\_\+print.\+cpp\end{DoxyCompactItemize}

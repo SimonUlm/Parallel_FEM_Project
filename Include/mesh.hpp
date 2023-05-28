@@ -9,6 +9,7 @@
 #endif
 
 #include "hpc.hpp"
+#include "mesh_objects.hpp"
 
 namespace Mesh{
     /**

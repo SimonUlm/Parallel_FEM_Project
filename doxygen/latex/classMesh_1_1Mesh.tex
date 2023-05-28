@@ -20,6 +20,9 @@ Collaboration diagram for Mesh\+::Mesh\+:
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\Hypertarget{classMesh_1_1Mesh_a08fc523de7a0c1f59ff01ae15c4b0895}\label{classMesh_1_1Mesh_a08fc523de7a0c1f59ff01ae15c4b0895}} 
+{\bfseries Mesh} (std\+::array$<$ long, 7 $>$ mesh\+\_\+data)
+\item 
 \mbox{\Hypertarget{classMesh_1_1Mesh_ace5048390ae6e649ad67523c8283df9e}\label{classMesh_1_1Mesh_ace5048390ae6e649ad67523c8283df9e}} 
 {\bfseries Mesh} (long \mbox{\hyperlink{classMesh_1_1Mesh_a7ac9346f82576fa4c8decd0e21f843ad}{m}}, long n, long nnodes, long nelem, long nbdry)
 \item 
@@ -38,11 +41,14 @@ Collaboration diagram for Mesh\+::Mesh\+:
 \mbox{\Hypertarget{classMesh_1_1Mesh_a4afa69aa437f83a8da5f4098467a9bc2}\label{classMesh_1_1Mesh_a4afa69aa437f83a8da5f4098467a9bc2}} 
 \mbox{\hyperlink{classMesh_1_1Mesh}{Mesh}} \& {\bfseries operator=} (const \mbox{\hyperlink{classMesh_1_1Mesh}{Mesh}} \&)=delete
 \item 
-\mbox{\Hypertarget{classMesh_1_1Mesh_a4e1ca3a87fa4c623e5163813945d0286}\label{classMesh_1_1Mesh_a4e1ca3a87fa4c623e5163813945d0286}} 
-void {\bfseries Refine} ()
-\item 
 \mbox{\Hypertarget{classMesh_1_1Mesh_a52a68fda5bb1ac84215b5d17fed47a97}\label{classMesh_1_1Mesh_a52a68fda5bb1ac84215b5d17fed47a97}} 
 void {\bfseries Print} ()
+\item 
+\mbox{\Hypertarget{classMesh_1_1Mesh_abc12edee9091b4c458a03dc09b375725}\label{classMesh_1_1Mesh_abc12edee9091b4c458a03dc09b375725}} 
+void {\bfseries Collect\+Edges} ()
+\item 
+\mbox{\Hypertarget{classMesh_1_1Mesh_a33435080ffd9c29134d9376a6427d4d0}\label{classMesh_1_1Mesh_a33435080ffd9c29134d9376a6427d4d0}} 
+void {\bfseries Collect\+Fixed\+Nodes} ()
 \item 
 \mbox{\Hypertarget{classMesh_1_1Mesh_a6a238ae21c2551bb7461a14ef7fb7511}\label{classMesh_1_1Mesh_a6a238ae21c2551bb7461a14ef7fb7511}} 
 long {\bfseries get\+\_\+m} ()
@@ -88,5 +94,5 @@ Abstract \mbox{\hyperlink{classMesh_1_1Mesh}{Mesh}} Class.
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
 Include/mesh.\+hpp\item 
-Source/mesh\+\_\+print.\+cpp\item 
-Source/mesh\+\_\+refine.\+cpp\end{DoxyCompactItemize}
+Source/mesh\+\_\+collect.\+cpp\item 
+Source/mesh\+\_\+print.\+cpp\end{DoxyCompactItemize}

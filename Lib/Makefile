@@ -41,7 +41,16 @@ AR_TARGET = $(LIBRARY).a
 all: install
 
 HPC = \
- *.o
+ mesh_collect.o \
+ mesh_create.o \
+ mesh_objects_print.o \
+ mesh_objects_util.o \
+ mesh_print.o \
+ mesh_refine.o \
+ skeleton_create.o \
+ skeleton_create_local.o \
+ skeleton_print.o \
+ util_matrix_print.o \
 
 
 

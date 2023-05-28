@@ -3,8 +3,9 @@
 #include "hpc.hpp"
 
 namespace Skeleton {
-
-// Print mesh information
+	/*!
+     *   Prints Data of Skeleton
+     */
     void Skeleton::Print() {
         long brief = 0;
         // Start printing
@@ -36,12 +37,18 @@ namespace Skeleton {
         printf("Total       : %12.6g MByte\n", (double) total / 1024. / 1024.);
     }
     
+    /*!
+     *   Prints Data ComBorder
+     */
     void ComBorder::Print() {
     	printf(" %zu %zu %zu", index, c1, c2);
         printf(" %zu %zu %zu", L, R, color);
         printf("\n");
     }
     
+    /*!
+     *   Prints ComBorder Nodes seperated for each ComBorder
+     */
     void ComBorderNodes::Print() {
     	for (long i = 0; i < n_borders; ++i) {
             for(long j = 0; j < n_nodes; ++j) {

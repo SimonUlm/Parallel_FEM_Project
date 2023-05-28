@@ -90,6 +90,9 @@ Collaboration diagram for Mesh::Mesh:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a08fc523de7a0c1f59ff01ae15c4b0895"><td class="memItemLeft" align="right" valign="top"><a id="a08fc523de7a0c1f59ff01ae15c4b0895"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Mesh</b> (std::array&lt; long, 7 &gt; mesh_data)</td></tr>
+<tr class="separator:a08fc523de7a0c1f59ff01ae15c4b0895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace5048390ae6e649ad67523c8283df9e"><td class="memItemLeft" align="right" valign="top"><a id="ace5048390ae6e649ad67523c8283df9e"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Mesh</b> (long <a class="el" href="classMesh_1_1Mesh.html#a7ac9346f82576fa4c8decd0e21f843ad">m</a>, long n, long nnodes, long nelem, long nbdry)</td></tr>
 <tr class="separator:ace5048390ae6e649ad67523c8283df9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -108,12 +111,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4afa69aa437f83a8da5f4098467a9bc2"><td class="memItemLeft" align="right" valign="top"><a id="a4afa69aa437f83a8da5f4098467a9bc2"></a>
 <a class="el" href="classMesh_1_1Mesh.html">Mesh</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classMesh_1_1Mesh.html">Mesh</a> &amp;)=delete</td></tr>
 <tr class="separator:a4afa69aa437f83a8da5f4098467a9bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e1ca3a87fa4c623e5163813945d0286"><td class="memItemLeft" align="right" valign="top"><a id="a4e1ca3a87fa4c623e5163813945d0286"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Refine</b> ()</td></tr>
-<tr class="separator:a4e1ca3a87fa4c623e5163813945d0286"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52a68fda5bb1ac84215b5d17fed47a97"><td class="memItemLeft" align="right" valign="top"><a id="a52a68fda5bb1ac84215b5d17fed47a97"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>Print</b> ()</td></tr>
 <tr class="separator:a52a68fda5bb1ac84215b5d17fed47a97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc12edee9091b4c458a03dc09b375725"><td class="memItemLeft" align="right" valign="top"><a id="abc12edee9091b4c458a03dc09b375725"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>CollectEdges</b> ()</td></tr>
+<tr class="separator:abc12edee9091b4c458a03dc09b375725"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33435080ffd9c29134d9376a6427d4d0"><td class="memItemLeft" align="right" valign="top"><a id="a33435080ffd9c29134d9376a6427d4d0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>CollectFixedNodes</b> ()</td></tr>
+<tr class="separator:a33435080ffd9c29134d9376a6427d4d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a238ae21c2551bb7461a14ef7fb7511"><td class="memItemLeft" align="right" valign="top"><a id="a6a238ae21c2551bb7461a14ef7fb7511"></a>
 long&#160;</td><td class="memItemRight" valign="bottom"><b>get_m</b> ()</td></tr>
 <tr class="separator:a6a238ae21c2551bb7461a14ef7fb7511"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,8 +162,8 @@ long&#160;</td><td class="memItemRight" valign="bottom"><b>refine_factor</b> = 0
 <div class="textblock"><p>Abstract <a class="el" href="classMesh_1_1Mesh.html" title="Abstract Mesh Class.">Mesh</a> Class. </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>Include/<a class="el" href="mesh_8hpp_source.html">mesh.hpp</a></li>
+<li>Source/mesh_collect.cpp</li>
 <li>Source/mesh_print.cpp</li>
-<li>Source/mesh_refine.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -45,9 +45,6 @@ namespace Skeleton{
         long get_L() {return L;}
         long get_R() {return R;}
         
-        /*!
-    	 *   Prints Data of ComBorder
-    	 */
         void Print();
         
     };
@@ -70,7 +67,7 @@ namespace Skeleton{
     public:
     	Util::List<long> nodes; /*!< Consecutive list of all nodes on the ComBorder's */
         /*!
-    	 *   Constructor for unrefined Mesh (Check if still working with 0??)
+    	 *   Constructor for unrefined Mesh
          *
          *   \param n_borders Number of ComBorder's in this Skeleton
     	 */
@@ -106,15 +103,10 @@ namespace Skeleton{
             return nodes(ix_border*n_nodes + ix_node);    
         }
 
-        /*!
-    	 *   \brief Prints Data of ComBorderNodes
-         *
-         *   The nodes for each border are printed into a new line
-    	 */
         void Print();	
     };
 
-    /* Skeleton Class */
+    /* Skeleton */
     /*!  \class Skeleton skeleton.hpp "Include/skeleton.hpp"
      *   \brief The skeleton is used for the communciation between the distributed
      *	  processes
@@ -226,9 +218,6 @@ namespace Skeleton{
         void Scatter(int rank, Mesh::LocalMesh &local_mesh);
         #endif
 
-        /*!
-    	 *   Prints Data of Skeleton
-    	 */
         void Print();
     };
 }

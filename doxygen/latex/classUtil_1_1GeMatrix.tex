@@ -1,0 +1,96 @@
+\hypertarget{classUtil_1_1GeMatrix}{}\doxysection{Util\+::Ge\+Matrix Class Reference}
+\label{classUtil_1_1GeMatrix}\index{Util::GeMatrix@{Util::GeMatrix}}
+
+
+Matrix class for general dense matrixes.  
+
+
+
+
+{\ttfamily \#include \char`\"{}Include/util\+\_\+matrix.\+hpp\char`\"{}}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_a18a7c2df6146287e14d3c71b5d4a6dfc}\label{classUtil_1_1GeMatrix_a18a7c2df6146287e14d3c71b5d4a6dfc}} 
+{\bfseries Ge\+Matrix} (\mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} \&\&)=delete
+\item 
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_a08ad2c43374b654a50cbbaf5108e7ed1}\label{classUtil_1_1GeMatrix_a08ad2c43374b654a50cbbaf5108e7ed1}} 
+{\bfseries Ge\+Matrix} (const \mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} \&)=delete
+\item 
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_ad648c47f9fcb2e7b35813392015dd9ba}\label{classUtil_1_1GeMatrix_ad648c47f9fcb2e7b35813392015dd9ba}} 
+\mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} \& {\bfseries operator=} (\mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} \&\&other)=default
+\item 
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_a19e4a3ef8fcea9ef0aa7fc6ef29a6cd3}\label{classUtil_1_1GeMatrix_a19e4a3ef8fcea9ef0aa7fc6ef29a6cd3}} 
+\mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} \& {\bfseries operator=} (const \mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} \&)=delete
+\item 
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_ab14adf0aa19cfa2828b23bd8acc96f50}\label{classUtil_1_1GeMatrix_ab14adf0aa19cfa2828b23bd8acc96f50}} 
+double \& {\bfseries operator()} (long i, long j) const
+\item 
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_a3c0ceea7054cf13f66641778f9fa7156}\label{classUtil_1_1GeMatrix_a3c0ceea7054cf13f66641778f9fa7156}} 
+double \& {\bfseries operator()} (long i, long j)
+\item 
+\mbox{\hyperlink{classUtil_1_1GeMatrix_a5e57c461aa253d62e596292711aa0644}{Ge\+Matrix}} (long m, long n, Storage\+Order order)
+\item 
+\mbox{\hyperlink{classUtil_1_1GeMatrix_a24b3132d751e121c24ebf6cfab3d42eb}{Ge\+Matrix}} (\mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \&sed, bool sym)
+\item 
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_a6c3dc2d221c5fad780121bdba613aa27}\label{classUtil_1_1GeMatrix_a6c3dc2d221c5fad780121bdba613aa27}} 
+void {\bfseries Init} ()
+\item 
+void \mbox{\hyperlink{classUtil_1_1GeMatrix_a9f4c3918f9df6c161f69bb481c393fdd}{Print}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Matrix class for general dense matrixes. 
+
+The \mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} class is a general storage format for dense matrixes which stores all values including zero values. The storage format can be row or column major 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_a5e57c461aa253d62e596292711aa0644}\label{classUtil_1_1GeMatrix_a5e57c461aa253d62e596292711aa0644}} 
+\index{Util::GeMatrix@{Util::GeMatrix}!GeMatrix@{GeMatrix}}
+\index{GeMatrix@{GeMatrix}!Util::GeMatrix@{Util::GeMatrix}}
+\doxysubsubsection{\texorpdfstring{GeMatrix()}{GeMatrix()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Util\+::\+Ge\+Matrix\+::\+Ge\+Matrix (\begin{DoxyParamCaption}\item[{long}]{m,  }\item[{long}]{n,  }\item[{Storage\+Order}]{order }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Constructor for \mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & Number of rows \\
+\hline
+{\em n} & Number of columns \\
+\hline
+{\em order} & Storage order ROWMAJOR $\vert$ COLMAJOR \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_a24b3132d751e121c24ebf6cfab3d42eb}\label{classUtil_1_1GeMatrix_a24b3132d751e121c24ebf6cfab3d42eb}} 
+\index{Util::GeMatrix@{Util::GeMatrix}!GeMatrix@{GeMatrix}}
+\index{GeMatrix@{GeMatrix}!Util::GeMatrix@{Util::GeMatrix}}
+\doxysubsubsection{\texorpdfstring{GeMatrix()}{GeMatrix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Util\+::\+Ge\+Matrix\+::\+Ge\+Matrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \&}]{sed,  }\item[{bool}]{sym }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Constructor for \mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} from \mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} (always as colmajor)
+
+
+\begin{DoxyParams}{Parameters}
+{\em sed} & Reference to \mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} \\
+\hline
+{\em sym} & Is given \mbox{\hyperlink{classUtil_1_1SedMatrix}{Sed\+Matrix}} symmetric \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classUtil_1_1GeMatrix_a9f4c3918f9df6c161f69bb481c393fdd}\label{classUtil_1_1GeMatrix_a9f4c3918f9df6c161f69bb481c393fdd}} 
+\index{Util::GeMatrix@{Util::GeMatrix}!Print@{Print}}
+\index{Print@{Print}!Util::GeMatrix@{Util::GeMatrix}}
+\doxysubsubsection{\texorpdfstring{Print()}{Print()}}
+{\footnotesize\ttfamily void Util\+::\+Ge\+Matrix\+::\+Print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Prints Data \mbox{\hyperlink{classUtil_1_1GeMatrix}{Ge\+Matrix}} 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Include/util\+\_\+matrix.\+hpp\item 
+Source/util\+\_\+matrix\+\_\+print.\+cpp\end{DoxyCompactItemize}

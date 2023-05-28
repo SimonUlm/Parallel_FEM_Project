@@ -17,8 +17,14 @@ Collaboration diagram for Mesh\+::Global\+Mesh\+:
 \mbox{\Hypertarget{classMesh_1_1GlobalMesh_a0d9b4b0a4e235d68fa54fab4f1755ec0}\label{classMesh_1_1GlobalMesh_a0d9b4b0a4e235d68fa54fab4f1755ec0}} 
 void {\bfseries Create} (\mbox{\hyperlink{structMesh_1_1Node}{Node}} bottom\+\_\+left\+\_\+node=\mbox{\hyperlink{structMesh_1_1Node}{Node}}\{0, 0\}, \mbox{\hyperlink{structMesh_1_1Node}{Node}} top\+\_\+right\+\_\+node=\mbox{\hyperlink{structMesh_1_1Node}{Node}}\{1, 1\})
 \item 
+\mbox{\Hypertarget{classMesh_1_1GlobalMesh_a432f57bd17e04ac6d4c5455f38546c38}\label{classMesh_1_1GlobalMesh_a432f57bd17e04ac6d4c5455f38546c38}} 
+void {\bfseries Refine} ()
+\item 
 \mbox{\Hypertarget{classMesh_1_1GlobalMesh_a01bda111f009ec929f31d29581ef718d}\label{classMesh_1_1GlobalMesh_a01bda111f009ec929f31d29581ef718d}} 
 {\bfseries Mesh} ()
+\item 
+\mbox{\Hypertarget{classMesh_1_1GlobalMesh_a08fc523de7a0c1f59ff01ae15c4b0895}\label{classMesh_1_1GlobalMesh_a08fc523de7a0c1f59ff01ae15c4b0895}} 
+{\bfseries Mesh} (std\+::array$<$ long, 7 $>$ mesh\+\_\+data)
 \item 
 \mbox{\Hypertarget{classMesh_1_1GlobalMesh_ace5048390ae6e649ad67523c8283df9e}\label{classMesh_1_1GlobalMesh_ace5048390ae6e649ad67523c8283df9e}} 
 {\bfseries Mesh} (long \mbox{\hyperlink{classMesh_1_1Mesh_a7ac9346f82576fa4c8decd0e21f843ad}{m}}, long n, long nnodes, long nelem, long nbdry)
@@ -32,10 +38,17 @@ void {\bfseries Create} (\mbox{\hyperlink{structMesh_1_1Node}{Node}} bottom\+\_\
 \mbox{\Hypertarget{classMesh_1_1GlobalMesh_a562a06588b65838906d515c78765f798}\label{classMesh_1_1GlobalMesh_a562a06588b65838906d515c78765f798}} 
 {\bfseries Mesh} (const \mbox{\hyperlink{classMesh_1_1Mesh}{Mesh}} \&)=delete
 \end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMesh_1_1GlobalMesh_a162c8e0e6c0d914bfd00f5da65791818}\label{classMesh_1_1GlobalMesh_a162c8e0e6c0d914bfd00f5da65791818}} 
+class {\bfseries Local\+Mesh}
+\end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
 Include/mesh.\+hpp\item 
-Source/mesh\+\_\+create.\+cpp\end{DoxyCompactItemize}
+Source/mesh\+\_\+create.\+cpp\item 
+Source/mesh\+\_\+refine.\+cpp\end{DoxyCompactItemize}

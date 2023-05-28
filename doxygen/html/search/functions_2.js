@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['print_46',['Print',['../classSkeleton_1_1Skeleton.html#a2f5a16c5472a0ab9d542c997e2038f23',1,'Skeleton::Skeleton']]]
+  ['init_5fentries_58',['init_entries',['../classSkeleton_1_1ComBorderNodes.html#a61d2c1cfcf2aa846837a169f7babf2c7',1,'Skeleton::ComBorderNodes']]]
 ];

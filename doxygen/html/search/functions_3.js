@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['skeleton_47',['Skeleton',['../classSkeleton_1_1Skeleton.html#afa1f511bd1c79cf5389ae9f347aa0ade',1,'Skeleton::Skeleton::Skeleton(long m, long n)'],['../classSkeleton_1_1Skeleton.html#a8aa461a476df2178255f24d2af27dca4',1,'Skeleton::Skeleton::Skeleton(long m, long n, long refine_factor)'],['../classSkeleton_1_1Skeleton.html#ae0980d5099ad3d935a5c936241ea7c79',1,'Skeleton::Skeleton::Skeleton(long n_borders, long nodes_per_border, enum global_or_local usecase)']]]
+  ['print_59',['Print',['../classSkeleton_1_1ComBorder.html#aec215f3e345906f4a2240e2a872da966',1,'Skeleton::ComBorder::Print()'],['../classSkeleton_1_1ComBorderNodes.html#a1b0afb03836a50be3b1655cd94a1a7a8',1,'Skeleton::ComBorderNodes::Print()'],['../classSkeleton_1_1Skeleton.html#a2f5a16c5472a0ab9d542c997e2038f23',1,'Skeleton::Skeleton::Print()'],['../classUtil_1_1GeMatrix.html#a9f4c3918f9df6c161f69bb481c393fdd',1,'Util::GeMatrix::Print()']]]
 ];
