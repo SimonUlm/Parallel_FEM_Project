@@ -6,6 +6,7 @@
 #include "vector_converter.hpp"
 #include "mesh.hpp"
 #include "skeleton.hpp"
+#include "parallel_dot_product.hpp"
 
 #ifdef _MPI
 void MpiPrintSerial(Mesh::LocalMesh &mesh, Skeleton::Skeleton &skeleton, MPI_Comm comm, int rank, int nof_processes);
