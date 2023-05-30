@@ -4,6 +4,8 @@
 #include <mpi.h>
 #include <vector>
 
-void parallel_dot_product(std::vector<long>& v_acc, std::vector<long> &v_dist, long &global_result);
+namespace Util {
+    void parallel_dot_product(std::vector<double> &v_acc, std::vector<double> &v_dist, double &global_result);
+}
 
 #endif // HPC2_PARALLEL_DOT_PRODUCT_HPP 

@@ -1,9 +1,10 @@
 #include <cstdio>
+#include <iostream>
+#include <vector>
 #include <mpi.h>
 
 #include "hpc.hpp"
 
-using namespace Mesh;
 
 int main(int argc, char **argv) {
     MPI_Init(&argc, &argv);
@@ -12,22 +13,17 @@ int main(int argc, char **argv) {
     int nof_processes;
     MPI_Comm_size(MPI_COMM_WORLD, &nof_processes);
 
-    int m = 3;
-    int n = 2;
+    std::vector<double> v_acc{1, 2, 3};
+    std::vector<double> v_dist{(double) rank, (double) rank, (double) rank};
+    
+    double dot_result = 0;
 
-    GlobalMesh global_mesh;
-    LocalMesh local_mesh;
+    Util::parallel_dot_product(v_acc, v_dist, dot_result);
 
-    if (rank == 0)
-    {
-        global_mesh = GlobalMesh(m, n);
-        global_mesh.Create();
-        global_mesh.Refine();
+    if (rank == 0) {
+	std::cout << "dot product result: " << dot_result << "\n";
     }
-
-    global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
-
-    MpiPrintSerial(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
 
     MPI_Finalize();
 }
+

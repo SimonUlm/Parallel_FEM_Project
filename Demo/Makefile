@@ -22,7 +22,6 @@ CS = $(LDFLAGS) ../Lib/libhpc.a $(LDLIBS)
 all: lib hpc_demo0
 	- ./hpc_demo0
 
-
 lib:
 	( cd ../Lib ; $(MAKE) )
 
