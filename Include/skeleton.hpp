@@ -42,8 +42,12 @@ namespace Skeleton{
         	border.set_entries(index, c1, c2, L, R, color);
         }
         
-        long get_L() {return L;}
-        long get_R() {return R;}
+        const long get_L() const {return L;}
+        const long get_R() const {return R;}
+        const long get_c1() const {return c1;}
+        const long get_c2() const {return c2;}
+        void set_c1(long new_c1) {c1 = new_c1;}
+        void set_c2(long new_c2) {c2 = new_c2;}
         
         /*!
     	 *   Prints Data of ComBorder
