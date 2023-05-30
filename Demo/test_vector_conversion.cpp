@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <iostream>
 #include <mpi.h>
 
 #include "hpc.hpp"
@@ -34,7 +34,15 @@ int main(int argc, char **argv) {
     std::vector<long> distr_to_accum(local_mesh.get_n_nodes(), 10);
     local_mesh.vector_converter().DistributedToAccumulated(distr_to_accum, MPI_COMM_WORLD);
 
-    MpiPrintVectorSerial(accum_to_distr, distr_to_accum, MPI_COMM_WORLD, rank, nof_processes);
+    MPI::PrintSerial(MPI_COMM_WORLD, rank, nof_processes, [&]() {
+        std::cout << "Rank = " << rank << std::endl;
+        for (long x : accum_to_distr)
+            std::cout << x << " ";
+        std::cout << std::endl;
+        for (long x : distr_to_accum)
+            std::cout << x << " ";
+        std::cout << std::endl;
+    });
 
     MPI_Finalize();
 }
