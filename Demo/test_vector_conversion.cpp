@@ -28,18 +28,18 @@ int main(int argc, char **argv) {
 
     global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
 
-    std::vector<long> accum_to_distr(local_mesh.get_n_nodes(), 10);
+    std::vector<double> accum_to_distr(local_mesh.get_n_nodes(), 10);
     local_mesh.vector_converter().AccumulatedToDistributed(accum_to_distr);
 
-    std::vector<long> distr_to_accum(local_mesh.get_n_nodes(), 10);
+    std::vector<double> distr_to_accum(local_mesh.get_n_nodes(), 10);
     local_mesh.vector_converter().DistributedToAccumulated(distr_to_accum, MPI_COMM_WORLD);
 
     MPI::PrintSerial(MPI_COMM_WORLD, rank, nof_processes, [&]() {
         std::cout << "Rank = " << rank << std::endl;
-        for (long x : accum_to_distr)
+        for (auto x : accum_to_distr)
             std::cout << x << " ";
         std::cout << std::endl;
-        for (long x : distr_to_accum)
+        for (auto x : distr_to_accum)
             std::cout << x << " ";
         std::cout << std::endl;
     });

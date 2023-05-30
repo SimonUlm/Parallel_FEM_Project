@@ -37,12 +37,12 @@ namespace Util {
         /*!
     	 *   Converts accumulated vector into distributed vector
     	 */
-        void AccumulatedToDistributed(std::vector<long> &vector) const;
+        void AccumulatedToDistributed(std::vector<double> &vector) const;
 
         /*!
     	 *   Converts distributed vector into accumulated vector
     	 */
-        void DistributedToAccumulated(std::vector<long> &vector, MPI_Comm comm) const;
+        void DistributedToAccumulated(std::vector<double> &vector, MPI_Comm comm) const;
 #endif
 
     private:
