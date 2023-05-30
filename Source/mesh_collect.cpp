@@ -25,7 +25,7 @@ namespace Mesh {
                 };
     }
 
-    void Mesh::CollectFixedNodes() {
+    void Mesh::CollectFixedNodes(long global_nbdry) {
 
         // Use the affiliation to set a flag for each dirichlet node
         std::unique_ptr<bool[]> flags(new bool[nodes.count]{});
@@ -38,8 +38,9 @@ namespace Mesh {
             }
         }
 
-        // Number of fixed nodes is higher than number of fixed boundary edges (except the whole boundary is fixed)
-        if (count_fixed != boundary.count)
+        // Number of fixed nodes is higher by one than number of fixed boundary edges
+        // (Except the mesh is global and the whole boundary is fixed)
+        if (count_fixed != 0 && count_fixed != global_nbdry)
             ++count_fixed;
 
         // Write to fixed nodes

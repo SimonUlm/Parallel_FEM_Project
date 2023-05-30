@@ -8,14 +8,14 @@
 namespace Util {
 
     void VectorConverter::AccumulatedToDistributed(std::vector<long> &local_vector) const {
-        assert(vector.size() == local_to_global_->count);
+        assert(local_vector.size() == local_to_global_->count);
 
         for (long i = 0; i < local_vector.size(); ++i)
             local_vector[i] /= local_nodes_priority_(i);
     }
 
     void VectorConverter::DistributedToAccumulated(std::vector<long> &local_vector, MPI_Comm comm) const {
-        assert(vector.size() == local_to_global_->count);
+        assert(local_vector.size() == local_to_global_->count);
 
         // Create global vector from local vector
         std::vector<long> global_vector_send(n_global_nodes_);

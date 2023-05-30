@@ -27,6 +27,10 @@ namespace Mesh{
         Util::List<Edge> edges;
         Util::List<BoundaryEdge> boundary;
         Util::List<long> fixed_nodes;
+
+        // Defined in Collect.cpp
+        void CollectFixedNodes(long global_nbdry);
+
     public:    
         Mesh() :
             m(0), n(0) {}
@@ -56,7 +60,6 @@ namespace Mesh{
 
         // Defined in Collect.cpp
         void CollectEdges();
-        void CollectFixedNodes();
 
         long get_m() {return m;}
         long get_n() {return n;}
@@ -80,6 +83,10 @@ namespace Mesh{
         const Util::VectorConverter & vector_converter() {
             return vector_converter_;
         };
+
+        void CollectFixedNodes() {
+            Mesh::CollectFixedNodes(0);
+        }
     };
 
     class GlobalMesh: public Mesh {
@@ -100,6 +107,10 @@ namespace Mesh{
 
         // Defined in Refine.cpp
         void Refine();
+
+        void CollectFixedNodes() {
+            Mesh::CollectFixedNodes(boundary.count);
+        }
 
         // Defined in Scatter.cpp
 #ifdef _MPI
