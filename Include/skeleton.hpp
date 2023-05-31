@@ -126,6 +126,7 @@ namespace Skeleton{
         long n_borders; /*!< Number of borders in this Skeleton */
         Util::Vector<ComBorder> com_borders; /*!< List of ComBorder */
         ComBorderNodes com_border_nodes; /*!< ComBorderNodes consist a list of nodes corresponding to each border */
+        Util::Vector<long> crosspoints; /*!< List of cross points between processes */
         
     public:
     	/*!  
@@ -135,7 +136,11 @@ namespace Skeleton{
     	 */
         Skeleton(long m, long n) :
                 com_borders(2 * n * m - n - m), com_border_nodes(2 * n * m - n - m),
-                n_borders(2*n*m-n-m) {}
+                n_borders(2*n*m-n-m),
+                crosspoints((m + 1) * (n + 1)) {
+            for (auto &point : crosspoints)
+                point = 0;
+        }
         /*!  
     	 *   Skeleton Constructor for refined meshes
          *
@@ -146,7 +151,11 @@ namespace Skeleton{
         Skeleton(long m, long n, long refine_factor) :
                 com_borders(2 * n * m - n - m),
                 com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
-                n_borders(2*n*m-n-m) {}
+                n_borders(2*n*m-n-m),
+                crosspoints((m + 1) * (n + 1)) {
+            for (auto &point : crosspoints)
+                point = 0;
+        }
         /*!  
     	 *   Skeleton Constructor for local Skeltons
          *
@@ -194,6 +203,8 @@ namespace Skeleton{
         void set_border_node(long ix_border, long ix_node, long node) {
         	com_border_nodes.set_entry(ix_border, ix_node, node);
         }
+
+        const Util::Vector<long> &get_crosspoints() const { return crosspoints; }
         /*!  
     	 *   \brief Creating global Skeleton from Mesh
          *

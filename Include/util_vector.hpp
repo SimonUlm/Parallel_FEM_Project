@@ -101,8 +101,16 @@ namespace Util {
         }
 
         // Iterators
+        const Iterator begin() const {
+            return Iterator(data_);
+        }
+
         Iterator begin() {
             return Iterator(data_);
+        }
+
+        const Iterator end() const {
+            return Iterator(data_ + count_);
         }
 
         Iterator end() {

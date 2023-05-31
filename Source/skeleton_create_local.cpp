@@ -6,12 +6,13 @@
 namespace Skeleton {
 
     void Skeleton::CreateLocal(int rank, Mesh::LocalMesh &local_mesh) {
-        // Determine size of local skeleton
+        // Determine size of local skeleton (and remember cross points)
         long n_borders_loc = 0;
-
         for (long i = 0; i < n_borders; ++i) {
             if ((com_borders(i).get_L() == rank) || (com_borders(i).get_R() == rank)) {
                 n_borders_loc += 1;
+                crosspoints(com_borders(i).get_c1()) = true;
+                crosspoints(com_borders(i).get_c2()) = true;
             }
         }
 
@@ -63,6 +64,27 @@ namespace Skeleton {
                 local_skel.set_border_node(local_border_ix, array_ix, local_node_ix);
             }
             local_border_ix += 1;
+        }
+
+        // Count crosspoints
+        long count = 0;
+        for (auto point : crosspoints)
+            if (point == true)
+                ++count;
+
+        // Create local crosspoints
+        local_skel.crosspoints = Util::Vector<long>(count);
+        long crosspoint_idx = 0;
+        for (long i = 0; i < crosspoints.count(); ++i) {
+            if (crosspoints(i) == false)
+                continue;
+            for (long j = 0; j < length_l2g; ++j) {
+                if (local2global(j) == i) {
+                    local_skel.crosspoints(crosspoint_idx) = j;
+                    ++crosspoint_idx;
+                    break;
+                }
+            }
         }
 
         // Write local skeleton to current object

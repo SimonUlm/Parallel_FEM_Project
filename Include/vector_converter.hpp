@@ -5,7 +5,12 @@
 #include <mpi.h>
 #endif
 
-namespace Util {
+// Declare Skeleton class
+namespace Skeleton {
+    class Skeleton;
+}
+
+namespace Mesh {
 
     /*!  \class VectorConverter vector_converter_.hpp "Include/vector_converter_.hpp"
      *   \brief Converts different vector types into each other
@@ -15,12 +20,13 @@ namespace Util {
     class VectorConverter {
     public:
         VectorConverter() :
-                n_global_nodes_(0),
+                n_global_crosspoints_(0),
                 local_nodes_priority_(),
                 local_to_global_(nullptr) {}
 
-        VectorConverter(Vector<long> &global_nodes_priority, Vector<long> &local_to_global) :
-                n_global_nodes_(global_nodes_priority.count()),
+        VectorConverter(long m, long n,
+                        Util::Vector<long> &global_nodes_priority, Util::Vector<long> &local_to_global) :
+                n_global_crosspoints_((m + 1) * (n + 1)),
                 local_nodes_priority_(local_to_global.count()),
                 local_to_global_(&local_to_global) {
             for (long i = 0; i < local_nodes_priority_.count(); ++i)
@@ -37,18 +43,19 @@ namespace Util {
         /*!
     	 *   Converts accumulated vector into distributed vector
     	 */
-        void AccumulatedToDistributed(Vector<double> &vector) const;
+        void AccumulatedToDistributed(Util::Vector<double> &vector) const;
 
         /*!
     	 *   Converts distributed vector into accumulated vector
     	 */
-        void DistributedToAccumulated(Vector<double> &vector, MPI_Comm comm) const;
+        void DistributedToAccumulated(Util::Vector<double> &vector, MPI_Comm comm,
+                                      Skeleton::Skeleton &local_skel) const;
 #endif
 
     private:
-        long n_global_nodes_; /*!< number of global nodes */
-        Vector<long> local_nodes_priority_; /*!< counts how many processes share each node  */
-        Vector<long> *local_to_global_; /*!< reference to vector that maps local to global nodes */
+        long n_global_crosspoints_; /*!< number of global nodes */
+        Util::Vector<long> local_nodes_priority_; /*!< counts how many processes share each node  */
+        Util::Vector<long> *local_to_global_; /*!< reference to vector that maps local to global nodes */
     };
 }
 

@@ -42,8 +42,8 @@ namespace Mesh {
         local_mesh.CollectFixedNodes();
 
         // Create vector converter
-        local_mesh.vector_converter_ = Util::VectorConverter(global_nodes_priority,
-                                                             local_mesh.local_to_global);
+        local_mesh.vector_converter_ = VectorConverter(mesh_data[0], mesh_data[1],
+                                                       global_nodes_priority, local_mesh.local_to_global);
 
         // Make sure the root process gets its global mesh back
         if (rank == 0)

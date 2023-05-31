@@ -70,7 +70,7 @@ namespace Mesh{
 
     class LocalMesh: public Mesh {
     private:
-        Util::VectorConverter vector_converter_;
+        VectorConverter vector_converter_;
 
     public:
         friend class GlobalMesh;
@@ -81,7 +81,7 @@ namespace Mesh{
             return nodes.count();
         };
 
-        const Util::VectorConverter & vector_converter() {
+        const VectorConverter & vector_converter() {
             return vector_converter_;
         };
 
