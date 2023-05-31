@@ -1,5 +1,5 @@
-#ifndef HPC2_MESH_LIST_HPP
-#define HPC2_MESH_LIST_HPP
+#ifndef HPC2_UTIL_VECTOR_HPP
+#define HPC2_UTIL_VECTOR_HPP
 
 #include "hpc.hpp"
 
@@ -73,19 +73,30 @@ namespace Util {
         Vector &operator=(const Vector &) = delete;
 
         // Access operations and getters
-        const T & operator()(long index) const {
+        const T &operator()(long index) const {
             assert(index < count_ || index == 0);
             return data_[index];
         }
 
-        T & operator()(long index) {
+        T &operator()(long index) {
             assert(index < count_ || index == 0);
             return data_[index];
         }
 
         const long count() const { return count_; }
 
-        T * const data() const { return data_; }
+        T *const data() const { return data_; }
+
+        // Initializers
+        void Init() {
+            for (long i = 0; i < count_; ++i)
+                data_[i] = i + 1;
+        }
+
+        void Init(T value) {
+            for (long i = 0; i < count_; ++i)
+                data_[i] = value;
+        }
 
         // Iterators
         Iterator begin() {
@@ -102,4 +113,4 @@ namespace Util {
     };
 }
 
-#endif //HPC2_MESH_LIST_HPP
+#endif //HPC2_UTIL_VECTOR_HPP

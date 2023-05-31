@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace Util {
-    void parallel_dot_product(std::vector<double> &v_acc, std::vector<double> &v_dist, double &global_result);
+    void parallel_dot_product(Vector<double> &v_acc, Vector<double> &v_dist, double &global_result);
 }
 
 #endif // HPC2_PARALLEL_DOT_PRODUCT_HPP 
