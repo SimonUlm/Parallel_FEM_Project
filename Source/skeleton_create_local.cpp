@@ -46,7 +46,7 @@ namespace Skeleton {
                 }
             }
             // Refactor: index variable actually unnecessary
-            local_skel.com_borders(local_border_ix).set_index(local_border_+ix);
+            local_skel.com_borders(local_border_ix).set_index(local_border_ix);
 
             // Copy border nodes and map from global to local node index
             for (long array_ix = 0; array_ix < nodes_per_border; ++array_ix) {
