@@ -23,7 +23,7 @@ namespace Skeleton {
         long local_border_ix = 0;
         long global_node_ix = 0;
         long local_node_ix = 0;
-        Util::List<long> &local2global = local_mesh.local_to_global;
+        Util::Vector<long> &local2global = local_mesh.local_to_global;
         long length_l2g = local2global.count;
 
         for (long i = 0; i < n_borders; ++i) {

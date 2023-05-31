@@ -22,11 +22,11 @@ namespace Mesh{
 		long m, n;
 		long refine_factor = 0;
 
-		Util::List<Node> nodes;
-        Util::List<Element> elements;
-        Util::List<Edge> edges;
-        Util::List<BoundaryEdge> boundary;
-        Util::List<long> fixed_nodes;
+		Util::Vector<Node> nodes;
+        Util::Vector<Element> elements;
+        Util::Vector<Edge> edges;
+        Util::Vector<BoundaryEdge> boundary;
+        Util::Vector<long> fixed_nodes;
 
         // Defined in Collect.cpp
         void CollectFixedNodes(long global_nbdry);
@@ -74,7 +74,7 @@ namespace Mesh{
     public:
         friend class GlobalMesh;
 
-        Util::List<long> local_to_global;
+        Util::Vector<long> local_to_global;
 
         long get_n_nodes() {
             return nodes.count;
@@ -116,7 +116,7 @@ namespace Mesh{
 #ifdef _MPI
         void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes);
     private:
-        void TransferGlobalToLocal(LocalMesh &local_mesh, Util::List<long> &global_nodes_priority,
+        void TransferGlobalToLocal(LocalMesh &local_mesh, Util::Vector<long> &global_nodes_priority,
                                    MPI_Comm comm, int rank);
 #endif
     };

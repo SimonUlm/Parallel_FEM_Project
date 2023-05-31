@@ -19,7 +19,7 @@ namespace Util {
                 local_nodes_priority_(),
                 local_to_global_(nullptr) {}
 
-        VectorConverter(Util::List<long> &global_nodes_priority, Util::List<long> &local_to_global) :
+        VectorConverter(Util::Vector<long> &global_nodes_priority, Util::Vector<long> &local_to_global) :
                 n_global_nodes_(global_nodes_priority.count),
                 local_nodes_priority_(local_to_global.count),
                 local_to_global_(&local_to_global) {
@@ -47,8 +47,8 @@ namespace Util {
 
     private:
         long n_global_nodes_; /*!< number of global nodes */
-        Util::List<long> local_nodes_priority_; /*!< counts how many processes share each node  */
-        Util::List<long> *local_to_global_; /*!< reference to vector that maps local to global nodes */
+        Util::Vector<long> local_nodes_priority_; /*!< counts how many processes share each node  */
+        Util::Vector<long> *local_to_global_; /*!< reference to vector that maps local to global nodes */
     };
 }
 

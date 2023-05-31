@@ -72,7 +72,7 @@ namespace Skeleton{
     	long n_borders; /*!< Number of ComBorder's */
         
     public:
-    	Util::List<long> nodes; /*!< Consecutive list of all nodes on the ComBorder's */
+    	Util::Vector<long> nodes; /*!< Consecutive list of all nodes on the ComBorder's */
         /*!
     	 *   Constructor for unrefined Mesh (Check if still working with 0??)
          *
@@ -132,7 +132,7 @@ namespace Skeleton{
     class Skeleton {
     private:
         long n_borders; /*!< Number of borders in this Skeleton */
-        Util::List<ComBorder> com_borders; /*!< List of ComBorder */
+        Util::Vector<ComBorder> com_borders; /*!< List of ComBorder */
         ComBorderNodes com_border_nodes; /*!< ComBorderNodes consist a list of nodes corresponding to each border */
         
     public:

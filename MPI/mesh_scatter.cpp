@@ -34,7 +34,7 @@ namespace Mesh {
                   MPI_LONG, 0, comm);
 
         // Prepare data structure that counts for all nodes by how many processes shared with
-        Util::List<long> global_nodes_priority(global_mesh_temp.nodes.count);
+        Util::Vector<long> global_nodes_priority(global_mesh_temp.nodes.count);
 
         // Gather relevant information and write into local mesh
         global_mesh_temp.TransferGlobalToLocal(local_mesh, global_nodes_priority, comm, rank);
@@ -50,7 +50,7 @@ namespace Mesh {
             *this = std::move(global_mesh_temp);
     }
 
-    void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, Util::List<long> &global_nodes_priority,
+    void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, Util::Vector<long> &global_nodes_priority,
                                            MPI_Comm comm, int rank) {
 
         // Create four temporary arrays that maps global to local nodes
@@ -96,7 +96,7 @@ namespace Mesh {
         }
 
         // Create local_to_global member
-        local_mesh.local_to_global = Util::List<long>(node_count);
+        local_mesh.local_to_global = Util::Vector<long>(node_count);
         node_count = 0;
         for (long i = 0; i < nodes.count; ++i) {
             if (node_flags[i]) {
@@ -106,7 +106,7 @@ namespace Mesh {
         }
 
         // Transfer and renumber elements
-        local_mesh.elements = Util::List<Element>(elem_count);
+        local_mesh.elements = Util::Vector<Element>(elem_count);
         elem_count = 0;
         for (auto element : elements) {
             if (element.t == rank) {
@@ -129,7 +129,7 @@ namespace Mesh {
 
         // Transfer and renumber boundary edges
         if (bdry_count != 0) {
-            local_mesh.boundary = Util::List<BoundaryEdge>(bdry_count);
+            local_mesh.boundary = Util::Vector<BoundaryEdge>(bdry_count);
             bdry_count = 0;
             for (auto boundary_edge : boundary) {
                 if (edge_flags[boundary_edge.m]) {
@@ -143,7 +143,7 @@ namespace Mesh {
         }
 
         // Transfer nodes
-        local_mesh.nodes = Util::List<Node>(node_count);
+        local_mesh.nodes = Util::Vector<Node>(node_count);
         for (long i = 0; i < node_count; ++i)
             local_mesh.nodes(i) = nodes(local_mesh.local_to_global(i));
 

@@ -7,14 +7,14 @@
 namespace Util {
 
     template<typename List>
-    class ListIterator {
+    class SimpleForwardIterator {
     public:
         using ValueType = typename List::ValueType;
 
-        ListIterator(ValueType *ptr) :
+        explicit SimpleForwardIterator(ValueType *ptr) :
                 ptr_(ptr) {}
 
-        ListIterator &operator++() {
+        SimpleForwardIterator &operator++() {
             ++ptr_;
             return *this;
         }
@@ -23,7 +23,7 @@ namespace Util {
             return *ptr_;
         }
 
-        bool operator!=(const ListIterator &other) const {
+        bool operator!=(const SimpleForwardIterator &other) const {
             return ptr_ != other.ptr_;
         }
 
@@ -32,36 +32,38 @@ namespace Util {
     };
 
     template<typename T>
-    class List {
+    class Vector {
     public:
         using ValueType = T;
-        using Iterator = ListIterator<List<T>>;
+        using Iterator = SimpleForwardIterator<Vector<T>>;
 
         long count;
 
-        explicit List() :
+        // Constructors
+        explicit Vector() :
                 count(0), data_(nullptr) {
         }
 
-        explicit List(long count) :
+        explicit Vector(long count) :
                 count(count), data_(nullptr) {
             if (count != 0)
                 data_ = new T[count];
         }
 
-        ~List() {
+        ~Vector() {
             delete[] data_;
         }
 
-        List(List &&other) noexcept:
+        Vector(Vector &&other) noexcept:
                 data_(other.data_), count(other.count) {
             other.data_ = nullptr;
             other.count = 0;
         }
 
-        List(const List &) = delete;
+        Vector(const Vector &) = delete;
 
-        List &operator=(List &&other) noexcept {
+        // Assignment operations
+        Vector &operator=(Vector &&other) noexcept {
             delete[] data_;
             data_ = other.data_;
             count = other.count;
@@ -70,18 +72,20 @@ namespace Util {
             return *this;
         }
 
-        List &operator=(const List &) = delete;
+        Vector &operator=(const Vector &) = delete;
 
-        T &operator()(long index) const {
+        // Access operations and getter
+        const T & operator()(long index) const {
             assert(index < count || index == 0);
             return data_[index];
         }
 
-        T &operator()(long index) {
+        T & operator()(long index) {
             assert(index < count || index == 0);
             return data_[index];
         }
 
+        // Iterators
         Iterator begin() {
             return Iterator(data_);
         }
