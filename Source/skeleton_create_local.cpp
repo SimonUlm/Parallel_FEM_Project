@@ -24,7 +24,7 @@ namespace Skeleton {
         long global_node_ix = 0;
         long local_node_ix = 0;
         Util::Vector<long> &local2global = local_mesh.local_to_global;
-        long length_l2g = local2global.count;
+        long length_l2g = local2global.count();
 
         for (long i = 0; i < n_borders; ++i) {
             if (com_borders(i).get_L() != rank && com_borders(i).get_R() != rank)

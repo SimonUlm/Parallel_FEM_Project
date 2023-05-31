@@ -77,7 +77,7 @@ namespace Mesh{
         Util::Vector<long> local_to_global;
 
         long get_n_nodes() {
-            return nodes.count;
+            return nodes.count();
         };
 
         const Util::VectorConverter & vector_converter() {
@@ -109,7 +109,7 @@ namespace Mesh{
         void Refine();
 
         void CollectFixedNodes() {
-            Mesh::CollectFixedNodes(boundary.count);
+            Mesh::CollectFixedNodes(boundary.count());
         }
 
         // Defined in Scatter.cpp

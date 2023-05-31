@@ -37,15 +37,13 @@ namespace Util {
         using ValueType = T;
         using Iterator = SimpleForwardIterator<Vector<T>>;
 
-        long count;
-
         // Constructors
         explicit Vector() :
-                count(0), data_(nullptr) {
+                count_(0), data_(nullptr) {
         }
 
         explicit Vector(long count) :
-                count(count), data_(nullptr) {
+                count_(count), data_(nullptr) {
             if (count != 0)
                 data_ = new T[count];
         }
@@ -55,9 +53,9 @@ namespace Util {
         }
 
         Vector(Vector &&other) noexcept:
-                data_(other.data_), count(other.count) {
+                data_(other.data_), count_(other.count_) {
             other.data_ = nullptr;
-            other.count = 0;
+            other.count_ = 0;
         }
 
         Vector(const Vector &) = delete;
@@ -66,24 +64,26 @@ namespace Util {
         Vector &operator=(Vector &&other) noexcept {
             delete[] data_;
             data_ = other.data_;
-            count = other.count;
+            count_ = other.count_;
             other.data_ = nullptr;
-            other.count = 0;
+            other.count_ = 0;
             return *this;
         }
 
         Vector &operator=(const Vector &) = delete;
 
-        // Access operations and getter
+        // Access operations and getters
         const T & operator()(long index) const {
-            assert(index < count || index == 0);
+            assert(index < count_ || index == 0);
             return data_[index];
         }
 
         T & operator()(long index) {
-            assert(index < count || index == 0);
+            assert(index < count_ || index == 0);
             return data_[index];
         }
+
+        const long count() const { return count_; }
 
         // Iterators
         Iterator begin() {
@@ -91,10 +91,11 @@ namespace Util {
         }
 
         Iterator end() {
-            return Iterator(data_ + count);
+            return Iterator(data_ + count_);
         }
 
     private:
+        long count_;
         T *data_;
     };
 }

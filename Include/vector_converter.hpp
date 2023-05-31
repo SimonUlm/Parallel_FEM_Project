@@ -20,10 +20,10 @@ namespace Util {
                 local_to_global_(nullptr) {}
 
         VectorConverter(Util::Vector<long> &global_nodes_priority, Util::Vector<long> &local_to_global) :
-                n_global_nodes_(global_nodes_priority.count),
-                local_nodes_priority_(local_to_global.count),
+                n_global_nodes_(global_nodes_priority.count()),
+                local_nodes_priority_(local_to_global.count()),
                 local_to_global_(&local_to_global) {
-            for (long i = 0; i < local_nodes_priority_.count; ++i)
+            for (long i = 0; i < local_nodes_priority_.count(); ++i)
                 local_nodes_priority_(i) = global_nodes_priority(local_to_global(i));
         }
 

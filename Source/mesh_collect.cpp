@@ -28,7 +28,7 @@ namespace Mesh {
     void Mesh::CollectFixedNodes(long global_nbdry) {
 
         // Use the affiliation to set a flag for each dirichlet node
-        std::unique_ptr<bool[]> flags(new bool[nodes.count]{});
+        std::unique_ptr<bool[]> flags(new bool[nodes.count()]{});
         long count_fixed = 0;
         for (auto boundary_edge : boundary) {
             if (boundary_edge.t == 1) {
@@ -46,9 +46,8 @@ namespace Mesh {
         // Write to fixed nodes
         fixed_nodes = Util::Vector<long>(count_fixed);
         long index = 0;
-        for (long j = 0; j < nodes.count; ++j)
+        for (long j = 0; j < nodes.count(); ++j)
             if (flags[j])
                 fixed_nodes(index++) = j;
-        fixed_nodes.count = index;
     }
 }

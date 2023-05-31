@@ -18,7 +18,7 @@ namespace Mesh {
         // Allocate global mesh on each process
         std::array<long, 7> mesh_data{};
         if (rank == 0)
-            mesh_data = {m, n, nodes.count, elements.count, boundary.count, edges.count, fixed_nodes.count};
+            mesh_data = {m, n, nodes.count(), elements.count(), boundary.count(), edges.count(), fixed_nodes.count()};
         MPI_Bcast(mesh_data.data(), 7, MPI_LONG, 0, comm);
         if (rank == 0)
             global_mesh_temp = std::move(*this);
@@ -26,15 +26,15 @@ namespace Mesh {
             global_mesh_temp = GlobalMesh(mesh_data);
 
         // Send global mesh to all processes
-        MPI_Bcast(&global_mesh_temp.nodes(0).x, (int) global_mesh_temp.nodes.count * 2,
+        MPI_Bcast(&global_mesh_temp.nodes(0).x, (int) global_mesh_temp.nodes.count() * 2,
                   MPI_DOUBLE, 0, comm);
-        MPI_Bcast(&global_mesh_temp.elements(0).n1, (int) global_mesh_temp.elements.count * 7,
+        MPI_Bcast(&global_mesh_temp.elements(0).n1, (int) global_mesh_temp.elements.count() * 7,
                   MPI_LONG, 0, comm);
-        MPI_Bcast(&global_mesh_temp.boundary(0).n1, (int) global_mesh_temp.boundary.count * 4,
+        MPI_Bcast(&global_mesh_temp.boundary(0).n1, (int) global_mesh_temp.boundary.count() * 4,
                   MPI_LONG, 0, comm);
 
         // Prepare data structure that counts for all nodes by how many processes shared with
-        Util::Vector<long> global_nodes_priority(global_mesh_temp.nodes.count);
+        Util::Vector<long> global_nodes_priority(global_mesh_temp.nodes.count());
 
         // Gather relevant information and write into local mesh
         global_mesh_temp.TransferGlobalToLocal(local_mesh, global_nodes_priority, comm, rank);
@@ -55,13 +55,13 @@ namespace Mesh {
 
         // Create four temporary arrays that maps global to local nodes
         // 1. Flag array that determines whether a global edge is also local
-        std::unique_ptr<long[]> edge_flags(new long[edges.count]{});
+        std::unique_ptr<long[]> edge_flags(new long[edges.count()]{});
         // 2. Flag array that determines whether a global node is also local
-        std::unique_ptr<long[]> node_flags(new long[nodes.count]{});
+        std::unique_ptr<long[]> node_flags(new long[nodes.count()]{});
         // 3. Array that maps global to local edges
-        std::unique_ptr<long[]> global_to_local_edges(new long[edges.count]{});
+        std::unique_ptr<long[]> global_to_local_edges(new long[edges.count()]{});
         // 4. Array that maps global to local nodes
-        std::unique_ptr<long[]> global_to_local_nodes(new long[nodes.count]{});
+        std::unique_ptr<long[]> global_to_local_nodes(new long[nodes.count()]{});
 
         // Count elements and remember the global nodes and boundary edges that belong to the local mesh
         int elem_count = 0;
@@ -79,7 +79,7 @@ namespace Mesh {
 
         // Create temporary global_to_local_edges
         int edge_count = 0;
-        for (long i = 0; i < edges.count; ++i) {
+        for (long i = 0; i < edges.count(); ++i) {
             if (edge_flags[i]) {
                 global_to_local_edges[i] = edge_count;
                 ++edge_count;
@@ -88,7 +88,7 @@ namespace Mesh {
 
         // Create temporary global_to_local_nodes
         int node_count = 0;
-        for (long i = 0; i < nodes.count; ++i) {
+        for (long i = 0; i < nodes.count(); ++i) {
             if (node_flags[i]) {
                 global_to_local_nodes[i] = node_count;
                 ++node_count;
@@ -98,7 +98,7 @@ namespace Mesh {
         // Create local_to_global member
         local_mesh.local_to_global = Util::Vector<long>(node_count);
         node_count = 0;
-        for (long i = 0; i < nodes.count; ++i) {
+        for (long i = 0; i < nodes.count(); ++i) {
             if (node_flags[i]) {
                 local_mesh.local_to_global(node_count) = i;
                 ++node_count;
@@ -148,7 +148,7 @@ namespace Mesh {
             local_mesh.nodes(i) = nodes(local_mesh.local_to_global(i));
 
         // Calculate priority for each node
-        MPI_Allreduce(node_flags.get(), &global_nodes_priority(0), (int) nodes.count,
+        MPI_Allreduce(node_flags.get(), &global_nodes_priority(0), (int) nodes.count(),
                       MPI_LONG, MPI_SUM, comm);
     }
 }
