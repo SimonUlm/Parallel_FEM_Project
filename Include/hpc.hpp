@@ -1,16 +1,13 @@
 #ifndef HPC2_HPC_HPP
 #define HPC2_HPC_HPP
 
-#include "util_list.hpp"
+#include "util_vector.hpp"
 #include "util_matrix.hpp"
 #include "vector_converter.hpp"
 #include "mesh.hpp"
 #include "mesh_objects.hpp"
 #include "skeleton.hpp"
-
-#ifdef _MPI
-void MpiPrintSerial(Mesh::LocalMesh &mesh, Skeleton::Skeleton &skeleton, MPI_Comm comm, int rank, int nof_processes);
-void MpiPrintVectorSerial(std::vector<long> &vector_1, std::vector<long> &vector_2, MPI_Comm comm, int rank, int nof_processes);
-#endif
+#include "parallel_dot_product.hpp"
+#include "print_serial.hpp"
 
 #endif //HPC2_HPC_HPP

@@ -19,11 +19,11 @@ namespace Util {
                 local_nodes_priority_(),
                 local_to_global_(nullptr) {}
 
-        VectorConverter(Util::List<long> &global_nodes_priority, Util::List<long> &local_to_global) :
-                n_global_nodes_(global_nodes_priority.count),
-                local_nodes_priority_(local_to_global.count),
+        VectorConverter(Vector<long> &global_nodes_priority, Vector<long> &local_to_global) :
+                n_global_nodes_(global_nodes_priority.count()),
+                local_nodes_priority_(local_to_global.count()),
                 local_to_global_(&local_to_global) {
-            for (long i = 0; i < local_nodes_priority_.count; ++i)
+            for (long i = 0; i < local_nodes_priority_.count(); ++i)
                 local_nodes_priority_(i) = global_nodes_priority(local_to_global(i));
         }
 
@@ -37,18 +37,18 @@ namespace Util {
         /*!
     	 *   Converts accumulated vector into distributed vector
     	 */
-        void AccumulatedToDistributed(std::vector<long> &vector) const;
+        void AccumulatedToDistributed(Vector<double> &vector) const;
 
         /*!
     	 *   Converts distributed vector into accumulated vector
     	 */
-        void DistributedToAccumulated(std::vector<long> &vector, MPI_Comm comm) const;
+        void DistributedToAccumulated(Vector<double> &vector, MPI_Comm comm) const;
 #endif
 
     private:
         long n_global_nodes_; /*!< number of global nodes */
-        Util::List<long> local_nodes_priority_; /*!< counts how many processes share each node  */
-        Util::List<long> *local_to_global_; /*!< reference to vector that maps local to global nodes */
+        Vector<long> local_nodes_priority_; /*!< counts how many processes share each node  */
+        Vector<long> *local_to_global_; /*!< reference to vector that maps local to global nodes */
     };
 }
 
