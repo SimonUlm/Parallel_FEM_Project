@@ -1,18 +1,15 @@
 #include "hpc.hpp"
 
 int main(int argc, char **argv) {
-    Util::GeMatrix matrix(4, 5, Util::StorageOrder::ROWMAJOR);
+    Mesh::GloabalMesh mesh(4,3);
     
-    matrix.Init();
-    matrix.Print();
+    mesh.Create();
     
-    Util::SedMatrix sed(5, 25);
     
-    sed.Init();
+    Util::SedMatrix sed = mesh.CreateStiffness();
+    sed.InitOne();
+    
     sed.Print();
     
-    Util::GeMatrix check(sed, false);
-    
-    check.Print();
     
 }

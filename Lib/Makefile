@@ -51,6 +51,7 @@ HPC = \
  skeleton_create_local.o \
  skeleton_print.o \
  util_matrix_print.o \
+ mesh_create_stiffness.o
 
 
 

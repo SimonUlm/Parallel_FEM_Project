@@ -14,14 +14,14 @@ namespace Util {
      *   \brief Matrix class for spares matrixes in compress format with extraxted diagonal
      *
      *	 The SedMatrix class is a storage format for sparses matrixes which. The matrix
-     *	 can be either compressed row or column. It stores the diagonal in extracted form and
+     *	 can be only compressed column. It stores the diagonal in extracted form and
      *   does not store zero entries  
      */	
 	class SedMatrix {
    	private:
    		long nzmax;			/*!< Maximum number of entries */
    		long n;				/*!< Number of rows/columns */
-   		long *i;			/*!< Col pointers and row indices */
+   		long *ptr_ind;			/*!< Col pointers and row indices */
    		double *data;		/*!< Numerical values */	
    	public:
    		SedMatrix(SedMatrix &&) = delete;
@@ -38,25 +38,72 @@ namespace Util {
         	assert(i < nzmax);
             return data[i];
         }
+        
+        double operator()(long i, long j) {
+        	// Check diagonal
+        	if (i == j) return data[i];
+        	
+        	// Column
+        	long col_start = ptr_ind[j];
+        	long col_end = ptr_ind[j+1];
+			
+			if (col_start == col_end) return 0;
+			
+			// Traverse col
+			for (long k = col_start; k < col_end; ++k) {
+				if (ptr_ind[k] == i {
+					return data[k];
+				}
+			}
+			
+			return 0;   
+        }
     	
     	SedMatrix(long n, long nzmax) :
-    			n(n), nzmax(nzmax), 
-    			i(new long[nzmax]),
-    			data(new double[nzmax]) {i[nzmax-1] = nzmax-1;}
+    			n(n), nzmax(nzmax+1), 
+    			ptr_ind(new long[nzmax+1]),
+    			data(new double[nzmax+1]) {}
     			
     	long get_n(){return n;}
     	
-    	long get_i(long k){return i[k];}
+    	long get_nzmax(){return nzmax;}
+    	
+    	long get_ptr(long k){return ptr_ind[k];}
+    	
+    	long set_ptr(long k, long ptr){ptr_ind[k] = ptr;}
     	
     	void Print();
     	
     	// Debug purpose
+    	void InitOne() {
+    		for (long k = 0; k < nzmax; ++k) {
+    			data[k] = 1;
+    		}
+    	}
+    	
     	void Init() {
     		// Init Diagonal with 00 11 22 33 ..
     		double v = 0;
     		for (long k = 0; k < n; ++k) {
     			(*this)(k) = v;
     			v += 11;	
+    		}
+    		
+    		v = 0;
+    		long index = n + 1;
+    		ptr_ind[0] = index;
+    		for (long k = 0; k < n; ++k) {
+    			for (long j = 0; j < n; ++j) {
+    				if (j != k) {
+    					data[index] = v;
+    					ptr_ind[index] = j;
+    					
+    					index += 1;
+    				}
+    				v += 10;
+    			}
+    			ptr_ind[k+1] = index;
+    			v = k + 1;
     		}
     				
     	}
@@ -124,6 +171,7 @@ namespace Util {
         		(*this)(i, i) = sed(i);
     		}
     		
+    		
     		// Super-/Sub-Diagonal
     		if (sym){
         		for (long j=0; j < n; ++j){
@@ -138,7 +186,8 @@ namespace Util {
                 		(*this)(sed.get_i(p), j) = sed(p);
             		}
         		}
-    		}			
+    		}
+    					
     			
 		}
     	

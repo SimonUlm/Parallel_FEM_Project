@@ -26,7 +26,7 @@ namespace Util {
         for (long i = 0; i < m; ++i) {
          	printf("  ");
          	for (long j = 0; j < n; ++j) {
-            	printf(" %4.1lf", (*this)(i, j));
+            	printf(" %4.1lf", (*this)(i, j);
          	}
          	printf("\n");
          }
@@ -34,7 +34,7 @@ namespace Util {
         // Print overall storage requirements
         printf("\nMemory\n");
         printf("Additional info	: %12zu Byte\n", 4 * sizeof(long));
-        printf("Data			: %12zu Byte\n", m * n * sizeof(double));
+        printf("Data		: %12zu Byte\n", m * n * sizeof(double));
         long total = 4 * sizeof(long) + m * n * sizeof(double);
         printf("Total       	: %12.6g MByte\n", (double) total / 1024. / 1024.);
     }
@@ -43,7 +43,7 @@ namespace Util {
     	// Start printing
         printf("\n=========== Print SedMatrix Data ===========\n");
         
-        printf("Basic Information:\t %zu-by-%zu, nzmax: %zu nnz: %zu\n", n, n, nzmax, i[n]);
+        printf("Basic Information:\t %zu-by-%zu, nzmax: %zu nnz: %zu\n", n, n, nzmax, ptr_ind[n]);
         
         // Print diagonal
     	printf ("Diagonal entries:\n"); 
@@ -54,18 +54,18 @@ namespace Util {
         // Print off-diagonal
     	printf ("Off-diagonal entries:\n"); 
     	for (long j = 0 ; j < n ; j++) {
-        	printf("    col %zu : locations %zu to %zu\n", j, i[j], (i[j+1]-1)) ;
-        	for (long p = i[j] ; p < i[j+1] ; p++) {
+        	printf("    col %zu : locations %zu to %zu\n", j, ptr_ind[j], (ptr_ind[j+1]-1)) ;
+        	for (long p = ptr_ind[j] ; p < ptr_ind[j+1] ; p++) {
             	printf("(%3zu,%3zu) : %g\n", i[p], j, data[p]) ;
         	}
     	}
     	
     	// Print overall storage requirements
         printf("\nMemory\n");
-        printf("Additional info				: %12zu Byte\n", 2 * sizeof(long));
-        printf("Col Pointers and Row indices: %12zu Byte\n", nzmax * sizeof(long));
-        printf("Data						: %12zu Byte\n", nzmax * sizeof(double));
+        printf("Additional info			: %12zu Byte\n", 2 * sizeof(long));
+        printf("Col Pointers and Row indices	: %12zu Byte\n", nzmax * sizeof(long));
+        printf("Data				: %12zu Byte\n", nzmax * sizeof(double));
         long total = 2 * sizeof(long) + nzmax * sizeof(long) + nzmax * sizeof(double);
-        printf("Total       				: %12.6g MByte\n", (double) total / 1024. / 1024.);
+        printf("Total       			: %12.6g MByte\n", (double) total / 1024. / 1024.);
     }
 }
