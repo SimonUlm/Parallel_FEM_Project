@@ -20,7 +20,7 @@ namespace Mesh {
 
         // Create global crosspoint vector from local vector
         Util::Vector<double> global_vector_send(n_global_crosspoints_);
-        for (auto point : local_skel.get_crosspoints())
+        for (auto &point : local_skel.get_crosspoints())
             global_vector_send((*local_to_global_)(point)) = local_vector(point);
 
         // Allreduce
@@ -29,7 +29,7 @@ namespace Mesh {
                       (int) n_global_crosspoints_, MPI_DOUBLE, MPI_SUM, comm);
 
         // Write entries from global crosspoint vector back into local vector
-        for (auto point : local_skel.get_crosspoints())
+        for (auto &point : local_skel.get_crosspoints())
             local_vector(point) = global_vector_recv((*local_to_global_)(point));
     }
 }

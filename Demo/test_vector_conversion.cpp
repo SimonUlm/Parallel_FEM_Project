@@ -42,8 +42,10 @@ int main(int argc, char **argv) {
 
     MPI::PrintSerial(MPI_COMM_WORLD, rank, nof_processes, [&]() {
         std::cout << "Rank = " << rank << std::endl;
+        for (auto &x : accum_to_distr)
+            std::cout << x << " ";
         std::cout << std::endl;
-        for (auto x : distr_to_accum)
+        for (auto &x : distr_to_accum)
             std::cout << x << " ";
         std::cout << std::endl;
     });

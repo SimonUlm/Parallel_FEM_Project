@@ -17,25 +17,25 @@ namespace Mesh {
 
         // Print coordinates
         printf("\nCoordinates (x,y):\n");
-        for (auto node : nodes)
+        for (auto &node : nodes)
             node.Print();
 
         // Print elements
         printf("\nElements:\n");
         printf("Vertices (n1,n2,n3), Mid. Points (m1,m2,m3), Affiliation\n");
-        for (auto element : elements)
+        for (auto &element : elements)
             element.Print();
 
         // Print boundary
         printf("\nBoundary Elements:\n");
         printf("Endpoints (n1, n2), Edge Number (ed1), Type\n");
-        for (auto boundary_edge : boundary)
+        for (auto &boundary_edge : boundary)
             boundary_edge.Print();
 
         // If there are fixed_nodes nodes (usually dirichlet nodes) Print them
         if (fixed_nodes.count()) {
             printf("\nFixed Nodes:\n");
-            for (auto fixed_node : fixed_nodes)
+            for (auto &fixed_node : fixed_nodes)
                 printf(" %zu\n", fixed_node);
         }
 

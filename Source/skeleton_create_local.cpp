@@ -68,7 +68,7 @@ namespace Skeleton {
 
         // Count crosspoints
         long count = 0;
-        for (auto point : crosspoints)
+        for (auto &point : crosspoints)
             if (point == true)
                 ++count;
 

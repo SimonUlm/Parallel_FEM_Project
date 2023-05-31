@@ -65,7 +65,7 @@ namespace Mesh {
 
         // Count elements and remember the global nodes and boundary edges that belong to the local mesh
         int elem_count = 0;
-        for (auto element : elements) {
+        for (auto &element : elements) {
             if (element.t == rank) {
                 node_flags[element.n1] = true;
                 node_flags[element.n2] = true;
@@ -108,7 +108,7 @@ namespace Mesh {
         // Transfer and renumber elements
         local_mesh.elements = Util::Vector<Element>(elem_count);
         elem_count = 0;
-        for (auto element : elements) {
+        for (auto &element : elements) {
             if (element.t == rank) {
                 local_mesh.elements(elem_count) = element;
                 local_mesh.elements(elem_count).n1 = global_to_local_nodes[element.n1];
@@ -123,7 +123,7 @@ namespace Mesh {
 
         // Count boundary edges
         int bdry_count = 0;
-        for (auto boundary_edge : boundary)
+        for (auto &boundary_edge : boundary)
             if (edge_flags[boundary_edge.m])
                 ++bdry_count;
 
@@ -131,7 +131,7 @@ namespace Mesh {
         if (bdry_count != 0) {
             local_mesh.boundary = Util::Vector<BoundaryEdge>(bdry_count);
             bdry_count = 0;
-            for (auto boundary_edge : boundary) {
+            for (auto &boundary_edge : boundary) {
                 if (edge_flags[boundary_edge.m]) {
                     local_mesh.boundary(bdry_count) = boundary_edge;
                     local_mesh.boundary(bdry_count).n1 = global_to_local_nodes[boundary_edge.n1];
