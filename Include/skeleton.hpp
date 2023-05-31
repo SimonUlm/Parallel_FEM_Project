@@ -48,6 +48,7 @@ namespace Skeleton{
         const long get_c2() const {return c2;}
         void set_c1(long new_c1) {c1 = new_c1;}
         void set_c2(long new_c2) {c2 = new_c2;}
+        void set_index(long new_ix) {index = new_ix;}
         
         void Print();
         
