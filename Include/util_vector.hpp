@@ -85,6 +85,8 @@ namespace Util {
 
         const long count() const { return count_; }
 
+        T * const data() const { return data_; }
+
         // Iterators
         Iterator begin() {
             return Iterator(data_);

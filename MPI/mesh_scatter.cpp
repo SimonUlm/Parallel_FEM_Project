@@ -26,11 +26,11 @@ namespace Mesh {
             global_mesh_temp = GlobalMesh(mesh_data);
 
         // Send global mesh to all processes
-        MPI_Bcast(&global_mesh_temp.nodes(0).x, (int) global_mesh_temp.nodes.count() * 2,
+        MPI_Bcast(global_mesh_temp.nodes.data(), (int) global_mesh_temp.nodes.count() * 2,
                   MPI_DOUBLE, 0, comm);
-        MPI_Bcast(&global_mesh_temp.elements(0).n1, (int) global_mesh_temp.elements.count() * 7,
+        MPI_Bcast(global_mesh_temp.elements.data(), (int) global_mesh_temp.elements.count() * 7,
                   MPI_LONG, 0, comm);
-        MPI_Bcast(&global_mesh_temp.boundary(0).n1, (int) global_mesh_temp.boundary.count() * 4,
+        MPI_Bcast(global_mesh_temp.boundary.data(), (int) global_mesh_temp.boundary.count() * 4,
                   MPI_LONG, 0, comm);
 
         // Prepare data structure that counts for all nodes by how many processes shared with
@@ -148,7 +148,7 @@ namespace Mesh {
             local_mesh.nodes(i) = nodes(local_mesh.local_to_global(i));
 
         // Calculate priority for each node
-        MPI_Allreduce(node_flags.get(), &global_nodes_priority(0), (int) nodes.count(),
+        MPI_Allreduce(node_flags.get(), global_nodes_priority.data(), (int) nodes.count(),
                       MPI_LONG, MPI_SUM, comm);
     }
 }
