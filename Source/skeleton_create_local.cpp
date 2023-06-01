@@ -33,7 +33,7 @@ namespace Skeleton {
 
             copy_border_entries(i, local_skel.get_border(local_border_ix));
 
-            // Map c1 and c2 from global to local
+            // Map c1 and c2 from global to local and set index for local skeleton
             for (long j = 0; j < length_l2g; ++j) {
                 if (local2global(j) == com_borders(i).get_c1()) {
                     local_skel.com_borders(local_border_ix).set_c1(j);
@@ -46,6 +46,8 @@ namespace Skeleton {
                     break;
                 }
             }
+            // Refactor: index variable actually unnecessary
+            local_skel.com_borders(local_border_ix).set_index(local_border_ix);
 
             // Copy border nodes and map from global to local node index
             for (long array_ix = 0; array_ix < nodes_per_border; ++array_ix) {
