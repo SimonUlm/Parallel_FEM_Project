@@ -47,7 +47,7 @@ namespace Util {
         explicit Vector(long count) :
                 count_(count), data_(nullptr) {
             if (count != 0)
-                data_ = new T[count];
+                data_ = new T[count]{};
         }
 
         ~Vector() {

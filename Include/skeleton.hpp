@@ -137,10 +137,7 @@ namespace Skeleton{
         Skeleton(long m, long n) :
                 com_borders(2 * n * m - n - m), com_border_nodes(2 * n * m - n - m),
                 n_borders(2*n*m-n-m),
-                crosspoints((m + 1) * (n + 1)) {
-            for (auto &point : crosspoints)
-                point = 0;
-        }
+                crosspoints((m + 1) * (n + 1)) {}
         /*!  
     	 *   Skeleton Constructor for refined meshes
          *
@@ -152,10 +149,7 @@ namespace Skeleton{
                 com_borders(2 * n * m - n - m),
                 com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
                 n_borders(2*n*m-n-m),
-                crosspoints((m + 1) * (n + 1)) {
-            for (auto &point : crosspoints)
-                point = 0;
-        }
+                crosspoints((m + 1) * (n + 1)) {}
         /*!  
     	 *   Skeleton Constructor for local Skeltons
          *
