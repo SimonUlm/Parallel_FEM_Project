@@ -48,7 +48,7 @@ namespace Mesh {
         /*!
     	 *   Converts distributed vector into accumulated vector
     	 */
-        void DistributedToAccumulated(Util::Vector<double> &vector, MPI_Comm comm,
+        void DistributedToAccumulated(Util::Vector<double> &vector, MPI_Comm comm, int rank,
                                       Skeleton::Skeleton &local_skel) const;
 #endif
 

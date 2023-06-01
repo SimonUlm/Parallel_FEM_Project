@@ -14,6 +14,7 @@ int main(int argc, char **argv) {
 
     int m = 3;
     int n = 2;
+    int refine_factor = 1;
 
     GlobalMesh global_mesh;
     LocalMesh local_mesh;
@@ -22,12 +23,11 @@ int main(int argc, char **argv) {
     {
         global_mesh = GlobalMesh(m, n);
         global_mesh.Create();
-        global_mesh.Refine();
-        global_mesh.Refine();
+        global_mesh.Refine(refine_factor);
     }
 
     global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
-    Skeleton::Skeleton skeleton(m, n, 2);
+    Skeleton::Skeleton skeleton(m, n, refine_factor);
     if (rank == 0)
         skeleton.Create(global_mesh);
     skeleton.Scatter(rank, local_mesh);
@@ -37,8 +37,8 @@ int main(int argc, char **argv) {
     local_mesh.vector_converter().AccumulatedToDistributed(accum_to_distr);
 
     Util::Vector<double> distr_to_accum(local_mesh.get_n_nodes());
-    distr_to_accum.Init(10);
-    local_mesh.vector_converter().DistributedToAccumulated(distr_to_accum, MPI_COMM_WORLD, skeleton);
+    distr_to_accum.Init();
+    local_mesh.vector_converter().DistributedToAccumulated(distr_to_accum, MPI_COMM_WORLD, rank, skeleton);
 
     MPI::PrintSerial(MPI_COMM_WORLD, rank, nof_processes, [&]() {
         std::cout << "Rank = " << rank << std::endl;

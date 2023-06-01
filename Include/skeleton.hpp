@@ -6,7 +6,8 @@
 #include "hpc.hpp"
 
 namespace Skeleton{
-	
+
+    constexpr long kNumberOfColors = 4;
 	enum global_or_local { GLOBAL, LOCAL };
 
     /* ComBorder */
@@ -46,6 +47,7 @@ namespace Skeleton{
         const long get_R() const {return R;}
         const long get_c1() const {return c1;}
         const long get_c2() const {return c2;}
+        const long get_color() const { return color; }
         void set_c1(long new_c1) {c1 = new_c1;}
         void set_c2(long new_c2) {c2 = new_c2;}
         void set_index(long new_ix) {index = new_ix;}
@@ -88,8 +90,8 @@ namespace Skeleton{
         ComBorderNodes(long n_borders, long n_nodes) :
                 nodes(n_borders*n_nodes), n_nodes(n_nodes), n_borders(n_borders) {}
                 
-        long get_n_nodes() {return n_nodes;}
-        long get_n_borders() {return n_borders;}
+        const long get_n_nodes() const { return n_nodes; }
+        const long get_n_borders() const { return n_borders; }
 
         /*!
     	 *   Initialize nodes with ascending numbers per border
@@ -99,13 +101,13 @@ namespace Skeleton{
             	nodes(index*n_nodes + i) = i+1;
             }
         }
-        
+
+        const long get_entry(long ix_border, long ix_node) const {
+            return nodes(ix_border*n_nodes + ix_node);
+        }
+
         void set_entry(long ix_border, long ix_node, long node) {
             nodes(ix_border*n_nodes + ix_node) = node;    
-        }
-        
-        long get_entry(long ix_border, long ix_node) {
-            return nodes(ix_border*n_nodes + ix_node);    
         }
 
         void Print();	
@@ -170,7 +172,8 @@ namespace Skeleton{
         /*!  
     	 *   \brief Return the number of borders of this Skeleton
     	 */
-        long get_n_borders() {return n_borders;}
+        const long get_n_borders() const { return n_borders; }
+        const long get_n_border_nodes() const { return com_border_nodes.get_n_nodes(); }
         
         /*!  
     	 *   \brief Function to copy of ComBorder entries
@@ -194,7 +197,10 @@ namespace Skeleton{
         ComBorder& get_border(long ix_border) {
         	return com_borders(ix_border);
         }
-        
+
+        const long get_border_node(long ix_border, long ix_node) const {
+            return com_border_nodes.get_entry(ix_border, ix_node);
+        }
         void set_border_node(long ix_border, long ix_node, long node) {
         	com_border_nodes.set_entry(ix_border, ix_node, node);
         }

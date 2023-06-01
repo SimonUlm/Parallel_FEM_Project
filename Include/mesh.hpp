@@ -108,6 +108,10 @@ namespace Mesh{
 
         // Defined in Refine.cpp
         void Refine();
+        void Refine(int refine_factor) {
+            for (int i = 0; i < refine_factor; ++i)
+                Refine();
+        }
 
         void CollectFixedNodes() {
             Mesh::CollectFixedNodes(boundary.count());
