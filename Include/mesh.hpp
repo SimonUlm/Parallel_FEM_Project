@@ -24,23 +24,23 @@ namespace Mesh{
 		/**
 	 	* @brief Number of rectangles for this mesh
 		*/
-		long m, n;
-		long refine_factor = 0;
+		long m, n;                  // Number of processes per row n and number of Processes per column n
+		long refine_factor = 0;     // Counts how often the refine method has been used on the mesh
 
-		Util::Vector<Node> nodes;
-        Util::Vector<Element> elements;
-        Util::Vector<Edge> edges;
-        Util::Vector<BoundaryEdge> boundary;
-        Util::Vector<long> fixed_nodes;
+		Util::Vector<Node> nodes;               // Vector of Nodes that make up the mesh
+        Util::Vector<Element> elements;         // Vector of Elements that make up the mesh
+        Util::Vector<Edge> edges;               // Vector of Edges that make up the mesh
+        Util::Vector<BoundaryEdge> boundary;    // Vector of Edges on the Boundary of the mesh
+        Util::Vector<long> fixed_nodes;         // Vector of Nodes that are fixed
 
         // Defined in Collect.cpp
-        void CollectFixedNodes(long global_nbdry);
+        void CollectFixedNodes(long global_nbdry);      // Returns all Nodes that are Part of a Boundary Edge
 
     public:    
-        Mesh() :
+        Mesh() :                                // Initialize "Empty"
             m(0), n(0) {}
 
-        Mesh(std::array<long, 7> mesh_data) :
+        Mesh(std::array<long, 7> mesh_data) :   
             Mesh(mesh_data[0], mesh_data[1],
                  mesh_data[2], mesh_data[3], mesh_data[4],
                  mesh_data[5], mesh_data[6]) {}

@@ -4,6 +4,7 @@
 
 namespace Mesh {
 
+    // Collects edges from elements
     void Mesh::CollectEdges() {
 
         // Get the number of edges
@@ -25,6 +26,8 @@ namespace Mesh {
                 };
     }
 
+    // Checks for each Node, if it is part of a Boundary element
+    // and create a new vector within the mesh object
     void Mesh::CollectFixedNodes(long global_nbdry) {
 
         // Use the affiliation to set a flag for each dirichlet node
