@@ -1,15 +1,21 @@
 #include "hpc.hpp"
 
 int main(int argc, char **argv) {
-    Mesh::GloabalMesh mesh(4,3);
+    Mesh::GlobalMesh mesh(1,1);
     
     mesh.Create();
+    mesh.Print();
     
     
     Util::SedMatrix sed = mesh.CreateStiffness();
-    sed.InitOne();
     
     sed.Print();
+    
+    Util::GeMatrix gematrix(sed, true);
+    
+    gematrix.Print();
+    
+    
     
     
 }

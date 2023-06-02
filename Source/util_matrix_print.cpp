@@ -26,7 +26,7 @@ namespace Util {
         for (long i = 0; i < m; ++i) {
          	printf("  ");
          	for (long j = 0; j < n; ++j) {
-            	printf(" %4.1lf", (*this)(i, j);
+            	printf(" %4.1lf", (*this)(i, j));
          	}
          	printf("\n");
          }
@@ -56,7 +56,7 @@ namespace Util {
     	for (long j = 0 ; j < n ; j++) {
         	printf("    col %zu : locations %zu to %zu\n", j, ptr_ind[j], (ptr_ind[j+1]-1)) ;
         	for (long p = ptr_ind[j] ; p < ptr_ind[j+1] ; p++) {
-            	printf("(%3zu,%3zu) : %g\n", i[p], j, data[p]) ;
+            	printf("(%3zu,%3zu) : %g\n", ptr_ind[p], j, data[p]) ;
         	}
     	}
     	

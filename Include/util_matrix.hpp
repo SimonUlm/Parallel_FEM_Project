@@ -2,6 +2,7 @@
 #define HPC2_UTIL_MATRIX_HPP
 
 #include <cassert>
+#include <stdexcept>
 
 #include "hpc.hpp"
 
@@ -24,12 +25,7 @@ namespace Util {
    		long *ptr_ind;			/*!< Col pointers and row indices */
    		double *data;		/*!< Numerical values */	
    	public:
-   		SedMatrix(SedMatrix &&) = delete;
-        SedMatrix(const SedMatrix &) = delete;
-        
-        SedMatrix & operator=(SedMatrix &&other) = default;
-        SedMatrix & operator=(const SedMatrix &) = delete;
-        
+   	
         double & operator()(long i) const {
     		assert(i < nzmax);
             return data[i];
@@ -51,7 +47,7 @@ namespace Util {
 			
 			// Traverse col
 			for (long k = col_start; k < col_end; ++k) {
-				if (ptr_ind[k] == i {
+				if (ptr_ind[k] == i) {
 					return data[k];
 				}
 			}
@@ -61,8 +57,8 @@ namespace Util {
     	
     	SedMatrix(long n, long nzmax) :
     			n(n), nzmax(nzmax+1), 
-    			ptr_ind(new long[nzmax+1]),
-    			data(new double[nzmax+1]) {}
+    			ptr_ind(new long[nzmax+1]()),
+    			data(new double[nzmax+1]()) {}
     			
     	long get_n(){return n;}
     	
@@ -70,7 +66,33 @@ namespace Util {
     	
     	long get_ptr(long k){return ptr_ind[k];}
     	
-    	long set_ptr(long k, long ptr){ptr_ind[k] = ptr;}
+    	void set_ptr(long k, long ptr){ptr_ind[k] = ptr;}
+    	
+    	void add_val(long i, long j, double val) {
+    		// Check diagonal
+        	if (i == j) {
+        		data[i] += val;
+        		return;
+        	 }
+        	
+        	// Column
+        	long col_start = ptr_ind[j];
+        	long col_end = ptr_ind[j+1];
+			
+			if (col_start == col_end) {
+				throw std::invalid_argument("Write position must not be zero entry! No memory was reserved for the given matrix entry");
+			}
+			
+			// Traverse col
+			for (long k = col_start; k < col_end; ++k) {
+				if (ptr_ind[k] == i) {
+					data[k] += val;
+					return;
+				}
+			}
+			
+			throw std::invalid_argument("Write position must not be zero entry! No memory was reserved for the given matrix entry");
+    	}
     	
     	void Print();
     	
@@ -175,15 +197,15 @@ namespace Util {
     		// Super-/Sub-Diagonal
     		if (sym){
         		for (long j=0; j < n; ++j){
-            		for (long p=sed.get_i(j); p < sed.get_i(j+1); ++p){
-                		(*this)(sed.get_i(p), j) = sed(p);
-                		(*this)(j, sed.get_i(p)) = sed(p);
+            		for (long p=sed.get_ptr(j); p < sed.get_ptr(j+1); ++p){
+                		(*this)(sed.get_ptr(p), j) = sed(p);
+                		(*this)(j, sed.get_ptr(p)) = sed(p);
             		}
         		}
     		} else {
         		for (long j=0; j < n; ++j){
-            		for (long p=sed.get_i(j); p < sed.get_i(j+1); ++p){
-                		(*this)(sed.get_i(p), j) = sed(p);
+            		for (long p=sed.get_ptr(j); p < sed.get_ptr(j+1); ++p){
+                		(*this)(sed.get_ptr(p), j) = sed(p);
             		}
         		}
     		}
