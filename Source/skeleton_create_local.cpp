@@ -5,6 +5,16 @@
 
 namespace Skeleton {
 
+    /*  
+	 * Transforms global Skeleton to local Skeleton
+     *
+     * Creates a tempory Skeleton copies the ComBorder's which correspond with the local process
+     * to the tempory Skeleton. At the end the old global Skeleton is overwritten with the local one.
+     *
+     * rank: Number of Local Process
+     * local_mesh: LocalMesh to map global and local indexing
+     * 
+	 */
     void Skeleton::CreateLocal(int rank, Mesh::LocalMesh &local_mesh) {
         // Determine size of local skeleton
         long n_borders_loc = 0;
@@ -29,8 +39,9 @@ namespace Skeleton {
         for (long i = 0; i < n_borders; ++i) {
             if (com_borders(i).get_L() != rank && com_borders(i).get_R() != rank)
                 continue;
-
-            copy_border_entries(i, local_skel.get_border(local_border_ix));
+			
+			// Corresponding ComBorder Found -> Copy entries to new local skeleton
+            com_borders(i).copy_entries(local_skel.com_borders(local_border_ix));
 
             // Map c1 and c2 from global to local
             for (long j = 0; j < length_l2g; ++j) {
@@ -60,7 +71,7 @@ namespace Skeleton {
                     }
                 }
                 // Write local node ix to local skel
-                local_skel.set_border_node(local_border_ix, array_ix, local_node_ix);
+                local_skel.com_border_nodes.set_entry(local_border_ix, array_ix, local_node_ix);
             }
             local_border_ix += 1;
         }

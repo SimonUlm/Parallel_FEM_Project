@@ -7,7 +7,7 @@
 
 
 namespace Util {
-
+	
     template<typename List>
     class SimpleForwardIterator {
     public:
@@ -32,24 +32,42 @@ namespace Util {
     private:
         ValueType *ptr_;
     };
-
+	
+	/* Vector */
+	
     template<typename T>
     class Vector {
+    /*
+     * Simple generic vector class which stores elements consectuive in memory for fast
+     * memory access
+     *
+     */
+     
     public:
         using ValueType = T;
         using Iterator = SimpleForwardIterator<Vector<T>>;
 
-        // Constructors
+        /*
+    	 * Empty Constructor
+         *
+    	 */
         explicit Vector() :
                 count_(0), data_(nullptr) {
         }
-
+		
+		/*
+    	 * Constructor to allocate memory for count elements
+    	 *
+    	 * count: number of elements to be stored
+         *
+    	 */
         explicit Vector(long count) :
                 count_(count), data_(nullptr) {
             if (count != 0)
                 data_ = new T[count];
         }
-
+		
+		// Destructor
         ~Vector() {
             delete[] data_;
         }

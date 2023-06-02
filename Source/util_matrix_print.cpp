@@ -2,12 +2,9 @@
 
 #include "hpc.hpp"
 
-namespace Util {
-
-// Print mesh information
-	
-	/*!
-     *   Prints Data GeMatrix
+namespace Util {	
+	/*
+     *   Prints Data of GeMatrix
      */
     void GeMatrix::Print() {
         // Start printing
@@ -39,6 +36,9 @@ namespace Util {
         printf("Total       	: %12.6g MByte\n", (double) total / 1024. / 1024.);
     }
     
+    /*
+     *   Prints Data of SedMatrix
+     */
     void SedMatrix::Print() {
     	// Start printing
         printf("\n=========== Print SedMatrix Data ===========\n");

@@ -47,13 +47,14 @@ HPC = \
  mesh_objects_util.o \
  mesh_print.o \
  mesh_refine.o \
+ mesh_create_stiffness.o \
  skeleton_create.o \
  skeleton_create_local.o \
  skeleton_print.o \
  util_matrix_print.o \
- mesh_create_stiffness.o
-
-
+ util_gematrix_from_sed.o \
+ util_sedmatrix_add_val.o
+ 
 
 $(HPC): ../Include/hpc.hpp Makefile
 

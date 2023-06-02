@@ -3,21 +3,34 @@
 
 namespace Skeleton {
     long mn_r(long m, long r);
-
+	
+	/*
+	 * Create Skeleton from given mesh
+	 *
+	 * Creates the global Skeleton from given Mesh. With the number of processes of the Mesh
+     * the Crosspoints and Processes of the ComBorder's are calculated. With the refinement
+     * factor the ComBorderNodes are calcualted and saved.
+     *
+     * mesh: Mesh for which the Skeleton should be created.
+     *
+	 */
     void Skeleton::Create(Mesh::Mesh &mesh) {  
         long border_index = 0;
         long m = mesh.get_m();
-        long m_n = m + 1;
+        long m_n = m + 1;							// Number of nodes in direction of m
         long n = mesh.get_n();
-        long n_n = n + 1;
+        long n_n = n + 1;							// Number of nodes in direction of n
 
-        long nof_h_edges = (m + 1) * n; // number of horizontal edges
-        long nof_v_edges = m * (n + 1); // number of vertical edges
+        long nof_h_edges = (m + 1) * n; 			// number of horizontal edges
+        long nof_v_edges = m * (n + 1); 			// number of vertical edges
         long nodes_per_row = n + 1;
-        long refine = mesh.get_refine_factor();
+        long refine = mesh.get_refine_factor();		// Number of performed refinements
         
+        // Iterate through processes
+        // Initialize always left vertical border and lower horizontal border as new couple
         for (long i = 0; i < m; ++i) {
             for (long j = 0; j < n; ++j) {
+            	// Skip first process in row
             	if (j != 0) {
             	    // initialize left vertical couple
             	    long c1 = i * nodes_per_row + j;		// lower left Node
@@ -31,6 +44,8 @@ namespace Skeleton {
             	    );
             	    
             	    long index = 0;
+            	    // Calcualted new nodes for each performed refinementd
+            	    // Check documentation for additional information about the formula
             	    for (long r = refine; r > 0; --r) {
             	        long node = mn_r(m_n, r-1) * mn_r(n_n, r-1) + (mn_r(n_n, r-1) -1) * m_n;
             	        node += pow(2, r-1) * j; 			// accounting column
@@ -44,6 +59,7 @@ namespace Skeleton {
             	    border_index++;	
             	}
             	
+            	// Skip first row of porcesses
             	if (i != 0) {
             	    // initialize low horizontal couple
             	    long c1 = nodes_per_row * i + j + 1;	// lower right node
@@ -57,10 +73,12 @@ namespace Skeleton {
             	    );
             	    
             	    long index = 0;
+            	    // Calcualted new nodes for each performed refinementd
+            	    // Check documentation for additional information about the formula
             	    for (long r = refine; r > 0; --r) {
             	        long node = mn_r(m_n, r-1) * mn_r(n_n, r-1);
-            	        node += pow(2, r-1) * j;	// accounting column
-            	        node += pow(2, r-1) * n * i;// accounting row
+            	        node += pow(2, r-1) * j;			// accounting column
+            	        node += pow(2, r-1) * n * i;		// accounting row
             	        for (long k = 0; k < pow(2, r-1); ++k) {
 			    			com_border_nodes.set_entry(border_index, index, node);
             	            node += 1;
@@ -73,6 +91,14 @@ namespace Skeleton {
         }
     }
     
+    /*
+     * Calculate number of nodes in one dimension after r refinemnts
+     *
+     * m: Number of processes in on dimension
+     * r: number of performed refinements
+     * return: Returns number nodes in direction of given dimension
+     *
+     */
     long mn_r(long m, long r) {
     	// m = number of nodes in one dimension
     	return (m - 1) * pow(2, r) + 1;
