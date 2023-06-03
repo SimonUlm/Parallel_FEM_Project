@@ -9,6 +9,51 @@
 namespace Util {	
 	enum StorageOrder {ROWMAJOR, COLMAJOR};
 	
+	class BlasVector {
+	private:
+		long length_;
+		double * data;
+		
+	public:
+		// Data access operator with absolute index in array (direct access)
+        double & operator()(long i) const {
+    		assert(i < length_);
+            return data[i];
+        }
+        double & operator()(long i) {
+        	assert(i < length_);
+            return data[i];
+        }
+            
+        
+    	BlasVector(long length) :
+			length_(length),
+			data(new double[length]) {}				
+    	
+    	// Destructor
+        ~BlasVector() {
+            delete[] data;
+        }
+        
+        long length() {return length_;}
+        
+        // x' * x
+        double Dot(BlasVector &y);
+        
+        // x <- y
+        void Copy(BlasVector &y);
+        
+        // x <- alpha * x
+        void Scal(double alpha);
+        
+        // y <- alpha * x + y
+        void Axpy(double alpha, BlasVector &x);
+        
+        // max(x)
+        double Amax();
+  	
+	};
+	
 	/* SedMatrix */
     
 	class SedMatrix {
@@ -90,8 +135,15 @@ namespace Util {
     	// Adding given value to matrix entry
     	void add_val(long i, long j, double val); 
     	
-    	// Print data of matrix
+    	// symmetric sed general matrix vector product
+		// y <- alpha * A * x + beta * y 
+        void SymSpmv(double alpha, BlasVector &x, double beta, BlasVector &y);
+        
+        // Print data of matrix
     	void Print();
+    	
+    	void SolveCg(BlasVector &rhs, BlasVector &sol);
+    	
   
    	};
 	
@@ -155,6 +207,11 @@ namespace Util {
     			data(new double[sed.get_n() * sed.get_n()]) {
     		from_sed(sed, sym);
 		}
+		
+		// Destructor
+        ~GeMatrix() {
+            delete[] data;
+        }
     	
 		// Print data of matrix
         void Print();
