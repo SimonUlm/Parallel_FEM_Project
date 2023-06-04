@@ -67,6 +67,7 @@ namespace Mesh{
         long get_refine_factor() {return refine_factor;}
         
         Util::SedMatrix CreateStiffness();
+	Util::Vector CreateRhs();
 
     };
 

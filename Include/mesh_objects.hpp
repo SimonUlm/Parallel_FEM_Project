@@ -60,7 +60,7 @@ namespace Mesh{
     struct BoundaryEdge {
         long n1, n2;
         long m;
-        long t;
+        long t; //  0 if Neumann boundary, 1 if Dirichlet boundary
         
         void Print();
     };
