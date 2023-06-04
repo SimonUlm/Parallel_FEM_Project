@@ -40,22 +40,29 @@ namespace Mesh {
         VectorConverter & operator=(const VectorConverter &) = delete;
 
 #ifdef _MPI
-        /*!
-    	 *   Converts accumulated vector into distributed vector
+        /*
+    	 *   Converts accumulated vector into distributed vector (in-place)
     	 */
         void AccumulatedToDistributed(Util::Vector<double> &vector) const;
 
-        /*!
-    	 *   Converts distributed vector into accumulated vector
+        /*
+    	 *   Converts distributed vector into accumulated vector (in-place)
     	 */
-        void DistributedToAccumulated(Util::Vector<double> &vector, MPI_Comm comm, int rank,
-                                      Skeleton::Skeleton &local_skel) const;
+        void DistributedToAccumulated(Util::Vector<double> &vector,
+                                      MPI_Comm comm, int rank, Skeleton::Skeleton &local_skel) const;
+
+        /*
+    	 *   Takes distributed vector as input and returns accumulated vector
+    	 */
+        void DistributedToAccumulated(Util::Vector<double> &local_vector_send,
+                                      Util::Vector<double> &local_vector_recv,
+                                      MPI_Comm comm, int rank, Skeleton::Skeleton &local_skel) const;
 #endif
 
     private:
-        long n_global_crosspoints_; /*!< number of global nodes */
-        Util::Vector<long> local_nodes_priority_; /*!< counts how many processes share each node  */
-        Util::Vector<long> *local_to_global_; /*!< reference to vector that maps local to global nodes */
+        long n_global_crosspoints_; // number of global nodes
+        Util::Vector<long> local_nodes_priority_; // counts how many processes share each node
+        Util::Vector<long> *local_to_global_; // reference to vector that maps local to global nodes
     };
 }
 

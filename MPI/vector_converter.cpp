@@ -15,14 +15,23 @@ namespace Mesh {
             local_vector(i) /= (double) local_nodes_priority_(i);
     }
 
-    void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector, MPI_Comm comm,
-                                                   int rank, Skeleton::Skeleton &local_skel) const {
-        assert(local_vector.count() == local_to_global_->count());
+    void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector,
+                                                   MPI_Comm comm, int rank, Skeleton::Skeleton &local_skel) const {
+        DistributedToAccumulated(local_vector,
+                                 local_vector,
+                                 comm, rank, local_skel);
+    }
+
+    void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector_send,
+                                                   Util::Vector<double> &local_vector_recv,
+                                                   MPI_Comm comm, int rank, Skeleton::Skeleton &local_skel) const {
+        assert(local_vector_send.count() == local_to_global_->count());
+        assert(local_vector_recv.count() == local_to_global_->count());
 
         // Create global cross point vector from local vector
         Util::Vector<double> global_vector_send(n_global_crosspoints_);
         for (auto &point : local_skel.get_crosspoints())
-            global_vector_send((*local_to_global_)(point)) = local_vector(point);
+            global_vector_send((*local_to_global_)(point)) = local_vector_send(point);
 
         // Allreduce
         Util::Vector<double> global_vector_recv(n_global_crosspoints_);
@@ -31,13 +40,13 @@ namespace Mesh {
 
         // Write entries from global cross point vector back into local vector
         for (auto &point : local_skel.get_crosspoints())
-            local_vector(point) = global_vector_recv((*local_to_global_)(point));
+            local_vector_recv(point) = global_vector_recv((*local_to_global_)(point));
 
         // Exchange interface points with neighbors
         MPI_Status status;
         long n_border_nodes = local_skel.get_n_border_nodes();
-        Util::Vector<double> send_vector(n_border_nodes);
-        Util::Vector<double> recv_vector(n_border_nodes);
+        Util::Vector<double> border_nodes_vector_send(n_border_nodes);
+        Util::Vector<double> border_nodes_vector_recv(n_border_nodes);
 
         for (long col = 0; col < Skeleton::kNumberOfColors; ++col) {
             // Find border_ix and neighbor to exchange with
@@ -48,7 +57,7 @@ namespace Mesh {
                 auto &border = local_skel.get_border(i);
                 if (border.get_color() != col)
                     continue;
-                neighbor = (int) (border.get_L() == rank) ? border.get_R() : border.get_L();
+                neighbor = (int) ((border.get_L() == rank) ? border.get_R() : border.get_L());
                 border_ix = i;
                 break;
             }
@@ -59,11 +68,11 @@ namespace Mesh {
 
             // Exchange data
             for (long i = 0; i < n_border_nodes; ++i)
-                send_vector(i) = local_vector(local_skel.get_border_node(border_ix, i));
-            MPI_Sendrecv(send_vector.data(), (int) n_border_nodes, MPI_DOUBLE, neighbor, 0,
-                         recv_vector.data(), (int) n_border_nodes, MPI_DOUBLE, neighbor, 0, comm, &status);
+                border_nodes_vector_send(i) = local_vector_send(local_skel.get_border_node(border_ix, i));
+            MPI_Sendrecv(border_nodes_vector_send.data(), (int) n_border_nodes, MPI_DOUBLE, neighbor, 0,
+                         border_nodes_vector_recv.data(), (int) n_border_nodes, MPI_DOUBLE, neighbor, 0, comm, &status);
             for (long i = 0; i < n_border_nodes; ++i)
-                local_vector(local_skel.get_border_node(border_ix, i)) += recv_vector(i);
+                local_vector_recv(local_skel.get_border_node(border_ix, i)) += border_nodes_vector_recv(i);
         }
     }
 }
