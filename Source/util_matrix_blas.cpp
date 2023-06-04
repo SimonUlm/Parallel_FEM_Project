@@ -8,10 +8,10 @@ namespace Util {
 	
     // x' * x
     double BlasVector::Dot(BlasVector &y) {
-    	assert(length() == y.length());
+    	assert(count() == y.count());
     	
     	double sum = 0;
-    	for (long i = 0; i < length(); ++i) {
+    	for (long i = 0; i < count(); ++i) {
     		sum += (*this)(i) * y(i);
     	}
     	
@@ -20,21 +20,21 @@ namespace Util {
     
     // x <- y
     void BlasVector::Copy(BlasVector &y) {
-    	assert(length() == y.length());
-    	for (long i = 0; i < y.length(); ++i) {
-			data[i] = y(i);
+    	assert(count() == y.count());
+    	for (long i = 0; i < y.count(); ++i) {
+			data_[i] = y(i);
 		}
     }
     
     // x <- alpha * x
     void BlasVector::Scal(double alpha) {
     	if (alpha == 0) {
-    		for (long i = 0; i < length(); ++i) {
-    			data[i] = 0;
+    		for (long i = 0; i < count(); ++i) {
+    			data_[i] = 0;
     		}
     	} else {
-    		for (long i = 0; i < length(); ++i) {
-    			data[i] *= alpha;
+    		for (long i = 0; i < count(); ++i) {
+    			data_[i] *= alpha;
     		}
     	}
     }
@@ -44,8 +44,8 @@ namespace Util {
     	if (alpha == 0){
     		return;
 		}
-		for (long i = 0; i < length(); ++i) {
-			data[i] += alpha*x(i);
+		for (long i = 0; i < count(); ++i) {
+			data_[i] += alpha*x(i);
 		}
     
     }
@@ -54,9 +54,9 @@ namespace Util {
     double BlasVector::Amax() {
     	double max = 0;
     	
-    	for (long i = 0; i < length(); ++i) {
-			if (fabs(data[i])>max) {
-			    max = fabs(data[i]);
+    	for (long i = 0; i < count(); ++i) {
+			if (fabs(data_[i])>max) {
+			    max = fabs(data_[i]);
 			}
 		}
 		return max;	

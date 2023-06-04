@@ -32,9 +32,10 @@ namespace Util {
     private:
         ValueType *ptr_;
     };
-	
+
+
+
 	/* Vector */
-	
     template<typename T>
     class Vector {
     /*
@@ -127,9 +128,39 @@ namespace Util {
             return Iterator(data_ + count_);
         }
 
-    private:
+    protected:
         long count_;
         T *data_;
+    };
+
+
+
+    /* BlasVector */
+    class BlasVector : public Vector<double> {
+        /*
+         * Vector for Blas operations.
+         *
+         * This class implements various Blas Level 1 operations
+         *
+         */
+    public:
+        explicit BlasVector(long count) :
+                Vector::Vector(count) {}
+
+        // x' * x
+        double Dot(BlasVector &y);
+
+        // x <- y
+        void Copy(BlasVector &y);
+
+        // x <- alpha * x
+        void Scal(double alpha);
+
+        // y <- alpha * x + y
+        void Axpy(double alpha, BlasVector &x);
+
+        // max(x)
+        double Amax();
     };
 }
 

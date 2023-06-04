@@ -10,59 +10,6 @@
 namespace Util {	
 	enum StorageOrder {ROWMAJOR, COLMAJOR};
 	
-	/* BlasVector */
-	
-	class BlasVector {
-	/*
-	 * Vector for Blas operations.
-	 *
-	 * This class implements various Blas Level 1 operations
-	 *
-	 */
-	private:
-		long length_;
-		double * data;
-		
-	public:
-		// Data access operator
-        double & operator()(long i) const {
-    		assert(i < length_);
-            return data[i];
-        }
-        double & operator()(long i) {
-        	assert(i < length_);
-            return data[i];
-        }
-            
-        // General constructor
-    	BlasVector(long length) :
-			length_(length),
-			data(new double[length]) {}				
-    	
-    	// Destructor
-        ~BlasVector() {
-            delete[] data;
-        }
-        
-        long length() {return length_;}
-        
-        // x' * x
-        double Dot(BlasVector &y);
-        
-        // x <- y
-        void Copy(BlasVector &y);
-        
-        // x <- alpha * x
-        void Scal(double alpha);
-        
-        // y <- alpha * x + y
-        void Axpy(double alpha, BlasVector &x);
-        
-        // max(x)
-        double Amax();
-  	
-	};
-	
 	/* SedMatrix */
     
 	class SedMatrix {

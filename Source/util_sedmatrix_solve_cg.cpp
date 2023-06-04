@@ -14,9 +14,9 @@ namespace Util {
 	 */
 	void SedMatrix::SolveCg(BlasVector &rhs, BlasVector &sol) {
 		
-		BlasVector r(rhs.length());
-		BlasVector d(rhs.length());
-		BlasVector a(rhs.length());
+		BlasVector r(rhs.count());
+		BlasVector d(rhs.count());
+		BlasVector a(rhs.count());
 		
 		// r <- rhs
 		r.Copy(rhs);
