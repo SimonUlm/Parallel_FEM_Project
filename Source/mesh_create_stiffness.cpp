@@ -31,9 +31,10 @@ namespace Mesh {
     } 
 
     Util::SedMatrix Mesh::CreateStiffness() {
+
         long col = 0;
         long row = 0;
-		
+
 		// Used to compare nodes of element to decide in which row of
 		// column a entry is needed
         static int ai[3] = {0,0,1}, aj[3] = {1, 2, 2};
@@ -116,8 +117,8 @@ namespace Mesh {
         }
         ptr_ind[n] = nz;
 
-        // Create SedMatrix and initialize non zero pattern
-        Util::SedMatrix mtrx(n, nz);
+        // Create SedMatrix and initialize non-zero pattern (in symmetry format)
+        Util::SedMatrix mtrx(n, nz, true);
         
         for (long j = 0; j < nz + 1; ++j) {
         	mtrx.set_ptr(j, ptr_ind[j]);

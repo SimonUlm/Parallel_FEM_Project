@@ -9,14 +9,14 @@ namespace Util {
      * sym: Is SedMatrix symmetric
      *
 	 */
-	void GeMatrix::from_sed(SedMatrix &sed, bool sym) {
+	void GeMatrix::FromSed(SedMatrix &sed) {
 		// Diagonal
 		for (long i = 0; i < n; ++i){
     		(*this)(i, i) = sed(i);
 		}
 		
 		// Super-/Sub-Diagonal
-		if (sym){
+		if (sed.is_symmetry_format()){
     		for (long j=0; j < n; ++j){
         		for (long p=sed.get_ptr(j); p < sed.get_ptr(j+1); ++p){
             		(*this)(sed.get_ptr(p), j) = sed(p);

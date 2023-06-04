@@ -22,54 +22,24 @@ namespace Util {
      * 
      */	
    	private:
-   		long nzmax;			// Maximum number of entries
-   		long n;				// Number of rows/columns
-   		long *ptr_ind;		// Col pointers and row indices
-   		double *data;		// Numerical values
+   		long nzmax;			                // Maximum number of entries
+   		long n;				                // Number of rows/columns
+   		long *ptr_ind;		                // Col pointers and row indices
+   		double *data;		                // Numerical values
+        bool is_symmetry_format_ = false;   // If true, only half of the symmetric matrix is actually stored
    	public:
-   		
-   		// Data access operator with absolute index in array (direct access)
-        double & operator()(long i) const {
-    		assert(i < nzmax);
-            return data[i];
-        }
-        double & operator()(long i) {
-        	assert(i < nzmax);
-            return data[i];
-        }
-        
-        // Data access operator with matrix coordinates (traversing through column need)
-        double operator()(long i, long j) {
-        	// Check diagonal
-        	if (i == j) return data[i];
-        	
-        	// Column
-        	long col_start = ptr_ind[j];
-        	long col_end = ptr_ind[j+1];
-			
-			if (col_start == col_end) return 0;
-			
-			// Traverse col
-			for (long k = col_start; k < col_end; ++k) {
-				if (ptr_ind[k] == i) {
-					return data[k];
-				}
-			}
-			
-			return 0;   
-        }
-    	
     	/*
-    	 * Constructor for nxn sparse matrix with nzmax non zero elements
+    	 * Constructor for nxn sparse matrix with nzmax non-zero elements
          *
          * n: Number of columns/rows
          * nzmax: Maximum number of nonzero elements
          *
     	 */
-    	SedMatrix(long n, long nzmax) :
+    	SedMatrix(long n, long nzmax, bool is_symmetry_format = false) :
     			n(n), nzmax(nzmax+1), 
     			ptr_ind(new long[nzmax+1]()),
-    			data(new double[nzmax+1]()) {ptr_ind[n] = nzmax;}
+    			data(new double[nzmax+1]()),
+                is_symmetry_format_(is_symmetry_format) {ptr_ind[n] = nzmax;}
     			
     	// Destructor
         ~SedMatrix() {
@@ -90,10 +60,41 @@ namespace Util {
         SedMatrix &operator=(SedMatrix &&other) = delete;
         SedMatrix &operator=(const SedMatrix &) = delete;
 
+        // Data access operator with absolute index in array (direct access)
+        double & operator()(long i) const {
+            assert(i < nzmax);
+            return data[i];
+        }
+        double & operator()(long i) {
+            assert(i < nzmax);
+            return data[i];
+        }
+
+        // Data access operator with matrix coordinates (traversing through column need)
+        double operator()(long i, long j) {
+            // Check diagonal
+            if (i == j) return data[i];
+
+            // Column
+            long col_start = ptr_ind[j];
+            long col_end = ptr_ind[j+1];
+
+            if (col_start == col_end) return 0;
+
+            // Traverse col
+            for (long k = col_start; k < col_end; ++k) {
+                if (ptr_ind[k] == i) {
+                    return data[k];
+                }
+            }
+
+            return 0;
+        }
+
     	// Getter methods		
     	long get_n(){return n;}
-    	
     	long get_nzmax(){return nzmax;}
+        bool is_symmetry_format(){return is_symmetry_format_;}
     	
     	// Get ptr_ind from absolute position in array
     	long get_ptr(long k){return ptr_ind[k];}
@@ -136,14 +137,43 @@ namespace Util {
     				
     	}
 
+        void InitDenseSpd() {
+            long row_index = n + 1;
 
-        
+            // Set pointer and row indices for first column
+            ptr_ind[0] = row_index;
+            for (long i = 1; i < n-1; ++i)
+                ptr_ind[row_index++] = i;
+
+            // Set all pointers and row indices
+            for (long j = 1; j < n-1; ++j) {
+                ptr_ind[j] = row_index;
+                for (long i = 0; i < n; ++i) {
+                    if (i == j)
+                        continue;
+                    ptr_ind[row_index++] = i;
+                }
+            }
+
+            // Set pointer and row indices for last column
+            ptr_ind[n-1] = row_index;
+            for (long i = 1; i < n-1; ++i)
+                ptr_ind[row_index++] = i;
+            ptr_ind[n] = row_index;
+
+            // Set values
+            for (long i = 0; i < n; ++i) {
+                for (long j = 0; j < n; ++j) {
+                    auto value = (double) (n - std::abs(i - j) - 1);
+                    if (value == 0)
+                        continue;
+                    add_val(i, j, value);
+                }
+            }
+        }
+
         // Print data of matrix
     	void Print();
-    	
-    	void SolveCg(BlasVector &rhs, BlasVector &sol);
-    	
-  
    	};
 	
 	/* GeMatrix */
@@ -156,14 +186,14 @@ namespace Util {
      * all values including zero values. The storage format can be row or column major
      */	
     private:
-    	long m; 			// Number of Rows
-    	long n; 			// Number of Columns
-    	long incRow;		// Row Stride
-    	long incCol;		// Column Stride
-        double *data; 		// Numerical values
+    	long m;       // Number of Rows
+    	long n;       // Number of Columns
+    	long incRow;  // Row Stride
+    	long incCol;  // Column Stride
+        double *data; // Numerical values
         
         // Initialize Matrix from Sed Matrix
-        void from_sed(SedMatrix &sed, bool sym);
+        void FromSed(SedMatrix &sed);
 
     public:
     	GeMatrix(GeMatrix &&) = delete;
@@ -200,11 +230,11 @@ namespace Util {
          *   sed: Reference to SedMatrix
          *	 sym: Is given SedMatrix symmetric
     	 */		
-    	GeMatrix(SedMatrix &sed, bool sym) :
+    	GeMatrix(SedMatrix &sed) :
     			m(sed.get_n()), n(sed.get_n()),
     			incRow(1), incCol(n),
     			data(new double[sed.get_n() * sed.get_n()]) {
-    		from_sed(sed, sym);
+            FromSed(sed);
 		}
 		
 		// Destructor

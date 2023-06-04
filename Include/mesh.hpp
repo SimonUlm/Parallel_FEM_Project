@@ -56,15 +56,14 @@ namespace Mesh{
         Mesh & operator=(Mesh &&other) = default;
         Mesh & operator=(const Mesh &) = delete;
 
-        // Defined in Print.cpp
+        const long get_m() const { return m; }
+        const long get_n() const { return n; }
+        const long get_n_nodes() const { return nodes.count(); }
+        const long get_refine_factor() const { return refine_factor; }
+
         void Print();
 
-        // Defined in Collect.cpp
         void CollectEdges();
-
-        long get_m() {return m;}
-        long get_n() {return n;}
-        long get_refine_factor() {return refine_factor;}
         
         Util::SedMatrix CreateStiffness();
 

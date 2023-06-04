@@ -2,6 +2,8 @@
 #define HPC2_UTIL_VECTOR_HPP
 
 #include <cassert>
+#include <cstring>
+#include <iostream>
 
 #include "hpc.hpp"
 
@@ -9,24 +11,55 @@
 namespace Util {
 	
     template<typename List>
-    class SimpleForwardIterator {
+    class SimpleIterator {
     public:
         using ValueType = typename List::ValueType;
+        using PointerType = ValueType*;
+        using ReferenceType = ValueType&;
 
-        explicit SimpleForwardIterator(ValueType *ptr) :
+        explicit SimpleIterator(ValueType *ptr) :
                 ptr_(ptr) {}
 
-        SimpleForwardIterator &operator++() {
+        SimpleIterator &operator++() {
             ++ptr_;
             return *this;
         }
 
-        ValueType &operator*() {
+        SimpleIterator operator++(int) {
+            SimpleIterator iterator = *this;
+            ++(*this);
+            return *this;
+        }
+
+        SimpleIterator &operator--() {
+            --ptr_;
+            return *this;
+        }
+
+        SimpleIterator operator--(int) {
+            SimpleIterator iterator = *this;
+            --(*this);
+            return *this;
+        }
+
+        ReferenceType operator[](int index) {
+            return ptr_[index];
+        }
+
+        PointerType operator->() {
+            return ptr_;
+        }
+
+        ReferenceType operator*() {
             return *ptr_;
         }
 
-        bool operator!=(const SimpleForwardIterator &other) const {
+        bool operator!=(const SimpleIterator &other) const {
             return ptr_ != other.ptr_;
+        }
+
+        bool operator==(const SimpleIterator &other) const {
+            return !(*this == other);
         }
 
     private:
@@ -46,7 +79,7 @@ namespace Util {
      
     public:
         using ValueType = T;
-        using Iterator = SimpleForwardIterator<Vector<T>>;
+        using Iterator = SimpleIterator<Vector<T>>;
 
         /*
     	 * Empty Constructor
@@ -134,6 +167,14 @@ namespace Util {
 
         Iterator end() {
             return Iterator(data_ + count_);
+        }
+
+        // Other
+        void Print() const {
+            std::cout << std::endl << "Vector:" << std::endl;
+            for (long i = 0; i < count_; ++i)
+                std::cout << data_[i] << std::endl;
+            std::cout << std::endl;
         }
 
     protected:

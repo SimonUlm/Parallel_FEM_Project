@@ -9,5 +9,6 @@
 #include "skeleton.hpp"
 #include "parallel_dot_product.hpp"
 #include "print_serial.hpp"
+#include "solvers.hpp"
 
 #endif //HPC2_HPC_HPP

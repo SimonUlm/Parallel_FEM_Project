@@ -23,7 +23,7 @@ namespace Util {
         for (long i = 0; i < m; ++i) {
          	printf("  ");
          	for (long j = 0; j < n; ++j) {
-            	printf(" %4.1lf", (*this)(i, j));
+            	printf(" %4.5lf", (*this)(i, j));
          	}
          	printf("\n");
          }
