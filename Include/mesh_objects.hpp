@@ -16,9 +16,17 @@ namespace Mesh{
         Node operator+(const Node other) const {
             return Node{x + other.x, y + other.y};
         }
+        
+        Node operator-(const Node other) const {
+            return Node{x - other.x, y - other.y};
+        }
 
         Node operator*(const double mult) const {
             return Node{mult * x, mult * y};
+        }
+        
+        double dot(Node n) {
+        	return x * n.x + y * n.y;
         }
         
         void Print();       

@@ -2,6 +2,7 @@
 #define HPC2_UTIL_MATRIX_HPP
 
 #include <cassert>
+#include <cstdio>
 
 #include "hpc.hpp"
 
@@ -10,26 +11,24 @@ namespace Util {
 	enum StorageOrder {ROWMAJOR, COLMAJOR};
 	
 	/* SedMatrix */
-    /*!  \class SedMatrix util_matrix.hpp "Include/util_matrix.hpp"
-     *   \brief Matrix class for spares matrixes in compress format with extraxted diagonal
-     *
-     *	 The SedMatrix class is a storage format for sparses matrixes which. The matrix
-     *	 can be either compressed row or column. It stores the diagonal in extracted form and
-     *   does not store zero entries  
-     */	
+    
 	class SedMatrix {
+	/* 
+     * Matrix class for spares matrixes in compress format with extraxted diagonal
+     *
+     * The SedMatrix class is a storage format for sparses matrixes which. The matrix
+     * can be only compressed column. It stores the diagonal in extracted form and
+     * does not store zero entries 
+     * 
+     */	
    	private:
-   		long nzmax;			/*!< Maximum number of entries */
-   		long n;				/*!< Number of rows/columns */
-   		long *i;			/*!< Col pointers and row indices */
-   		double *data;		/*!< Numerical values */	
+   		long nzmax;			// Maximum number of entries
+   		long n;				// Number of rows/columns
+   		long *ptr_ind;		// Col pointers and row indices
+   		double *data;		// Numerical values
    	public:
-   		SedMatrix(SedMatrix &&) = delete;
-        SedMatrix(const SedMatrix &) = delete;
-        
-        SedMatrix & operator=(SedMatrix &&other) = default;
-        SedMatrix & operator=(const SedMatrix &) = delete;
-        
+   		
+   		// Data access operator with absolute index in array (direct access)
         double & operator()(long i) const {
     		assert(i < nzmax);
             return data[i];
@@ -38,47 +37,133 @@ namespace Util {
         	assert(i < nzmax);
             return data[i];
         }
+        
+        // Data access operator with matrix coordinates (traversing through column need)
+        double operator()(long i, long j) {
+        	// Check diagonal
+        	if (i == j) return data[i];
+        	
+        	// Column
+        	long col_start = ptr_ind[j];
+        	long col_end = ptr_ind[j+1];
+			
+			if (col_start == col_end) return 0;
+			
+			// Traverse col
+			for (long k = col_start; k < col_end; ++k) {
+				if (ptr_ind[k] == i) {
+					return data[k];
+				}
+			}
+			
+			return 0;   
+        }
     	
+    	/*
+    	 * Constructor for nxn sparse matrix with nzmax non zero elements
+         *
+         * n: Number of columns/rows
+         * nzmax: Maximum number of nonzero elements
+         *
+    	 */
     	SedMatrix(long n, long nzmax) :
-    			n(n), nzmax(nzmax), 
-    			i(new long[nzmax]),
-    			data(new double[nzmax]) {i[nzmax-1] = nzmax-1;}
+    			n(n), nzmax(nzmax+1), 
+    			ptr_ind(new long[nzmax+1]()),
+    			data(new double[nzmax+1]()) {ptr_ind[n] = nzmax;}
     			
+    	// Destructor
+        ~SedMatrix() {
+        	delete[] ptr_ind;
+            delete[] data;
+        }
+
+        SedMatrix(SedMatrix &&other) noexcept:
+                ptr_ind(other.ptr_ind), data(other.data), nzmax(other.nzmax), n(other.n) {
+            other.ptr_ind = nullptr;
+            other.data = nullptr;
+            other.nzmax = 0;
+            other.n = 0;
+        }
+        SedMatrix(const SedMatrix &) = delete;
+
+        // Assignment operations
+        SedMatrix &operator=(SedMatrix &&other) = delete;
+        SedMatrix &operator=(const SedMatrix &) = delete;
+
+    	// Getter methods		
     	long get_n(){return n;}
     	
-    	long get_i(long k){return i[k];}
+    	long get_nzmax(){return nzmax;}
     	
-    	void Print();
+    	// Get ptr_ind from absolute position in array
+    	long get_ptr(long k){return ptr_ind[k];}
     	
-    	// Debug purpose
-    	void Init() {
+    	// Set ptr_ind at absolute postion in array
+    	void set_ptr(long k, long ptr){ptr_ind[k] = ptr;}
+    	
+    	// Adding given value to matrix entry
+    	void add_val(long i, long j, double val); 
+    	
+    	// symmetric sed general matrix vector product
+		// y <- alpha * A * x + beta * y 
+        void SymSpmv(double alpha, BlasVector &x, double beta, BlasVector &y);
+       
+        
+		void Init() {
     		// Init Diagonal with 00 11 22 33 ..
     		double v = 0;
     		for (long k = 0; k < n; ++k) {
     			(*this)(k) = v;
     			v += 11;	
     		}
+    		
+    		v = 0;
+    		long index = n + 1;
+    		ptr_ind[0] = index;
+    		for (long k = 0; k < n; ++k) {
+    			for (long j = 0; j < n; ++j) {
+    				if (j != k) {
+    					data[index] = v;
+    					ptr_ind[index] = j;
+    					
+    					index += 1;
+    				}
+    				v += 10;
+    			}
+    			ptr_ind[k+1] = index;
+    			v = k + 1;
+    		}
     				
     	}
+
+
+        
+        // Print data of matrix
+    	void Print();
     	
-    	// Missing ? sed *sed_nz_pattern(mesh *M), index sed_dupl (sed *A)
-   
+    	void SolveCg(BlasVector &rhs, BlasVector &sol);
+    	
+  
    	};
 	
 	/* GeMatrix */
-    /*!  \class GeMatrix util_matrix.hpp "Include/util_matrix.hpp"
-     *   \brief Matrix class for general dense matrixes
-     *
-     *	 The GeMatrix class is a general storage format for dense matrixes which stores
-     *   all values including zero values. The storage format can be row or column major
-     */	
+    
     class GeMatrix {
+    /*
+     * Matrix class for general dense matrixes
+     *
+     * The GeMatrix class is a general storage format for dense matrixes which stores
+     * all values including zero values. The storage format can be row or column major
+     */	
     private:
-    	long m; 			/*!< Number of Rows */
-    	long n; 			/*!< Number of Columns */
-    	long incRow;		/*!< Row Stride */
-    	long incCol;		/*!< Column Stride */
-        double *data; 		/*!< Numerical values */
+    	long m; 			// Number of Rows
+    	long n; 			// Number of Columns
+    	long incRow;		// Row Stride
+    	long incCol;		// Column Stride
+        double *data; 		// Numerical values
+        
+        // Initialize Matrix from Sed Matrix
+        void from_sed(SedMatrix &sed, bool sym);
 
     public:
     	GeMatrix(GeMatrix &&) = delete;
@@ -96,12 +181,12 @@ namespace Util {
             return data[i*incRow + j*incCol];
         }
     
-    	/*!
+    	/*
     	 *   Constructor for GeMatrix
          *
-         *   \param m Number of rows
-         *   \param n Number of columns
-         *   \param order Storage order ROWMAJOR | COLMAJOR
+         *   m: Number of rows
+         *   n: Number of columns
+         *   order: Storage order ROWMAJOR | COLMAJOR
     	 */
     	GeMatrix(long m, long n, StorageOrder order) :
     			m(m), n(n), 
@@ -109,48 +194,25 @@ namespace Util {
     			incCol(order == StorageOrder::ROWMAJOR? 1: m),
     			data(new double[m*n]) {}
     	
-    	/*!
+    	/*
     	 *   Constructor for GeMatrix from SedMatrix (always as colmajor)
          *
-         *   \param sed Reference to SedMatrix
-         *	 \param sym Is given SedMatrix symmetric
+         *   sed: Reference to SedMatrix
+         *	 sym: Is given SedMatrix symmetric
     	 */		
     	GeMatrix(SedMatrix &sed, bool sym) :
     			m(sed.get_n()), n(sed.get_n()),
     			incRow(1), incCol(n),
     			data(new double[sed.get_n() * sed.get_n()]) {
-    		// Diagonal
-    		for (long i = 0; i < n; ++i){
-        		(*this)(i, i) = sed(i);
-    		}
-    		
-    		// Super-/Sub-Diagonal
-    		if (sym){
-        		for (long j=0; j < n; ++j){
-            		for (long p=sed.get_i(j); p < sed.get_i(j+1); ++p){
-                		(*this)(sed.get_i(p), j) = sed(p);
-                		(*this)(j, sed.get_i(p)) = sed(p);
-            		}
-        		}
-    		} else {
-        		for (long j=0; j < n; ++j){
-            		for (long p=sed.get_i(j); p < sed.get_i(j+1); ++p){
-                		(*this)(sed.get_i(p), j) = sed(p);
-            		}
-        		}
-    		}			
-    			
+    		from_sed(sed, sym);
 		}
+		
+		// Destructor
+        ~GeMatrix() {
+            delete[] data;
+        }
     	
-    	// Debug purpose
-    	void Init() {
-    		for (long i = 0; i < m; ++i) {
-		     	for (long j = 0; j < n; ++j) {
-		        	(*this)(i, j) = j + i * n;
-		     	}
-         	}
-    	}	
-        
+		// Print data of matrix
         void Print();
    	};
 }

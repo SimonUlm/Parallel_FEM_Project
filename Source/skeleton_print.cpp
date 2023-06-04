@@ -37,8 +37,8 @@ namespace Skeleton {
         printf("Total       : %12.6g MByte\n", (double) total / 1024. / 1024.);
     }
     
-    /*!
-     *   Prints Data ComBorder
+    /*
+     * Prints Data ComBorder
      */
     void ComBorder::Print() {
     	printf(" %zu %zu %zu", index, c1, c2);
@@ -46,11 +46,11 @@ namespace Skeleton {
         printf("\n");
     }
     
-    /*!
-     *   Prints ComBorder Nodes seperated for each ComBorder
+    /*
+     * Prints ComBorder Nodes seperated for each ComBorder
      */
     void ComBorderNodes::Print() {
-    	for (long i = 0; i < n_borders; ++i) {
+    	for (long i = 0; i < nodes.count() / n_nodes; ++i) {
             for(long j = 0; j < n_nodes; ++j) {
             	printf(" %zu", nodes(i*n_nodes+j));
             }

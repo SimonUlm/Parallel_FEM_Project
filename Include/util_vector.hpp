@@ -7,7 +7,7 @@
 
 
 namespace Util {
-
+	
     template<typename List>
     class SimpleForwardIterator {
     public:
@@ -33,23 +33,42 @@ namespace Util {
         ValueType *ptr_;
     };
 
+
+
+	/* Vector */
     template<typename T>
     class Vector {
+    /*
+     * Simple generic vector class which stores elements consectuive in memory for fast
+     * memory access
+     *
+     */
+     
     public:
         using ValueType = T;
         using Iterator = SimpleForwardIterator<Vector<T>>;
 
-        // Constructors
+        /*
+    	 * Empty Constructor
+         *
+    	 */
         explicit Vector() :
                 count_(0), data_(nullptr) {
         }
-
+		
+		/*
+    	 * Constructor to allocate memory for count elements
+    	 *
+    	 * count: number of elements to be stored
+         *
+    	 */
         explicit Vector(long count) :
                 count_(count), data_(nullptr) {
             if (count != 0)
                 data_ = new T[count]{};
         }
-
+		
+		// Destructor
         ~Vector() {
             delete[] data_;
         }
@@ -117,9 +136,39 @@ namespace Util {
             return Iterator(data_ + count_);
         }
 
-    private:
+    protected:
         long count_;
         T *data_;
+    };
+
+
+
+    /* BlasVector */
+    class BlasVector : public Vector<double> {
+        /*
+         * Vector for Blas operations.
+         *
+         * This class implements various Blas Level 1 operations
+         *
+         */
+    public:
+        explicit BlasVector(long count) :
+                Vector::Vector(count) {}
+
+        // x' * x
+        double Dot(BlasVector &y);
+
+        // x <- y
+        void Copy(BlasVector &y);
+
+        // x <- alpha * x
+        void Scal(double alpha);
+
+        // y <- alpha * x + y
+        void Axpy(double alpha, BlasVector &x);
+
+        // max(x)
+        double Amax();
     };
 }
 
