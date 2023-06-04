@@ -1,6 +1,4 @@
-#include <cassert>
 #include <algorithm>
-#include <utility>
 
 #include "hpc.hpp"
 #include "mesh_objects.hpp"
@@ -12,7 +10,7 @@ namespace Mesh {
 	
     
     void stima_laplace(Node &n1, Node &n2, Node &n3, 
-    				   long  typ, double dx[3], double ax[3]) {
+    				   long typ, double dx[3], double ax[3]) {
 
     	Node n32 = n3 - n2;
     	Node n13 = n1 - n3;
@@ -33,8 +31,6 @@ namespace Mesh {
     } 
 
     Util::SedMatrix Mesh::CreateStiffness() {
-        // Missing asserts?
-        
         long col = 0;
         long row = 0;
 		
@@ -95,8 +91,7 @@ namespace Mesh {
 		        tmp[col] += 1;
         	}
         }
-        
-        
+
         // remove duplicate entries
         // tmp checks if row i is yet seen
         long *entries_per_col = new long[n]();
@@ -120,8 +115,7 @@ namespace Mesh {
         	ptr_ind[j] = q;
         }
         ptr_ind[n] = nz;
-        
-        
+
         // Create SedMatrix and initialize non zero pattern
         Util::SedMatrix mtrx(n, nz);
         

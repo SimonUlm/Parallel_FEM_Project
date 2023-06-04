@@ -1,10 +1,12 @@
 #include "hpc.hpp"
 
 int main(int argc, char **argv) {
-    Mesh::GlobalMesh mesh(1,1);
     
+    
+    Mesh::GlobalMesh mesh(3,4);
+ 
     mesh.Create();
-    mesh.Print();
+    mesh.Refine();
     
     
     Util::SedMatrix sed = mesh.CreateStiffness();
@@ -15,7 +17,5 @@ int main(int argc, char **argv) {
     
     gematrix.Print();
     
-    
-    
-    
+
 }

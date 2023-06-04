@@ -9,7 +9,7 @@ namespace Util {
 	 * Solve SedMatrix with CG
      *
      * rhs: Right hand side of equation
-     * sol: Pointer so solution vector
+     * sol: Pointer to solution vector with start value when calling function
      *
 	 */
 	void SedMatrix::SolveCg(BlasVector &rhs, BlasVector &sol) {
@@ -25,17 +25,13 @@ namespace Util {
 		d.Copy(r);
 		
 		// r <- - this * x_0 + r
-		SymSpmv(-1, sol, 1, r);
-		
-		
-		
+		SymSpmv(-1, sol, 1, r);	
 		
 		double rho = r.Dot(r);
 		double alpha = 0;
 		double rho_new = 0;
 		
 		for (long i = 0; i < N; ++i) {
-			// Missing tolerance check
 			if (r.Amax() < TOL) {
 				break;
 			}

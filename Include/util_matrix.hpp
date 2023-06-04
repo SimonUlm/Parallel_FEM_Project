@@ -2,6 +2,7 @@
 #define HPC2_UTIL_MATRIX_HPP
 
 #include <cassert>
+#include <cstdio>
 
 #include "hpc.hpp"
 
@@ -9,13 +10,21 @@
 namespace Util {	
 	enum StorageOrder {ROWMAJOR, COLMAJOR};
 	
+	/* BlasVector */
+	
 	class BlasVector {
+	/*
+	 * Vector for Blas operations.
+	 *
+	 * This class implements various Blas Level 1 operations
+	 *
+	 */
 	private:
 		long length_;
 		double * data;
 		
 	public:
-		// Data access operator with absolute index in array (direct access)
+		// Data access operator
         double & operator()(long i) const {
     		assert(i < length_);
             return data[i];
@@ -25,7 +34,7 @@ namespace Util {
             return data[i];
         }
             
-        
+        // General constructor
     	BlasVector(long length) :
 			length_(length),
 			data(new double[length]) {}				
@@ -113,7 +122,7 @@ namespace Util {
     	SedMatrix(long n, long nzmax) :
     			n(n), nzmax(nzmax+1), 
     			ptr_ind(new long[nzmax+1]()),
-    			data(new double[nzmax+1]()) {}
+    			data(new double[nzmax+1]()) {ptr_ind[n] = nzmax;}
     			
     	// Destructor
         ~SedMatrix() {
@@ -151,6 +160,36 @@ namespace Util {
     	// symmetric sed general matrix vector product
 		// y <- alpha * A * x + beta * y 
         void SymSpmv(double alpha, BlasVector &x, double beta, BlasVector &y);
+       
+        
+		void Init() {
+    		// Init Diagonal with 00 11 22 33 ..
+    		double v = 0;
+    		for (long k = 0; k < n; ++k) {
+    			(*this)(k) = v;
+    			v += 11;	
+    		}
+    		
+    		v = 0;
+    		long index = n + 1;
+    		ptr_ind[0] = index;
+    		for (long k = 0; k < n; ++k) {
+    			for (long j = 0; j < n; ++j) {
+    				if (j != k) {
+    					data[index] = v;
+    					ptr_ind[index] = j;
+    					
+    					index += 1;
+    				}
+    				v += 10;
+    			}
+    			ptr_ind[k+1] = index;
+    			v = k + 1;
+    		}
+    				
+    	}
+
+
         
         // Print data of matrix
     	void Print();
