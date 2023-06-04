@@ -196,6 +196,16 @@ namespace Util {
         explicit BlasVector(long count) :
                 Vector::Vector(count) {}
 
+        BlasVector(BlasVector &&other) :
+                Vector::Vector(std::move(other)) {}
+
+        // Assignment operators
+        BlasVector(const BlasVector &) = delete;
+
+        BlasVector &operator=(const BlasVector &) = delete;
+
+        using Vector::operator=;
+
         // x' * x
         double Dot(BlasVector &y);
 

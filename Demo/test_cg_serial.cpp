@@ -14,8 +14,7 @@ int main(int argc, char **argv) {
     b.Init();
 
     //test_sed.SolveCg(b, sol);
-    Util::BlasVector sol(mesh.get_n_nodes());
-    sol = Solver::SolveCG(test_sed, b);
+    Util::BlasVector sol = Solver::SolveCG(test_sed, b);
 
     // Output
     b.Print();

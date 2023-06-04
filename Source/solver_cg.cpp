@@ -57,6 +57,6 @@ namespace Solver {
             s.Axpy(1, r);
         }
 
-        return std::move(u);
+        return u;
     }
 }
