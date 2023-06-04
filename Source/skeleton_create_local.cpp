@@ -3,6 +3,10 @@
 
 #include "hpc.hpp"
 
+#ifdef _MPI
+#include <mpi.h>
+#endif
+
 namespace Skeleton {
 
     /*  
@@ -15,7 +19,7 @@ namespace Skeleton {
      * local_mesh: LocalMesh to map global and local indexing
      * 
 	 */
-    void Skeleton::CreateLocal(int rank, Mesh::LocalMesh &local_mesh) {
+    void Skeleton::CreateLocal(Mesh::LocalMesh &local_mesh) {
         // Determine size of local skeleton (and remember cross points)
         long n_borders_loc = 0;
         for (long i = 0; i < n_borders; ++i) {
@@ -28,7 +32,11 @@ namespace Skeleton {
 
         // Allocate local skeleton
         long nodes_per_border = com_border_nodes.get_n_nodes();
+#ifdef _MPI
+        Skeleton local_skel(n_borders_loc, nodes_per_border, comm, rank, LOCAL);
+#else
         Skeleton local_skel(n_borders_loc, nodes_per_border, LOCAL);
+#endif
 
         // Loop again to generate entries in local_skel
         long local_border_ix = 0;

@@ -3,6 +3,10 @@
 #include <math.h>
 #include <cstdio>
 
+#ifdef _MPI
+#include <mpi.h>
+#endif
+
 #include "hpc.hpp"
 
 namespace Skeleton{
@@ -138,9 +142,14 @@ namespace Skeleton{
         long n_borders; 						// Number of borders in this Skeleton
         Util::Vector<ComBorder> com_borders;	// Vector of ComBorders
         ComBorderNodes com_border_nodes; 		// List of nodes on the communication borders
-        Util::Vector<long> crosspoints; /*!< List of cross points between processes */
+        Util::Vector<long> crosspoints;         // List of cross points between processes
+#ifdef _MPI
+        MPI_Comm comm = MPI_COMM_WORLD;
+        int rank = 0;
+#endif
 
     public:
+#ifdef _MPI
     	/*
     	 * Constructor for unrefined meshes
     	 *
@@ -148,35 +157,39 @@ namespace Skeleton{
          * n: Number of processes in horizontal direction
          *
     	 */
-        Skeleton(long m, long n) :
+        Skeleton(long m, long n, MPI_Comm comm, int rank) :
                 com_borders(2 * n * m - n - m), com_border_nodes(2 * n * m - n - m),
                 n_borders(2*n*m-n-m),
-                crosspoints((m + 1) * (n + 1)){}
+                crosspoints((m + 1) * (n + 1)),
+                comm(comm), rank(rank) {}
 
-        /*
-    	 * Constructor for refined meshes
-         *
-         * m: Number of processes in vertical direction
-         * n: Number of processes in horizontal direction
-         * refine_factor: Number of performed refinements
-         *
-    	 */
-        Skeleton(long m, long n, long refine_factor) :
+        Skeleton(long m, long n, long refine_factor, MPI_Comm comm, int rank) :
                 com_borders(2 * n * m - n - m),
                 com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
                 n_borders(2*n*m-n-m),
-                crosspoints((m + 1) * (n + 1)){}
+                crosspoints((m + 1) * (n + 1)),
+                comm(comm), rank(rank) {}
 
-        /*
-    	 * Constructor for local Skeltons
-         *
-         * n_borders: Number of ComBorder's
-         * nodes_per_border: Number of nodes on ComBorder edge
-         *
-    	 */
-        Skeleton(long n_borders, long nodes_per_border, enum global_or_local usecase) :
+        Skeleton(long n_borders, long nodes_per_border, MPI_Comm comm, int rank, enum global_or_local usecase) :
                 com_borders(n_borders), com_border_nodes(n_borders, nodes_per_border),
+                comm(comm), rank(rank),
                 n_borders(n_borders) {assert(usecase == LOCAL);}
+#else
+        Skeleton(long m, long n) :
+                        com_borders(2 * n * m - n - m), com_border_nodes(2 * n * m - n - m),
+                        n_borders(2*n*m-n-m),
+                        crosspoints((m + 1) * (n + 1)){}
+
+        Skeleton(long m, long n, long refine_factor) :
+                    com_borders(2 * n * m - n - m),
+                    com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
+                    n_borders(2*n*m-n-m),
+                    crosspoints((m + 1) * (n + 1)){}
+
+        Skeleton(long n_borders, long nodes_per_border, enum global_or_local usecase) :
+                    com_borders(n_borders), com_border_nodes(n_borders, nodes_per_border),
+                    n_borders(n_borders) {assert(usecase == LOCAL);}
+#endif
 
         Skeleton(Skeleton &&) = delete;
         Skeleton(const Skeleton &) = delete;
@@ -196,17 +209,22 @@ namespace Skeleton{
         }
 
         const Util::Vector<long> &get_crosspoints() const { return crosspoints; }
+
+#ifdef _MPI
+        const MPI_Comm get_comm() const { return comm; }
+        const int get_rank() const { return rank; }
+#endif
         
     	// Creating global Skeleton from Mesh
         void Create(Mesh::Mesh &mesh);
         
     	//Transforms global Skeleton to local Skeleton
-        void CreateLocal(int rank, Mesh::LocalMesh &local_mesh);
+        void CreateLocal(Mesh::LocalMesh &local_mesh);
         
-        #ifdef _MPI
+#ifdef _MPI
         // Scatter Skeleton between Processes by MPI
-        void Scatter(int rank, Mesh::LocalMesh &local_mesh);
-        #endif
+        void Scatter(Mesh::LocalMesh &local_mesh);
+#endif
 
 		// Print data of Skeleton
         void Print();

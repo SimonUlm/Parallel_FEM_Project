@@ -120,7 +120,7 @@ namespace Mesh{
 
         // Defined in Scatter.cpp
 #ifdef _MPI
-        void Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes);
+        void Scatter(LocalMesh &local_mesh, Skeleton::Skeleton &skeleton);
     private:
         void TransferGlobalToLocal(LocalMesh &local_mesh, Util::Vector<long> &global_nodes_priority,
                                    MPI_Comm comm, int rank);

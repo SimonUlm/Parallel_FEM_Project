@@ -16,17 +16,18 @@ namespace Mesh {
     }
 
     void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector,
-                                                   MPI_Comm comm, int rank, Skeleton::Skeleton &local_skel) const {
-        DistributedToAccumulated(local_vector,
-                                 local_vector,
-                                 comm, rank, local_skel);
+                                                   Skeleton::Skeleton &local_skel) const {
+        DistributedToAccumulated(local_vector,local_vector,local_skel);
     }
 
     void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector_send,
                                                    Util::Vector<double> &local_vector_recv,
-                                                   MPI_Comm comm, int rank, Skeleton::Skeleton &local_skel) const {
+                                                   Skeleton::Skeleton &local_skel) const {
         assert(local_vector_send.count() == local_to_global_->count());
         assert(local_vector_recv.count() == local_to_global_->count());
+
+        MPI_Comm comm = local_skel.get_comm();
+        int rank = local_skel.get_rank();
 
         // Create global cross point vector from local vector
         Util::Vector<double> global_vector_send(n_global_crosspoints_);

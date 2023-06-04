@@ -9,7 +9,11 @@
 
 namespace Mesh {
 
-    void GlobalMesh::Scatter(LocalMesh &local_mesh, MPI_Comm comm, int rank, int nof_processes) {
+    void GlobalMesh::Scatter(LocalMesh &local_mesh, Skeleton::Skeleton &skeleton) {
+
+        // MPI stuff
+        MPI_Comm comm = skeleton.get_comm();
+        int rank = skeleton.get_rank();
 
         // Declare temporary global mesh structure that is used by all processes. This approach is chosen to make sure
         // the global mesh gets destructed at the end of the scatter method on all local processes to save memory.
