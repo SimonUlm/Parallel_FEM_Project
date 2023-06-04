@@ -143,9 +143,10 @@ namespace Skeleton{
         Util::Vector<ComBorder> com_borders;	// Vector of ComBorders
         ComBorderNodes com_border_nodes; 		// List of nodes on the communication borders
         Util::Vector<long> crosspoints;         // List of cross points between processes
+        int rank = 0;
 #ifdef _MPI
         MPI_Comm comm = MPI_COMM_WORLD;
-        int rank = 0;
+        VectorConverter vector_converter;
 #endif
 
     public:
@@ -213,6 +214,8 @@ namespace Skeleton{
 #ifdef _MPI
         const MPI_Comm get_comm() const { return comm; }
         const int get_rank() const { return rank; }
+
+        void set_vector_converter(VectorConverter &&converter) { vector_converter = std::move(converter); }
 #endif
         
     	// Creating global Skeleton from Mesh
@@ -224,6 +227,18 @@ namespace Skeleton{
 #ifdef _MPI
         // Scatter Skeleton between Processes by MPI
         void Scatter(Mesh::LocalMesh &local_mesh);
+
+        // Call vector transformations from Skeleton
+        void AccumulatedToDistributed(Util::Vector<double> &local_vector) const {
+            vector_converter.AccumulatedToDistributed(local_vector);
+        }
+        void DistributedToAccumulated(Util::Vector<double> &local_vector) const {
+            vector_converter.DistributedToAccumulated(local_vector, *this);
+        }
+        void DistributedToAccumulated(Util::Vector<double> &local_vector_send,
+                                      Util::Vector<double> &local_vector_recv) const {
+            vector_converter.DistributedToAccumulated(local_vector_send, local_vector_recv, *this);
+        }
 #endif
 
 		// Print data of Skeleton

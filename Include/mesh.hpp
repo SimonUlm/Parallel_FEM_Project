@@ -11,6 +11,10 @@
 #include "hpc.hpp"
 #include "mesh_objects.hpp"
 
+namespace Skeleton {
+    class Skeleton;
+}
+
 namespace Mesh{
     /**
      * @brief Abstract Mesh Class
@@ -70,9 +74,6 @@ namespace Mesh{
     };
 
     class LocalMesh: public Mesh {
-    private:
-        VectorConverter vector_converter_;
-
     public:
         friend class GlobalMesh;
 
@@ -80,10 +81,6 @@ namespace Mesh{
 
         long get_n_nodes() {
             return nodes.count();
-        };
-
-        const VectorConverter & vector_converter() {
-            return vector_converter_;
         };
 
         void CollectFixedNodes() {

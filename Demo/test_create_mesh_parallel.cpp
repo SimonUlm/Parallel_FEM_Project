@@ -26,13 +26,11 @@ int main(int argc, char **argv) {
         global_mesh.Refine();
     }
 
-    global_mesh.Scatter(local_mesh, MPI_COMM_WORLD, rank, nof_processes);
-
-    Skeleton::Skeleton skeleton(m, n, 2);
+    Skeleton::Skeleton skeleton(m, n, 2, MPI_COMM_WORLD, rank);
     if (rank == 0)
         skeleton.Create(global_mesh);
 
-    skeleton.Scatter(rank, local_mesh);
+    global_mesh.Scatter(local_mesh, skeleton);
 
     MPI::PrintSerial(MPI_COMM_WORLD, rank, nof_processes, [&]() {
         local_mesh.Print();

@@ -10,7 +10,7 @@ using namespace Util;
 namespace Solver {
 
     BlasVector SolveCGParallel(SedMatrix &K, BlasVector &f,
-                               Mesh::LocalMesh &local_mesh, Skeleton::Skeleton &local_skel,
+                               Skeleton::Skeleton &local_skel,
                                long max_it, double tol) {
 
         constexpr double kTol = 1e-5;
@@ -38,7 +38,7 @@ namespace Solver {
         r.Copy(f);
         K.SymSpmv(-1, u, 1, r);
         // w = r
-        local_mesh.vector_converter().DistributedToAccumulated(r, w, local_skel);
+        local_skel.DistributedToAccumulated(r, w);
         // s = w
         s.Copy(w);
         // sigma = <w, r>
@@ -58,7 +58,7 @@ namespace Solver {
             // r = r - alpha * v
             r.Axpy(-alpha, v);
             // w = r
-            local_mesh.vector_converter().DistributedToAccumulated(r, w, local_skel);
+            local_skel.DistributedToAccumulated(r, w);
             // sigma = <w, r>
             old_sigma = sigma;
             sigma = w.Dot(r);

@@ -13,7 +13,7 @@ namespace Solver {
 
 #ifdef _MPI
     Util::BlasVector SolveCGParallel(Util::SedMatrix &K, Util::BlasVector &f,
-                                     Mesh::LocalMesh &local_mesh, Skeleton::Skeleton &local_skel,
+                                     Skeleton::Skeleton &local_skel,
                                      long max_it, double tol);
 #endif
 

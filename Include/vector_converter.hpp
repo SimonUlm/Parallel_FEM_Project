@@ -5,12 +5,10 @@
 #include <mpi.h>
 #endif
 
-// Declare Skeleton class
 namespace Skeleton {
-    class Skeleton;
-}
 
-namespace Mesh {
+    // Declare Skeleton class
+    class Skeleton;
 
     /*!  \class VectorConverter vector_converter_.hpp "Include/vector_converter_.hpp"
      *   \brief Converts different vector types into each other
@@ -43,20 +41,20 @@ namespace Mesh {
         /*
     	 *   Converts accumulated vector into distributed vector (in-place)
     	 */
-        void AccumulatedToDistributed(Util::Vector<double> &vector) const;
+        void AccumulatedToDistributed(Util::Vector<double> &local_vector) const;
 
         /*
     	 *   Converts distributed vector into accumulated vector (in-place)
     	 */
         void DistributedToAccumulated(Util::Vector<double> &local_vector,
-                                      Skeleton::Skeleton &local_skel) const;
+                                      const Skeleton &local_skel) const;
 
         /*
     	 *   Takes distributed vector as input and returns accumulated vector
     	 */
         void DistributedToAccumulated(Util::Vector<double> &local_vector_send,
                                       Util::Vector<double> &local_vector_recv,
-                                      Skeleton::Skeleton &local_skel) const;
+                                      const Skeleton &local_skel) const;
 #endif
 
     private:

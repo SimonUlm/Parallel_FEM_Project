@@ -6,7 +6,7 @@
 #ifdef _MPI
 #include <mpi.h>
 
-namespace Mesh {
+namespace Skeleton {
 
     void VectorConverter::AccumulatedToDistributed(Util::Vector<double> &local_vector) const {
         assert(local_vector.count() == local_to_global_->count());
@@ -16,13 +16,13 @@ namespace Mesh {
     }
 
     void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector,
-                                                   Skeleton::Skeleton &local_skel) const {
+                                                   const Skeleton &local_skel) const {
         DistributedToAccumulated(local_vector,local_vector,local_skel);
     }
 
     void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector_send,
                                                    Util::Vector<double> &local_vector_recv,
-                                                   Skeleton::Skeleton &local_skel) const {
+                                                   const Skeleton &local_skel) const {
         assert(local_vector_send.count() == local_to_global_->count());
         assert(local_vector_recv.count() == local_to_global_->count());
 
@@ -49,7 +49,7 @@ namespace Mesh {
         Util::Vector<double> border_nodes_vector_send(n_border_nodes);
         Util::Vector<double> border_nodes_vector_recv(n_border_nodes);
 
-        for (long col = 0; col < Skeleton::kNumberOfColors; ++col) {
+        for (long col = 0; col < kNumberOfColors; ++col) {
             // Find border_ix and neighbor to exchange with
             // Initialise neighbor with own rank
             int neighbor = rank;
