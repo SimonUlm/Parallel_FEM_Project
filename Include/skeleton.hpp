@@ -67,7 +67,6 @@ namespace Skeleton{
      */
     private:
     	long n_nodes;				// Number of nodes per ComBorder
-    	// long n_borders; 			// Number of ComBorder's
     	Util::Vector<long> nodes; 	// Consecutive list of all nodes on the ComBorder's
     	
     public:
@@ -92,7 +91,8 @@ namespace Skeleton{
         	nodes(n_borders*n_nodes), n_nodes(n_nodes) {}
         
         // Getter Methods       
-        long get_n_nodes() {return n_nodes;}
+        long get_n_nodes() { return n_nodes; }
+        Util::Vector<long> &get_nodes() { return nodes; }
         
         /*
          * Get node from given border

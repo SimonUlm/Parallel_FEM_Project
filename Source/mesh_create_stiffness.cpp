@@ -155,7 +155,7 @@ namespace Mesh {
 		        mtrx.add_val(row, col, ax[j]);
 		    }
         }
-        return std::move(mtrx);
+        return mtrx;
     }  
 }
 

@@ -121,6 +121,19 @@ namespace Util {
             delete[] data;
         }
 
+        SedMatrix(SedMatrix &&other) noexcept:
+                ptr_ind(other.ptr_ind), data(other.data), nzmax(other.nzmax), n(other.n) {
+            other.ptr_ind = nullptr;
+            other.data = nullptr;
+            other.nzmax = 0;
+            other.n = 0;
+        }
+        SedMatrix(const SedMatrix &) = delete;
+
+        // Assignment operations
+        SedMatrix &operator=(SedMatrix &&other) = delete;
+        SedMatrix &operator=(const SedMatrix &) = delete;
+
     	// Getter methods		
     	long get_n(){return n;}
     	
