@@ -75,6 +75,8 @@ namespace Util {
         	delete[] ptr_ind;
             delete[] data;
         }
+        
+        void SymSpmv(double alpha, Util::BlasVector &x, double beta, Util::BlasVector &y);
 
     	// Getter methods		
     	long get_n(){return n;}
@@ -88,7 +90,13 @@ namespace Util {
     	void set_ptr(long k, long ptr){ptr_ind[k] = ptr;}
     	
     	// Adding given value to matrix entry
-    	void add_val(long i, long j, double val); 
+    	void add_val(long i, long j, double val);
+    	
+    	// set column to zero except diagonal entry
+    	void zero_col(long j);
+    	
+    	// set row to zero except diagonal entry
+    	void zero_rows(long i, long j);
     	
     	// Print data of matrix
     	void Print();

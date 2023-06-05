@@ -67,8 +67,12 @@ namespace Mesh{
         long get_refine_factor() {return refine_factor;}
         
         Util::SedMatrix CreateStiffness();
-	Util::Vector CreateRhs();
-
+	Util::BlasVector CreateRhs(double (*fvol)(Node&, long),
+				   double (*fNeu)(Node&, long));
+					  
+	void AddDirichlet(Util::SedMatrix &stiff_matrix,
+			  Util::BlasVector &b,
+			  double (*fDir)(Node&, long));
     };
 
     class LocalMesh: public Mesh {
