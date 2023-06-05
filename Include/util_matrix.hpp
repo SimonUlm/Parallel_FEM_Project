@@ -104,7 +104,13 @@ namespace Util {
     	void set_ptr(long k, long ptr){ptr_ind[k] = ptr;}
     	
     	// Adding given value to matrix entry
-    	void add_val(long i, long j, double val); 
+    	void add_val(long i, long j, double val);
+    	
+    	// set column to zero except diagonal entry
+    	void zero_col(long j);
+    	
+    	// set row to zero except diagonal entry
+    	void zero_rows(long i, long j);
     	
     	// symmetric sed general matrix vector product
 		// y <- alpha * A * x + beta * y 

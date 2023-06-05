@@ -70,7 +70,12 @@ namespace Mesh{
         void CollectEdges();
         
         Util::SedMatrix CreateStiffness();
-
+	    Util::BlasVector CreateRhs(double (*fvol)(Node&, long),
+                                   double (*fNeu)(Node&, long));
+					  
+	void AddDirichlet(Util::SedMatrix &stiff_matrix,
+			  Util::BlasVector &b,
+			  double (*fDir)(Node&, long));
     };
 
     class LocalMesh: public Mesh {
