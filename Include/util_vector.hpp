@@ -199,12 +199,12 @@ namespace Util {
         BlasVector(BlasVector &&other) :
                 Vector::Vector(std::move(other)) {}
 
-        // Assignment operators
         BlasVector(const BlasVector &) = delete;
 
+        // Assignment operators
         BlasVector &operator=(const BlasVector &) = delete;
 
-        using Vector::operator=;
+        BlasVector &operator=(BlasVector &&) = delete;
 
         // x' * x
         double Dot(BlasVector &y);

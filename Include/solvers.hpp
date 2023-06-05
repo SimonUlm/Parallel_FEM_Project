@@ -9,12 +9,18 @@
 
 namespace Solver {
 
-    Util::BlasVector SolveCG(Util::SedMatrix &K, Util::BlasVector &f, long max_it = 0, double tol = 0);
+    Util::BlasVector SolveCG(Util::SedMatrix &K, Util::BlasVector &f,
+                             long max_it = 0, double tol = 0);
+    Util::BlasVector SolveJacobi(Util::SedMatrix &K, Util::BlasVector &f,
+                                 double omega = 0, long max_it = 0, double tol = 0);
 
 #ifdef _MPI
     Util::BlasVector SolveCGParallel(Util::SedMatrix &K, Util::BlasVector &f,
                                      Skeleton::Skeleton &local_skel,
                                      long max_it, double tol);
+    Util::BlasVector SolveJacobi(Util::SedMatrix &K, Util::BlasVector &f,
+                                 Skeleton::Skeleton &local_skel,
+                                 double omega = 0, long max_it = 0, double tol = 0);
 #endif
 
 }

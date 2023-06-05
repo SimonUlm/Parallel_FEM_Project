@@ -1,6 +1,7 @@
 #ifndef HPC2_UTIL_MATRIX_HPP
 #define HPC2_UTIL_MATRIX_HPP
 
+#include <algorithm>
 #include <cassert>
 #include <cstdio>
 
@@ -9,7 +10,7 @@
 
 namespace Util {	
 	enum StorageOrder {ROWMAJOR, COLMAJOR};
-	
+
 	/* SedMatrix */
     
 	class SedMatrix {
@@ -108,7 +109,14 @@ namespace Util {
     	// symmetric sed general matrix vector product
 		// y <- alpha * A * x + beta * y 
         void SymSpmv(double alpha, BlasVector &x, double beta, BlasVector &y);
-       
+
+        // Get copy of diagonal
+        Util::BlasVector Diag() const {
+            Util::BlasVector diag(n);
+            for (long i = 0; i < n; ++i)
+                diag(i) = data[i];
+            return diag;
+        }
         
 		void Init() {
     		// Init Diagonal with 00 11 22 33 ..

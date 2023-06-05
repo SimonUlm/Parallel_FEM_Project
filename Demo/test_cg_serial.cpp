@@ -13,8 +13,8 @@ int main(int argc, char **argv) {
     Util::BlasVector b(mesh.get_n_nodes());
     b.Init();
 
-    //test_sed.SolveCg(b, sol);
-    Util::BlasVector sol = Solver::SolveCG(test_sed, b);
+    //Util::BlasVector sol = Solver::SolveCG(test_sed, b);
+    Util::BlasVector sol = Solver::SolveJacobi(test_sed, b);
 
     // Output
     b.Print();
