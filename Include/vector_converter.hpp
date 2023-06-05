@@ -18,12 +18,14 @@ namespace Skeleton {
     class VectorConverter {
     public:
         VectorConverter() :
+                n_global_nodes_(0),
                 n_global_crosspoints_(0),
                 local_nodes_priority_(),
                 local_to_global_(nullptr) {}
 
         VectorConverter(long m, long n,
                         Util::Vector<long> &global_nodes_priority, Util::Vector<long> &local_to_global) :
+                n_global_nodes_(global_nodes_priority.count()),
                 n_global_crosspoints_((m + 1) * (n + 1)),
                 local_nodes_priority_(local_to_global.count()),
                 local_to_global_(&local_to_global) {
@@ -55,9 +57,17 @@ namespace Skeleton {
         void DistributedToAccumulated(Util::Vector<double> &local_vector_send,
                                       Util::Vector<double> &local_vector_recv,
                                       const Skeleton &local_skel) const;
+
+        /*
+         * Gather accumulated local vector and store into global vector
+         */
+        void GatherAccumulatedVector(Util::Vector<double> &local_vector_send,
+                                     Util::Vector<double> &global_vector_recv,
+                                     const Skeleton &local_skel) const;
 #endif
 
     private:
+        long n_global_nodes_;
         long n_global_crosspoints_; // number of global nodes
         Util::Vector<long> local_nodes_priority_; // counts how many processes share each node
         Util::Vector<long> *local_to_global_; // reference to vector that maps local to global nodes

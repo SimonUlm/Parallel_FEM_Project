@@ -76,5 +76,28 @@ namespace Skeleton {
                 local_vector_recv(local_skel.get_border_node(border_ix, i)) += border_nodes_vector_recv(i);
         }
     }
+
+    void VectorConverter::GatherAccumulatedVector(Util::Vector<double> &local_vector_send,
+                                                  Util::Vector<double> &global_vector_recv,
+                                                  const Skeleton &local_skel) const {
+        assert(local_vector_send.count() == local_to_global_->count());
+
+        MPI_Comm comm = local_skel.get_comm();
+        int rank = local_skel.get_rank();
+
+        // Convert vector to ease the process
+        AccumulatedToDistributed(local_vector_send);
+
+        // Create global vector from local vector
+        Util::Vector<double> global_vector_send(n_global_nodes_);
+        for (long i = 0; i < local_vector_send.count(); ++i)
+            global_vector_send((*local_to_global_)(i)) = local_vector_send(i);
+
+        // Allreduce
+        if (rank == 0)
+            global_vector_recv = Util::Vector<double>(n_global_nodes_);
+        MPI_Reduce(global_vector_send.data(), global_vector_recv.data(), (int) n_global_nodes_,
+                      MPI_DOUBLE, MPI_SUM, 0, comm);
+    }
 }
 #endif // _MPI

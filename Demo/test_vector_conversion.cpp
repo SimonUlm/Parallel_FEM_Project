@@ -49,5 +49,11 @@ int main(int argc, char **argv) {
         std::cout << std::endl;
     });
 
+    // Gather accum_to_distr onto root process
+    Util::Vector<double> global_vector;
+    skeleton.GatherAccumulatedVector(accum_to_distr, global_vector);
+    if (rank == 0)
+        global_vector.Print();
+
     MPI_Finalize();
 }
