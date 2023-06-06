@@ -1,3 +1,6 @@
+FILE = main_test.cpp
+
+SHELL=/bin/bash
 
 CC = g++
 ifeq ($(MPI), true)
@@ -20,9 +23,7 @@ LDLIBS += -lm
 CS = $(LDFLAGS) ../Lib/libhpc.a $(LDLIBS)
 
 all: lib hpc_demo0
-	- ./hpc_demo0 30
-	- ./hpc_demo0 50
-
+	- ./hpc_demo0 5
 lib:
 	( cd ../Lib ; $(MAKE) )
 

@@ -24,8 +24,8 @@ int main(int argc, char* argv[]) {
     
     int argv_1 = std::stoi(argv[1]);
     printf("%d\n",argv_1);
-    /*
     Mesh::GlobalMesh mesh(m, n);
+
     mesh.Create();
 
     mesh.Print();
@@ -44,7 +44,6 @@ int main(int argc, char* argv[]) {
     printf("\n=========== SOL ===========");
     sol.Print();
 
-
     // Compute A*u, compare to rhs
     Util::BlasVector ref_rhs(mesh.get_n_nodes());
     // ref_rhs = A * u
@@ -54,8 +53,6 @@ int main(int argc, char* argv[]) {
     ref_rhs.Axpy(-1, rhs);
     double max_err = ref_rhs.Amax();
 
-
     printf("\n=========== ERR ===========\n");
     printf("err = %.3e\n", max_err);
-    */
 }

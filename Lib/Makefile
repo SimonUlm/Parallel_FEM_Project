@@ -54,7 +54,7 @@ HPC = \
  skeleton_print.o \
  solver_cg.o \
  solver_jacobi.o \
- util_blasvector_print.o\
+ util_blasvector_print.o \
  util_gematrix_from_sed.o \
  util_sedmatrix_add_val.o \
  util_matrix_blas.o \

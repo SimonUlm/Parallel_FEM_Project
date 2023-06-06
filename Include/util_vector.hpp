@@ -233,6 +233,9 @@ namespace Util {
 
         // max(x)
         double Amax();
+
+	// print function
+	void Print();
     };
 }
 
