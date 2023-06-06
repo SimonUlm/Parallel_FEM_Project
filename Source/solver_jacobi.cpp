@@ -30,7 +30,7 @@ namespace Solver {
         // Calculate inverse diagonal
         BlasVector d = K.Diag();
         for (auto &value : d)
-            {value = 1 / value; printf("%lf\n", value);}
+            value = 1 / value;
 
         // Initialise
         // r = f - K * u

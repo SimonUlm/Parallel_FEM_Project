@@ -33,7 +33,7 @@ namespace Solver {
         BlasVector d = K.Diag();
         local_skel.DistributedToAccumulated(d);
         for (auto &value : d)
-            {value = 1 / value; printf("%lf\n", value);}
+            value = 1 / value;
 
         // Initialise
         // r = f - K * u
