@@ -22,11 +22,11 @@ namespace Util {
 	}
 	
 	
-	void SedMatrix::zero_rows(long i, long j) {
+	void SedMatrix::zero_row(long i) {
 		/*
-		 * Set the given 2 rows to zero except the diagonal entry
+		 * Set the given row to zero except the diagonal entry
 		 *
-		 * i: array with row indices
+		 * i: row index
 		 *
 		 */
 	
@@ -38,18 +38,13 @@ namespace Util {
     		col_end = ptr_ind[k+1];	
     		
     		// Traverse column to find row
-    		int count = 0;
 			for (long l = col_start; l < col_end; ++l) {
-				if (ptr_ind[l] == i || ptr_ind[l] == j) {
+				if (ptr_ind[l] == i) {
 					// row found
 					data[l] = 0;
-					count++;
+					break;
 				}
-				
-				// both rows found
-				if (count == 2) break;
 			}
-		
 		}
 	}
 }
