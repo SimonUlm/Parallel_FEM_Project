@@ -22,7 +22,8 @@ namespace Util {
     // x <- y
     void BlasVector::Copy(BlasVector &y) {
     	assert(count() == y.count());
-        std::copy(y.begin(), y.end(), begin());
+	for (long i = 0; i < count_; ++i)
+            data_[i] = y(i);
     }
     
     // x <- alpha * x

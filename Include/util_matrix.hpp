@@ -110,7 +110,7 @@ namespace Util {
     	void zero_col(long j);
     	
     	// set row to zero except diagonal entry
-    	void zero_rows(long i, long j);
+    	void zero_row(long i);
     	
     	// symmetric sed general matrix vector product
 		// y <- alpha * A * x + beta * y 

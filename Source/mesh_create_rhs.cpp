@@ -97,36 +97,43 @@ namespace Mesh {
 	long n_nodes = nodes.count();
 	long n_elem = elements.count();
 	long n_bdry = boundary.count();
+	long n_fxd  = fixed_nodes.count();
+
+	Util::BlasVector u(n_nodes);
 
 	// Boundary integrals (Dirichlet boundaries)
-	long ind[2];
+	long ind;
 	
-	for (long k = 0; k < n_bdry; ++k) {
+	for (long k = 0; k < n_fxd; ++k) {
 	    // Check if k-th boundary is part of dirichlet boundaries
-	    if (boundary(k).t == 1) {
-		// Get edge nodes and compute Dirichlet values
-		// REFACTOR? Like this values for nodes that appear in more than 1 dirichlet boundary are computed more than once (overload, but simple) -> use something like unique() in MATLAB instead
-		ind[0] = boundary(k).n1;
-		ind[1] = boundary(k).n2;
-		b(ind[0]) = fDir(nodes(ind[0]), boundary(k).t);
-		b(ind[1]) = fDir(nodes(ind[1]), boundary(k).t);
-		
-		
-		
-		// adjust stiffness matrix
-		// set diagonal to 1
-		stiff_matrix(ind[0]) = 1;
-		stiff_matrix(ind[1]) = 1;
-		
-		// set column to zero
-		stiff_matrix.zero_col(ind[0]);
-		stiff_matrix.zero_col(ind[0]);
-		
-		
-		// set row to zero
-		stiff_matrix.zero_rows(ind[0], ind[1]);	
-		
-	    }
+	    ind = fixed_nodes(k);
+	    u(ind) = fDir(nodes(ind), 1);
 	}
+
+	// b <- b - A * u,  first modification of rhs
+	stiff_matrix.SymSpmv(-1, u, 1, b);
+	
+	// Adjust stiffness matrix
+	for (long k = 0; k < n_fxd; ++k) {
+	    ind = fixed_nodes(k);
+
+	    // set diagonal to 1
+	    stiff_matrix(ind) = 1;
+	    
+	    // set column to zero
+	    stiff_matrix.zero_col(ind);
+	    
+	    // set row to zero
+	    stiff_matrix.zero_row(ind);	
+	}
+
+	// Second modification of rhs
+	for (long k = 0; k < n_fxd; ++k) {
+            // Check if k-th boundary is part of dirichlet boundaries
+            ind = fixed_nodes(k);
+	    b(ind) = u(ind);
+        }
+
+
     }
 } // namespace Mesh
