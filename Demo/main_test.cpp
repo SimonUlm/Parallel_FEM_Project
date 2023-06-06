@@ -38,4 +38,20 @@ int main() {
     Util::BlasVector sol = Solver::SolveCG(stiffness, rhs);
     printf("\n=========== SOL ===========");
     sol.Print();
+
+
+    // Compute A*u, compare to rhs
+    Util::BlasVector ref_rhs(mesh.get_n_nodes());
+    // ref_rhs = A * u
+    stiffness.SymSpmv(1.0, sol, 0.0, ref_rhs);
+    // infinity norm of ref_rhs - rhs
+    printf("\n=========== A*u ===========");
+    ref_rhs.Print();
+
+    ref_rhs.Axpy(-1, rhs);
+    double max_err = ref_rhs.Amax();
+
+
+    printf("\n=========== ERR ===========\n");
+    printf("err = %.5e\n", max_err);
 }
