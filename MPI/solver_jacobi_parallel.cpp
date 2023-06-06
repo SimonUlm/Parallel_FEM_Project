@@ -7,7 +7,7 @@ using namespace Util;
 namespace Solver {
 
     Util::BlasVector SolveJacobiParallel(Util::SedMatrix &K, Util::BlasVector &f,
-                                         Skeleton::Skeleton local_skel,
+                                         Skeleton::Skeleton &local_skel,
                                          double omega, long max_it, double tol) {
 
         constexpr double kOmega = 0.2;
@@ -33,7 +33,7 @@ namespace Solver {
         BlasVector d = K.Diag();
         local_skel.DistributedToAccumulated(d);
         for (auto &value : d)
-            {value = 1 / value; printf("%lf\n", value);}
+            value = 1 / value;
 
         // Initialise
         // r = f - K * u

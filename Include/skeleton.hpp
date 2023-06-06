@@ -243,6 +243,10 @@ namespace Skeleton{
                                      Util::Vector<double> &global_vector_recv) const {
             vector_converter.GatherAccumulatedVector(local_vector_send, global_vector_recv, *this);
         }
+        void GatherDistributedVector(Util::Vector<double> &local_vector_send,
+                                     Util::Vector<double> &global_vector_recv) const {
+            vector_converter.GatherDistributedVector(local_vector_send, global_vector_recv, *this);
+        }
 #endif
 
 		// Print data of Skeleton

@@ -19,13 +19,6 @@ namespace Util {
     	return sum;
     }
     
-    // x <- y
-    void BlasVector::Copy(BlasVector &y) {
-    	assert(count() == y.count());
-	for (long i = 0; i < count_; ++i)
-            data_[i] = y(i);
-    }
-    
     // x <- alpha * x
     void BlasVector::Scal(double alpha) {
     	if (alpha == 0) {

@@ -51,7 +51,9 @@ int main(int argc, char **argv) {
 
     // Gather accum_to_distr onto root process
     Util::Vector<double> global_vector;
-    skeleton.GatherAccumulatedVector(accum_to_distr, global_vector);
+    Util::Vector<double> test_vector(local_mesh.get_n_nodes());
+    test_vector.Init(50);
+    skeleton.GatherAccumulatedVector(test_vector, global_vector);
     if (rank == 0)
         global_vector.Print();
 

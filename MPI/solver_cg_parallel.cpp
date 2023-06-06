@@ -9,7 +9,7 @@ using namespace Util;
 
 namespace Solver {
 
-    BlasVector SolveCGParallel(SedMatrix &K, BlasVector &f,
+    BlasVector SolveCGParallel(SedMatrix &K, BlasVector &r,
                                Skeleton::Skeleton &local_skel,
                                long max_it, double tol) {
 
@@ -17,57 +17,58 @@ namespace Solver {
 
         // Handle input
         long n = K.get_n();
-        assert(n == f.count());
+        assert(n == r.count());
         if (max_it == 0)
             max_it = n;
         if (tol == 0)
             tol = kTol;
 
         // Declare
-        BlasVector u(n);
-        BlasVector r(n);
-        BlasVector w(n);
-        BlasVector s(n);
-        BlasVector v(n);
-        double sigma;
-        double old_sigma;
-        double alpha;
+        BlasVector x(n);
+        BlasVector q(n);
+        //BlasVector w(n);
+        BlasVector p(n);
+        BlasVector a(n);
+        double rho_new;
+        double rho_old;
+        double lambda;
 
         // Initialise
-        // r = f - K * u
-        r.Copy(f);
-        K.SymSpmv(-1, u, 1, r);
-        // w = r
-        local_skel.DistributedToAccumulated(r, w);
-        // s = w
-        s.Copy(w);
-        // sigma = <w, r>
-        sigma = w.Dot(r);
+        // q = r - K * x
+        K.SymSpmv(1, x, 0, a);
+        r.Axpy(-1, a);
+        q.Copy(r);
+        // w = q
+        local_skel.DistributedToAccumulated(q);
+        // p = w
+        p.Copy(q);
+        // rho_new = <w, q>
+        rho_new = Solver::ParallelDot(q, r);
 
         for (long k = 1; k <= max_it; ++k) {
-            if (r.Amax() < tol)
+            if (rho_new < tol * tol)
                 break;
 
-            // v = K * s
-            K.SymSpmv(1, s, 0, v);
-            // alpha = sigma / <s, v>
-            alpha = sigma / s.Dot(v);
-            // u = u + alpha * s;
-            u.Axpy(alpha, s);
-
-            // r = r - alpha * v
-            r.Axpy(-alpha, v);
-            // w = r
-            local_skel.DistributedToAccumulated(r, w);
-            // sigma = <w, r>
-            old_sigma = sigma;
-            sigma = w.Dot(r);
-            // s = r + (sigma / old_sigma) * s
-            s.Scal(sigma / old_sigma);
-            s.Axpy(1, w);
+            // a = K * p
+            K.SymSpmv(1, p, 0, a);
+            // lambda = rho_new / <p, a>
+            lambda = rho_new / Solver::ParallelDot(p, a);
+            // x = x + lambda * p;
+            x.Axpy(lambda, p);
+            // q = q - lambda * a
+            r.Axpy(-lambda, a);
+            // w = q
+            q.Copy(r);
+            local_skel.DistributedToAccumulated(q);
+            // rho_new = <w, q>
+            rho_old = rho_new;
+            rho_new = Solver::ParallelDot(q, r);
+            // p = q + (rho_new / rho_old) * p
+            p.Scal(rho_new / rho_old);
+            p.Axpy(1, q);
         }
 
-        return u;
+        return x;
     }
 }
 
