@@ -20,19 +20,20 @@ LDLIBS += -lm
 CS = $(LDFLAGS) ../Lib/libhpc.a $(LDLIBS)
 
 all: lib hpc_demo0
-	- ./hpc_demo0
+	- ./hpc_demo0 30
+	- ./hpc_demo0 50
 
 lib:
 	( cd ../Lib ; $(MAKE) )
 
 ifneq ($(MPI), true)
-    hpc_demo0: lib main_test.cpp Makefile
-	    $(CC) $(CF) $(I) -o hpc_demo0 main_test.cpp $(CS)
+    hpc_demo0: lib $(FILE) Makefile
+	    $(CC) $(CF) $(I) -o hpc_demo0 $(FILE) $(CS)
 endif
 
 ifeq ($(MPI), true)
-    hpc_demo0: lib main_test.cpp Makefile
-	    $(CC) $(CF) $(I) -D_MPI -o hpc_demo0 main_test.cpp $(CS)
+    hpc_demo0: lib $(FILE) Makefile
+	    $(CC) $(CF) $(I) -D_MPI -o hpc_demo0 $(FILE) $(CS)
 endif
 
 

@@ -1,5 +1,6 @@
 #include "hpc.hpp"
 #include <cstdio>
+#include <iostream>
 
 double F_vol( Mesh::Node& node, long typ )
 {
@@ -17,12 +18,19 @@ double u_D( Mesh::Node& node, long typ )
   // return ( x[0] * x[1] );
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     int m = 1;
     int n = 2;
+    
+    int argv_1 = std::stoi(argv[1]);
 
     Mesh::GlobalMesh mesh(m, n);
     mesh.Create();
+
+    for (int i = 0; i < 
+
+
+
     mesh.Print();
     
     Util::SedMatrix stiffness = mesh.CreateStiffness();
@@ -45,13 +53,11 @@ int main() {
     // ref_rhs = A * u
     stiffness.SymSpmv(1.0, sol, 0.0, ref_rhs);
     // infinity norm of ref_rhs - rhs
-    printf("\n=========== A*u ===========");
-    ref_rhs.Print();
 
     ref_rhs.Axpy(-1, rhs);
     double max_err = ref_rhs.Amax();
 
 
     printf("\n=========== ERR ===========\n");
-    printf("err = %.5e\n", max_err);
+    printf("err = %.3e\n", max_err);
 }
