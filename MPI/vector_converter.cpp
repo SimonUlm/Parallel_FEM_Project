@@ -29,6 +29,9 @@ namespace Skeleton {
         MPI_Comm comm = local_skel.get_comm();
         int rank = local_skel.get_rank();
 
+        // Copy all regular nodes from send vector to recv vector
+        local_vector_recv.Copy(local_vector_send);
+
         // Create global cross point vector from local vector
         Util::Vector<double> global_vector_send(n_global_crosspoints_);
         for (auto &point : local_skel.get_crosspoints())
@@ -82,11 +85,20 @@ namespace Skeleton {
                                                   const Skeleton &local_skel) const {
         assert(local_vector_send.count() == local_to_global_->count());
 
-        MPI_Comm comm = local_skel.get_comm();
-        int rank = local_skel.get_rank();
-
         // Convert vector to ease the process
         AccumulatedToDistributed(local_vector_send);
+
+        GatherDistributedVector(local_vector_send, global_vector_recv, local_skel);
+
+    }
+
+    void VectorConverter::GatherDistributedVector(Util::Vector<double> &local_vector_send,
+                                                  Util::Vector<double> &global_vector_recv,
+                                                  const Skeleton &local_skel) const {
+        assert(local_vector_send.count() == local_to_global_->count());
+
+        MPI_Comm comm = local_skel.get_comm();
+        int rank = local_skel.get_rank();
 
         // Create global vector from local vector
         Util::Vector<double> global_vector_send(n_global_nodes_);
@@ -97,7 +109,7 @@ namespace Skeleton {
         if (rank == 0)
             global_vector_recv = Util::Vector<double>(n_global_nodes_);
         MPI_Reduce(global_vector_send.data(), global_vector_recv.data(), (int) n_global_nodes_,
-                      MPI_DOUBLE, MPI_SUM, 0, comm);
+                   MPI_DOUBLE, MPI_SUM, 0, comm);
     }
 }
 #endif // _MPI

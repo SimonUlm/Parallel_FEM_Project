@@ -7,7 +7,7 @@ using namespace Util;
 namespace Solver {
 
     Util::BlasVector SolveJacobiParallel(Util::SedMatrix &K, Util::BlasVector &f,
-                                         Skeleton::Skeleton local_skel,
+                                         Skeleton::Skeleton &local_skel,
                                          double omega, long max_it, double tol) {
 
         constexpr double kOmega = 0.2;

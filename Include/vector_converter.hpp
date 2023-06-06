@@ -64,6 +64,13 @@ namespace Skeleton {
         void GatherAccumulatedVector(Util::Vector<double> &local_vector_send,
                                      Util::Vector<double> &global_vector_recv,
                                      const Skeleton &local_skel) const;
+
+        /*
+         * Gather accumulated local vector and store into global vector
+         */
+        void GatherDistributedVector(Util::Vector<double> &local_vector_send,
+                                     Util::Vector<double> &global_vector_recv,
+                                     const Skeleton &local_skel) const;
 #endif
 
     private:

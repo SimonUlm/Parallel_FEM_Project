@@ -25,7 +25,7 @@ namespace Util {
             return *this;
         }
 
-        SimpleIterator operator++(int) {
+        const SimpleIterator operator++(int) {
             SimpleIterator iterator = *this;
             ++(*this);
             return *this;
@@ -36,7 +36,7 @@ namespace Util {
             return *this;
         }
 
-        SimpleIterator operator--(int) {
+        const SimpleIterator operator--(int) {
             SimpleIterator iterator = *this;
             --(*this);
             return *this;
@@ -170,6 +170,12 @@ namespace Util {
         }
 
         // Other
+        void Copy(Vector &other) {
+            assert(count() == other.count());
+            for (long i = 0; i < count_; ++i)
+                data_[i] = other(i);
+        }
+
         void Print() const {
             std::cout << std::endl << "Vector:" << std::endl;
             for (long i = 0; i < count_; ++i)
@@ -193,6 +199,9 @@ namespace Util {
          *
          */
     public:
+        explicit BlasVector() :
+                Vector::Vector() {}
+
         explicit BlasVector(long count) :
                 Vector::Vector(count) {}
 
@@ -202,15 +211,19 @@ namespace Util {
         BlasVector(const BlasVector &) = delete;
 
         // Assignment operators
-        BlasVector &operator=(const BlasVector &) = delete;
+        BlasVector &operator=(BlasVector &&other) noexcept {
+            delete[] data_;
+            data_ = other.data_;
+            count_ = other.count_;
+            other.data_ = nullptr;
+            other.count_ = 0;
+            return *this;
+        }
 
-        BlasVector &operator=(BlasVector &&) = delete;
+        BlasVector &operator=(const BlasVector &) = delete;
 
         // x' * x
         double Dot(BlasVector &y);
-
-        // x <- y
-        void Copy(BlasVector &y);
 
         // x <- alpha * x
         void Scal(double alpha);

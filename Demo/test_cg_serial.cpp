@@ -1,24 +1,40 @@
+#include <cstdio>
+
 #include "hpc.hpp"
+
+double F_vol( Mesh::Node& node, long typ )
+{
+    return ( 0.0 );
+}
+
+double g_Neu( Mesh::Node& node, long typ )
+{
+    return ( node.x * node.y );
+}
+
+double u_D( Mesh::Node& node, long typ )
+{
+    return ( 5.0 );
+}
 
 int main(int argc, char **argv) {
     
     
-    Mesh::GlobalMesh mesh(2,3);
+    Mesh::GlobalMesh mesh(3,2);
  
     mesh.Create();
-    //mesh.Refine();
+    mesh.Refine();
 
-    Util::SedMatrix test_sed(mesh.get_n_nodes(), mesh.get_n_nodes() * mesh.get_n_nodes() - 2);
-    test_sed.InitDenseSpd();
-    Util::BlasVector b(mesh.get_n_nodes());
-    b.Init();
+    Util::SedMatrix stiffness = mesh.CreateStiffness();
+    Util::BlasVector rhs = mesh.CreateRhs(F_vol, g_Neu);
+    mesh.AddDirichlet(stiffness, rhs, u_D);
 
-    //Util::BlasVector sol = Solver::SolveCG(test_sed, b);
-    Util::BlasVector sol = Solver::SolveJacobi(test_sed, b);
+    Util::BlasVector sol = Solver::SolveCG(stiffness, rhs);
+    //Util::BlasVector sol = Solver::SolveJacobi(stiffness, rhs);
 
     // Output
-    b.Print();
-    Util::GeMatrix test_ge(test_sed);
-    test_ge.Print();
+    printf("\n=========== Right Hand Side ===========");
+    rhs.Print();
+    printf("\n=========== Solution ===========");
     sol.Print();
 }

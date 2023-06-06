@@ -6,57 +6,61 @@ using namespace Util;
 
 namespace Solver {
 
-    BlasVector SolveCG(SedMatrix &K, BlasVector &f, long max_it, double tol) {
+    BlasVector SolveCG(SedMatrix &A, BlasVector &r, long max_it, double tol) {
 
         constexpr double kTol = 1e-5;
 
         // Handle input
-        long n = K.get_n();
-        assert(n == f.count());
+        long n = A.get_n();
+        assert(n == r.count());
         if (max_it == 0)
             max_it = n;
         if (tol == 0)
             tol = kTol;
 
         // Declare
-        BlasVector u(n);
-        BlasVector r(n);
-        BlasVector s(n);
+        BlasVector x(n);
+        BlasVector q(n);
+        BlasVector p(n);
         BlasVector v(n);
         double sigma;
-        double old_sigma;
+        double sigma_old;
+        double sigma_0;
         double alpha;
 
         // Initialise
-        // r = f - K * u
-        r.Copy(f);
-        K.SymSpmv(-1, u, 1, r);
-        // s = r
-        s.Copy(r);
-        // sigma = <r, r>
-        sigma = r.Dot(r);
+        // q = r - A * x
+        q.Copy(r);
+        A.SymSpmv(-1, x, 1, q);
+        // p = q
+        p.Copy(q);
+        // sigma = <q, q>
+        sigma = q.Dot(q);
+        sigma_old = sigma;
+        sigma_0 = sigma;
 
         for (long k = 1; k <= max_it; ++k) {
-            if (r.Amax() < tol)
+            if (std::sqrt(sigma / sigma_0) < tol)
                 break;
 
-            // v = K * s
-            K.SymSpmv(1, s, 0, v);
-            // alpha = sigma / <s, v>
-            alpha = sigma / s.Dot(v);
-            // u = u + alpha * s;
-            u.Axpy(alpha, s);
+            // v = A * p
+            A.SymSpmv(1, p, 0, v);
+            // alpha = sigma / <p, v>
+            alpha = sigma / p.Dot(v);
+            // x = x + alpha * p;
+            x.Axpy(alpha, p);
 
-            // r = r - alpha * v
-            r.Axpy(-alpha, v);
-            // sigma = <r, r>
-            old_sigma = sigma;
-            sigma = r.Dot(r);
-            // s = r + (sigma / old_sigma) * s
-            s.Scal(sigma / old_sigma);
-            s.Axpy(1, r);
+            // q = q - alpha * v
+            q.Axpy(-alpha, v);
+            // sigma = <q, q>
+            sigma = q.Dot(q);
+            // p = q + (sigma / sigma_old) * p
+            p.Scal(sigma / sigma_old);
+            p.Axpy(1, q);
+            // sigma_old = sigma
+            sigma_old = sigma;
         }
 
-        return u;
+        return x;
     }
 }
