@@ -7,7 +7,7 @@
 
 #include <mpi.h>
 
-#ifndef _SERIAL_SCATTER
+#ifdef _SERIAL_SCATTER
 namespace Mesh {
 
     void GlobalMesh::Scatter(LocalMesh &local_mesh, Skeleton::Skeleton &skeleton) {
@@ -15,34 +15,55 @@ namespace Mesh {
         // MPI stuff
         MPI_Comm comm = skeleton.get_comm();
         int rank = skeleton.get_rank();
+        long nnodes;
+        if (rank == 0)
+            nnodes = nodes.count();
+        MPI_Bcast(&nnodes, 1, MPI_LONG, 0, comm);
 
-        // Declare temporary global mesh structure that is used by all processes. This approach is chosen to make sure
-        // the global mesh gets destructed at the end of the scatter method on all local processes to save memory.
-        GlobalMesh global_mesh_temp;
-
-        // Allocate global mesh on each process
+        // Temporary
+        LocalMesh mesh_sender;
+        Util::Vector<long> global_nodes_priority(nnodes);
         std::array<long, 7> mesh_data{};
-        if (rank == 0)
-            mesh_data = {m, n, nodes.count(), elements.count(), boundary.count(), edges.count(), fixed_nodes.count()};
-        MPI_Bcast(mesh_data.data(), 7, MPI_LONG, 0, comm);
-        if (rank == 0)
-            global_mesh_temp = std::move(*this);
-        else
-            global_mesh_temp = GlobalMesh(mesh_data);
+        MPI_Request request;
+        MPI_Status status;
 
-        // Send global mesh to all processes
-        MPI_Bcast(global_mesh_temp.nodes.data(), (int) global_mesh_temp.nodes.count() * 2,
-                  MPI_DOUBLE, 0, comm);
-        MPI_Bcast(global_mesh_temp.elements.data(), (int) global_mesh_temp.elements.count() * 7,
-                  MPI_LONG, 0, comm);
-        MPI_Bcast(global_mesh_temp.boundary.data(), (int) global_mesh_temp.boundary.count() * 4,
-                  MPI_LONG, 0, comm);
+        if (rank == 0) {
+            for (int process = 1; process < m * n; ++process) {
+                local_mesh.m = m;
+                local_mesh.n = n;
+                TransferGlobalToLocal(local_mesh, global_nodes_priority, comm, process);
+                if (process != 1)
+                    MPI_Wait(&request, &status);
+                mesh_sender = std::move(local_mesh);
+                mesh_data = {mesh_sender.m, mesh_sender.n,
+                             mesh_sender.nodes.count(), mesh_sender.elements.count(), mesh_sender.boundary.count(),
+                             mesh_sender.edges.count(), mesh_sender.fixed_nodes.count()};
+                MPI_Isend(mesh_data.data(), 7,
+                          MPI_LONG, process, 0, comm, &request);
+                MPI_Isend(mesh_sender.nodes.data(), (int) mesh_sender.nodes.count() * 2,
+                         MPI_DOUBLE, process, 0, comm, &request);
+                MPI_Isend(mesh_sender.elements.data(), (int) mesh_sender.elements.count() * 7,
+                         MPI_LONG, process, 0, comm, &request);
+                MPI_Isend(mesh_sender.boundary.data(), (int) mesh_sender.boundary.count() * 4,
+                         MPI_LONG, process, 0, comm, &request);
+                MPI_Isend(mesh_sender.local_to_global.data(), (int) mesh_sender.local_to_global.count(),
+                          MPI_LONG, process, 0, comm, &request);
+            }
+            TransferGlobalToLocal(local_mesh, global_nodes_priority, comm, rank);
+        } else {
+            MPI_Recv(mesh_data.data(), 7, MPI_LONG, 0, 0, comm, &status);
+            local_mesh = LocalMesh(mesh_data);
+            MPI_Recv(local_mesh.nodes.data(), (int) local_mesh.nodes.count() * 2,
+                      MPI_DOUBLE, 0, 0, comm, &status);
+            MPI_Recv(local_mesh.elements.data(), (int) local_mesh.elements.count() * 7,
+                      MPI_LONG, 0, 0, comm, &status);
+            MPI_Recv(local_mesh.boundary.data(), (int) local_mesh.boundary.count() * 4,
+                      MPI_LONG, 0, 0, comm, &status);
+            MPI_Recv(local_mesh.local_to_global.data(), (int) local_mesh.local_to_global.count(),
+                      MPI_LONG, 0, 0, comm, &status);
+        }
+        MPI_Bcast(global_nodes_priority.data(), (int) global_nodes_priority.count(), MPI_LONG, 0, comm);
 
-        // Prepare data structure that counts for all nodes by how many processes shared with
-        Util::Vector<long> global_nodes_priority(global_mesh_temp.nodes.count());
-
-        // Gather relevant information and write into local mesh
-        global_mesh_temp.TransferGlobalToLocal(local_mesh, global_nodes_priority, comm, rank);
         local_mesh.CollectEdges();
         local_mesh.CollectFixedNodes();
 
@@ -52,10 +73,6 @@ namespace Mesh {
         // Create vector converter
         skeleton.set_vector_converter(Skeleton::VectorConverter(mesh_data[0], mesh_data[1],
                                                                 global_nodes_priority, local_mesh.local_to_global));
-
-        // Make sure the root process gets its global mesh back
-        if (rank == 0)
-            *this = std::move(global_mesh_temp);
     }
 
     void GlobalMesh::TransferGlobalToLocal(LocalMesh &local_mesh, Util::Vector<long> &global_nodes_priority,
@@ -156,8 +173,8 @@ namespace Mesh {
             local_mesh.nodes(i) = nodes(local_mesh.local_to_global(i));
 
         // Calculate priority for each node
-        MPI_Allreduce(node_flags.get(), global_nodes_priority.data(), (int) nodes.count(),
-                      MPI_LONG, MPI_SUM, comm);
+        for (long i = 0; i < nodes.count(); ++i)
+            global_nodes_priority(i) += node_flags[i];
     }
 }
 #endif // _SERIAL_SCATTER

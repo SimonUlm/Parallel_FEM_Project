@@ -84,6 +84,13 @@ namespace Mesh{
 
         Util::Vector<long> local_to_global;
 
+        LocalMesh():
+                Mesh::Mesh() {}
+
+        LocalMesh(std::array<long, 7> mesh_data) :
+                Mesh::Mesh(mesh_data),
+                local_to_global(mesh_data[2]) {}
+
         long get_n_nodes() {
             return nodes.count();
         };

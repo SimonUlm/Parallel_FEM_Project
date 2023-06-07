@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     // Define problem size
     int m = 3;
     int n = 2;
-    int refine_factor = 5;
+    int refine_factor = 7;
 
     // Define variables
     Mesh::GlobalMesh global_mesh;

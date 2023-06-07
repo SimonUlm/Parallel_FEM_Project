@@ -19,11 +19,11 @@ double u_D( Mesh::Node& node, long typ )
 
 int main(int argc, char **argv) {
 
-    int m = 3;
-    int n = 2;
+    int m = 12;
+    int n = 8;
     int refine_factor = 5;
     
-    Mesh::GlobalMesh mesh(3,2);
+    Mesh::GlobalMesh mesh(m,n);
  
     mesh.Create();
     mesh.Refine(refine_factor);
@@ -32,8 +32,8 @@ int main(int argc, char **argv) {
     Util::BlasVector rhs = mesh.CreateRhs(F_vol, g_Neu);
     mesh.AddDirichlet(stiffness, rhs, u_D);
 
-    //Util::BlasVector sol = Solver::SolveCg(stiffness, rhs);
-    Util::BlasVector sol = Solver::SolveJacobi(stiffness, rhs);
+    Util::BlasVector sol = Solver::SolveCg(stiffness, rhs);
+    //Util::BlasVector sol = Solver::SolveJacobi(stiffness, rhs);
 
     // Output
     printf("\n=========== Solution ===========");
