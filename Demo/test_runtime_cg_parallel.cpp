@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <iostream>
 
-#define MIN_REFINES 0
+#define MIN_REFINES 2
 
 double F_vol( Mesh::Node& node, long typ )
 {
@@ -35,7 +35,8 @@ int main(int argc, char* argv[]) {
 
     }
 
-    
+    double error;
+
     // Time stamps
     double t_setup1, t_setup2, t_setup;
     double t_scatter1, t_scatter2, t_scatter;
@@ -45,13 +46,13 @@ int main(int argc, char* argv[]) {
     double t_total;
 
     // Problem size
-    int m = 3;
-    int n = 4;
+    int m = 12;
+    int n = 8;
     int refine_factor = std::stoi(argv[1]);
     
     if (refine_factor == MIN_REFINES && rank == 0) {
 	printf("Problem size : %dx%d grid, %d processes\n", m, n, m * n);
-	printf("Test case    : CG serial vs parallel\n");
+	printf("Test case    : CG serial parallel\n");
 	printf("------------------------------------------\n\n");
     }
     
@@ -70,6 +71,9 @@ int main(int argc, char* argv[]) {
 	t_setup2 = Util::get_wall_time(); 
 	t_setup = t_setup2 - t_setup1;
 	printf("DOF    = %ld\n", global_mesh.get_n_nodes());
+	printf("----------\n");
+	global_mesh.Print();
+	printf("----------\n\n");
 	printf("t_setup_problem = %f s\n", t_setup);
     }
 
@@ -91,9 +95,8 @@ int main(int argc, char* argv[]) {
 	t_assemble = t_assemble2 - t_assemble1;
 	printf("t_assemble      = %f s\n", t_assemble);
     }
-
     if (rank == 0) { t_solve1 = Util::get_wall_time(); }
-    Util::BlasVector sol = Solver::SolveCgParallel(local_stiffness, local_rhs, skeleton);
+    Util::BlasVector sol = Solver::SolveCgParallel(local_stiffness, local_rhs, skeleton, error);
     if (rank == 0) {
 	t_solve2 = Util::get_wall_time(); 
 	t_solve = t_solve2 - t_solve1;
@@ -109,7 +112,11 @@ int main(int argc, char* argv[]) {
 	printf("t_gather_sol    = %f s\n", t_gather_sol2 - t_gather_sol1);
 	t_total = t_setup + t_scatter + t_assemble + t_solve + t_gather_sol;
 	printf("t_total         = %f s\n", t_total);
-	printf("==========\n");
+	printf("----------\n");
+	printf("Solution:\n");
+	local_sol_accum.Print();
+	printf("Global residual (norm) = %.3e\n", error);
+	printf("=======================================\n\n\n");
     }
 
     MPI_Finalize();
