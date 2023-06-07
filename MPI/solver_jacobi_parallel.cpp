@@ -12,7 +12,9 @@ namespace Solver {
                                          double omega, long max_it, double tol) {
 
         long n = K.get_n();
+#ifndef NDEBUG
         assert(n == f.count());
+#endif
 
         // Declare
         BlasVector r(n); // residuum

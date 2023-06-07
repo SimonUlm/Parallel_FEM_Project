@@ -15,7 +15,9 @@ namespace Solver {
                                long max_it, double tol) {
 
         long n = K.get_n();
+#ifndef NDEBUG
         assert(n == r.count());
+#endif
 
         // Declare
         // The input vector r (namely the rhs) will be used as residuum

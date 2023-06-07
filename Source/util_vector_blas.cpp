@@ -9,7 +9,9 @@ namespace Util {
 	
     // x' * x
     double BlasVector::Dot(BlasVector &y) {
+#ifndef NDEBUG
     	assert(count() == y.count());
+#endif
     	
     	double sum = 0;
     	for (long i = 0; i < count(); ++i) {

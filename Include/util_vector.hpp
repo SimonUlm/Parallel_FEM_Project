@@ -128,12 +128,16 @@ namespace Util {
 
         // Access operations and getters
         const T &operator()(long index) const {
+#ifndef NDEBUG
             assert(index < count_ || index == 0);
+#endif
             return data_[index];
         }
 
         T &operator()(long index) {
+#ifndef NDEBUG
             assert(index < count_ || index == 0);
+#endif
             return data_[index];
         }
 
@@ -171,7 +175,9 @@ namespace Util {
 
         // Other
         void Copy(Vector &other) {
+#ifndef NDEBUG
             assert(count() == other.count());
+#endif
             for (long i = 0; i < count_; ++i)
                 data_[i] = other(i);
         }

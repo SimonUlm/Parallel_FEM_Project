@@ -2,7 +2,6 @@
 #define HPC2_MESH_OBJECTS_HPP
 
 #include <algorithm>
-#include <cassert>
 #include <cstdio>
 
 #include "hpc.hpp"

@@ -5,7 +5,11 @@
 
 namespace Solver {
     double ParallelDot(Util::Vector<double> &v_acc, Util::Vector<double> &v_dist) {
+
+#ifndef NDEBUG
 	assert(v_acc.count() == v_dist.count());
+#endif
+
 	// Compute local part of the dot product
 	double local_result = 0;
     double global_result = 0;

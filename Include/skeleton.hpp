@@ -174,7 +174,11 @@ namespace Skeleton{
         Skeleton(long n_borders, long nodes_per_border, MPI_Comm comm, int rank, enum global_or_local usecase) :
                 com_borders(n_borders), com_border_nodes(n_borders, nodes_per_border),
                 comm(comm), rank(rank),
-                n_borders(n_borders) {assert(usecase == LOCAL);}
+                n_borders(n_borders) {
+#ifndef NDEBUG
+            assert(usecase == LOCAL);
+#endif
+        }
 #else
         Skeleton(long m, long n) :
                         com_borders(2 * n * m - n - m), com_border_nodes(2 * n * m - n - m),

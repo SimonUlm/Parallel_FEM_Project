@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <array>
-#include <cassert>
 #ifdef _MPI
 #include <mpi.h>
 #endif

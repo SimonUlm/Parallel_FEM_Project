@@ -63,11 +63,15 @@ namespace Util {
 
         // Data access operator with absolute index in array (direct access)
         double & operator()(long i) const {
+#ifndef NDEBUG
             assert(i < nzmax);
+#endif
             return data[i];
         }
         double & operator()(long i) {
+#ifndef NDEBUG
             assert(i < nzmax);
+#endif
             return data[i];
         }
 
@@ -217,11 +221,15 @@ namespace Util {
         GeMatrix & operator=(const GeMatrix &) = delete;
     			
     	double & operator()(long i, long j) const {
+#ifndef NDEBUG
     		assert(i < m && j < n);
+#endif
             return data[i*incRow + j*incCol];
         }
         double & operator()(long i, long j) {
+#ifndef NDEBUG
         	assert(i < m && j < n);
+#endif
             return data[i*incRow + j*incCol];
         }
     

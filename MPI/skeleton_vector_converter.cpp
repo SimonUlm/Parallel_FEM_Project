@@ -1,5 +1,4 @@
 #include <cassert>
-#include <cstdio>
 
 #include "hpc.hpp"
 
@@ -9,7 +8,9 @@
 namespace Skeleton {
 
     void VectorConverter::AccumulatedToDistributed(Util::Vector<double> &local_vector) const {
+#ifndef NDEBUG
         assert(local_vector.count() == local_to_global_->count());
+#endif
 
         for (long i = 0; i < local_vector.count(); ++i)
             local_vector(i) /= (double) local_nodes_priority_(i);
@@ -23,8 +24,10 @@ namespace Skeleton {
     void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector_send,
                                                    Util::Vector<double> &local_vector_recv,
                                                    const Skeleton &local_skel) const {
+#ifndef NDEBUG
         assert(local_vector_send.count() == local_to_global_->count());
         assert(local_vector_recv.count() == local_to_global_->count());
+#endif
 
         MPI_Comm comm = local_skel.get_comm();
         int rank = local_skel.get_rank();
@@ -83,7 +86,9 @@ namespace Skeleton {
     void VectorConverter::GatherAccumulatedVector(Util::Vector<double> &local_vector_send,
                                                   Util::Vector<double> &global_vector_recv,
                                                   const Skeleton &local_skel) const {
+#ifndef NDEBUG
         assert(local_vector_send.count() == local_to_global_->count());
+#endif
 
         // Convert vector to ease the process
         AccumulatedToDistributed(local_vector_send);
@@ -95,7 +100,9 @@ namespace Skeleton {
     void VectorConverter::GatherDistributedVector(Util::Vector<double> &local_vector_send,
                                                   Util::Vector<double> &global_vector_recv,
                                                   const Skeleton &local_skel) const {
+#ifndef NDEBUG
         assert(local_vector_send.count() == local_to_global_->count());
+#endif
 
         MPI_Comm comm = local_skel.get_comm();
         int rank = local_skel.get_rank();
