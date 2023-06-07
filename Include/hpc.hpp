@@ -1,6 +1,7 @@
 #ifndef HPC2_HPC_HPP
 #define HPC2_HPC_HPP
 
+#include "util_clock.hpp"
 #include "util_vector.hpp"
 #include "util_matrix.hpp"
 #include "vector_converter.hpp"

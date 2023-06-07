@@ -1,5 +1,5 @@
 FILE = main_test.cpp
-
+NP = 12
 SHELL=/bin/bash
 
 CC = g++
@@ -22,8 +22,21 @@ I = -I../Include
 LDLIBS += -lm
 CS = $(LDFLAGS) ../Lib/libhpc.a $(LDLIBS)
 
+ifneq ($(MPI),true)
 all: lib hpc_demo0
 	- ./hpc_demo0 5
+	- ./hpc_demo0 6
+	- ./hpc_demo0 7
+	- ./hpc_demo0 8
+endif
+
+ifeq ($(MPI),true)
+all: lib hpc_demo0
+	- mpirun -np $(NP) ./hpc_demo0 5
+	- mpirun -np $(NP) ./hpc_demo0 6
+	- mpirun -np $(NP) ./hpc_demo0 7
+	- mpirun -np $(NP) ./hpc_demo0 8
+endif
 lib:
 	( cd ../Lib ; $(MAKE) )
 
