@@ -11,6 +11,7 @@ namespace Solver {
 
     BlasVector SolveCgParallel(Util::SedMatrix &K, Util::BlasVector &r,
                                Skeleton::Skeleton &local_skel,
+                               double &error,
                                long max_it, double tol) {
 
         long n = K.get_n();
@@ -62,6 +63,7 @@ namespace Solver {
             s.Axpy(1, w);
         }
 
+        error = sigma;
         return u;
     }
 }

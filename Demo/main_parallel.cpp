@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     // Define problem size
     int m = 3;
     int n = 2;
-    int refine_factor = 3;
+    int refine_factor = 5;
 
     // Define variables
     Mesh::GlobalMesh global_mesh;
@@ -50,7 +50,8 @@ int main(int argc, char **argv) {
     local_mesh.AddDirichlet(stiffness, rhs, u_D);
 
     // Solve problem
-    Util::BlasVector local_sol = Solver::SolveCgParallel(stiffness, rhs, skeleton);
+    double error;
+    Util::BlasVector local_sol = Solver::SolveCgParallel(stiffness, rhs, skeleton, error);
 
     // Gather solution
     Util::BlasVector global_sol;
@@ -60,6 +61,7 @@ int main(int argc, char **argv) {
     if (rank == 0) {
         printf("\n=========== Solution Vector ===========");
         global_sol.Print();
+        printf("Error = %lf\n", error);
     }
 
     MPI_Finalize();

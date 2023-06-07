@@ -7,6 +7,7 @@ using namespace Util;
 namespace Solver {
 
     Util::BlasVector SolveJacobi(Util::SedMatrix &K, Util::BlasVector &f,
+                                 double &error,
                                  double omega, long max_it, double tol) {
 
         long n = K.get_n();
@@ -45,6 +46,7 @@ namespace Solver {
             sigma = r.Dot(r);
         }
 
+        error = sigma;
         return u;
     }
 }

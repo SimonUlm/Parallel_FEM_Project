@@ -8,6 +8,7 @@ namespace Solver {
 
     Util::BlasVector SolveJacobiParallel(Util::SedMatrix &K, Util::BlasVector &f,
                                          Skeleton::Skeleton &local_skel,
+                                         double &error,
                                          double omega, long max_it, double tol) {
 
         long n = K.get_n();
@@ -52,6 +53,7 @@ namespace Solver {
             sigma = Solver::ParallelDot(w, r);
         }
 
+        error = sigma;
         return u;
     }
 }

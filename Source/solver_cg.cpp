@@ -6,7 +6,9 @@ using namespace Util;
 
 namespace Solver {
 
-    BlasVector SolveCg(Util::SedMatrix &K, Util::BlasVector &r, long max_it, double tol) {
+    BlasVector SolveCg(Util::SedMatrix &K, Util::BlasVector &r,
+                       double &error,
+                       long max_it, double tol) {
 
         long n = K.get_n();
         assert(n == r.count());
@@ -50,6 +52,7 @@ namespace Solver {
             s.Axpy(1, r);
         }
 
+        error = sigma;
         return u;
     }
 }

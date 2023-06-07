@@ -9,6 +9,7 @@
 
 namespace Solver {
 
+    static double kInfError = std::numeric_limits<double>::max();
     constexpr long kMaxItCG = 1e3;
     constexpr double kTolCG = 1e-5;
     constexpr double kOmegaJacobi = 1;
@@ -16,8 +17,10 @@ namespace Solver {
     constexpr double kTolJacobi = 1e-5;
 
     Util::BlasVector SolveCg(Util::SedMatrix &K, Util::BlasVector &f,
+                             double &error = kInfError,
                              long max_it = kMaxItCG, double tol = kTolCG);
     Util::BlasVector SolveJacobi(Util::SedMatrix &K, Util::BlasVector &f,
+                                 double &error = kInfError,
                                  double omega = kOmegaJacobi, long max_it = kMaxItJacobi, double tol = kTolJacobi);
 
 #ifdef _MPI
@@ -25,9 +28,11 @@ namespace Solver {
 
     Util::BlasVector SolveCgParallel(Util::SedMatrix &K, Util::BlasVector &r,
                                      Skeleton::Skeleton &local_skel,
+                                     double &error = kInfError,
                                      long max_it = kMaxItCG, double tol = kTolCG);
     Util::BlasVector SolveJacobiParallel(Util::SedMatrix &K, Util::BlasVector &f,
                                          Skeleton::Skeleton &local_skel,
+                                         double &error = kInfError,
                                          double omega = kOmegaJacobi, long max_it = kMaxItJacobi, double tol = kTolJacobi);
 #endif
 
