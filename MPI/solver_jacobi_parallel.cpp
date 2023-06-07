@@ -10,24 +10,14 @@ namespace Solver {
                                          Skeleton::Skeleton &local_skel,
                                          double omega, long max_it, double tol) {
 
-        constexpr double kOmega = 0.2;
-        constexpr long kMaxIt = 1000;
-        constexpr double kTol = 1e-5;
-
-        // Handle input
         long n = K.get_n();
         assert(n == f.count());
-        if (omega == 0)
-            omega = kOmega;
-        if (max_it == 0)
-            max_it = kMaxIt;
-        if (tol == 0)
-            tol = kTol;
 
         // Declare
         BlasVector u(n);
         BlasVector r(n);
         BlasVector w(n);
+        double sigma;
 
         // Calculate inverse diagonal and accumulate
         BlasVector d = K.Diag();
@@ -41,9 +31,11 @@ namespace Solver {
         K.SymSpmv(-1, u, 1, r);
         // w = r
         local_skel.DistributedToAccumulated(r, w);
+        // sigma = <w, r>
+        sigma = Solver::ParallelDot(w, r);
 
         for (long k = 1; k <= max_it; ++k) {
-            if (r.Amax() < tol)
+            if (sigma < tol * tol)
                 break;
 
             // u = u + omega * d * r
@@ -54,6 +46,8 @@ namespace Solver {
             K.SymSpmv(-1, u, 1, r);
             // w = r
             local_skel.DistributedToAccumulated(r, w);
+            // sigma = <w, r>
+            sigma = Solver::ParallelDot(w, r);
         }
 
         return u;

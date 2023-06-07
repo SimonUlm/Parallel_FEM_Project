@@ -8,15 +8,8 @@ namespace Solver {
 
     BlasVector SolveCG(SedMatrix &A, BlasVector &r, long max_it, double tol) {
 
-        constexpr double kTol = 1e-5;
-
-        // Handle input
         long n = A.get_n();
         assert(n == r.count());
-        if (max_it == 0)
-            max_it = n;
-        if (tol == 0)
-            tol = kTol;
 
         // Declare
         BlasVector x(n);

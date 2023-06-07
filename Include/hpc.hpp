@@ -7,7 +7,6 @@
 #include "mesh_objects.hpp"
 #include "mesh.hpp"
 #include "skeleton.hpp"
-#include "parallel_dot_product.hpp"
 #include "print_serial.hpp"
 #include "solvers.hpp"
 

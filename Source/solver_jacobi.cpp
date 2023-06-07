@@ -9,19 +9,8 @@ namespace Solver {
     Util::BlasVector SolveJacobi(Util::SedMatrix &K, Util::BlasVector &f,
                                  double omega, long max_it, double tol) {
 
-        constexpr double kOmega = 0.2;
-        constexpr long kMaxIt = 1000;
-        constexpr double kTol = 1e-5;
-
-        // Handle input
         long n = K.get_n();
         assert(n == f.count());
-        if (omega == 0)
-            omega = kOmega;
-        if (max_it == 0)
-            max_it = kMaxIt;
-        if (tol == 0)
-            tol = kTol;
 
         // Declare
         BlasVector u(n);

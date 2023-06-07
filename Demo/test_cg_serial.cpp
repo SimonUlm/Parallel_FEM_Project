@@ -14,27 +14,30 @@ double g_Neu( Mesh::Node& node, long typ )
 
 double u_D( Mesh::Node& node, long typ )
 {
-    return ( 5.0 );
+    return ( 0.0 );
 }
 
 int main(int argc, char **argv) {
-    
+
+    int m = 3;
+    int n = 2;
+    int refine_factor = 2;
     
     Mesh::GlobalMesh mesh(3,2);
  
     mesh.Create();
-    mesh.Refine();
+    mesh.Refine(refine_factor);
 
     Util::SedMatrix stiffness = mesh.CreateStiffness();
     Util::BlasVector rhs = mesh.CreateRhs(F_vol, g_Neu);
     mesh.AddDirichlet(stiffness, rhs, u_D);
 
-    Util::BlasVector sol = Solver::SolveCG(stiffness, rhs);
-    //Util::BlasVector sol = Solver::SolveJacobi(stiffness, rhs);
+    //Util::BlasVector sol = Solver::SolveCG(stiffness, rhs);
+    Util::BlasVector sol = Solver::SolveJacobi(stiffness, rhs);
 
     // Output
-    printf("\n=========== Right Hand Side ===========");
-    rhs.Print();
     printf("\n=========== Solution ===========");
     sol.Print();
+
+    printf("\nProblem size: %ld\n", mesh.get_n_nodes());
 }
