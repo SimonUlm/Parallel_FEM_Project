@@ -3,11 +3,51 @@ make[1]: Entering directory '/home/vdy14/hpc2/Lib'
 make[1]: Nothing to be done for 'all'.
 make[1]: Leaving directory '/home/vdy14/hpc2/Lib'
 mpiCC    -O3 -I../Include -D_MPI -o hpc_demo0 test_runtime_cg_parallel.cpp  ../Lib/libhpc.a -lm
-mpirun -np 12 ./hpc_demo0 10
-time MPI Setup = 1.390141 s
-time experiment (assert 1s)  = 1.000012 s
+mpirun -np 12 ./hpc_demo0 5
+time MPI Setup = 1.397289 s
 ----------
-refine = 10
-DOF    = 12590081
-t_setup_problem = 20.426121 ms
-t_scatter       = 104.704376 ms
+refine = 5
+DOF    = 12513
+t_setup_problem = 0.013994 s
+t_scatter       = 0.045099 s
+t_assemble      = 0.003754 s
+t_solve         = 0.362320 s
+t_gather_sol    = 0.000705 s
+t_total         = 0.425872 s
+==========
+mpirun -np 12 ./hpc_demo0 6
+time MPI Setup = 1.473413 s
+----------
+refine = 6
+DOF    = 49601
+t_setup_problem = 0.174334 s
+t_scatter       = 0.112997 s
+t_assemble      = 0.053983 s
+t_solve         = 1.954995 s
+t_gather_sol    = 0.001858 s
+t_total         = 2.298167 s
+==========
+mpirun -np 12 ./hpc_demo0 7
+time MPI Setup = 1.186384 s
+----------
+refine = 7
+DOF    = 197505
+t_setup_problem = 0.444118 s
+t_scatter       = 0.444409 s
+t_assemble      = 0.300351 s
+t_solve         = 15.014791 s
+t_gather_sol    = 0.007354 s
+t_total         = 16.211023 s
+==========
+mpirun -np 12 ./hpc_demo0 8
+time MPI Setup = 1.258670 s
+----------
+refine = 8
+DOF    = 788225
+t_setup_problem = 0.759028 s
+t_scatter       = 1.704532 s
+t_assemble      = 1.257507 s
+t_solve         = 117.880199 s
+t_gather_sol    = 0.027784 s
+t_total         = 121.629050 s
+==========
