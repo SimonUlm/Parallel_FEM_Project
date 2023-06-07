@@ -14,18 +14,18 @@ namespace Solver {
         assert(n == f.count());
 
         // Declare
-        BlasVector u(n);
-        BlasVector r(n);
-        BlasVector w(n);
+        BlasVector r(n); // residuum
+        BlasVector w(n); // accumulated residuum
+        BlasVector u(n); // solution
+        BlasVector d(n); // diagonal of the stiffness matrix
         double sigma;
 
-        // Calculate inverse diagonal and accumulate
-        BlasVector d = K.Diag();
+        // Initialise
+        // d = diag(K)^-1
+        d = K.Diag();
         local_skel.DistributedToAccumulated(d);
         for (auto &value : d)
             value = 1 / value;
-
-        // Initialise
         // r = f - K * u
         r.Copy(f);
         K.SymSpmv(-1, u, 1, r);
@@ -34,6 +34,7 @@ namespace Solver {
         // sigma = <w, r>
         sigma = Solver::ParallelDot(w, r);
 
+        // Iterate
         for (long k = 1; k <= max_it; ++k) {
             if (sigma < tol * tol)
                 break;
@@ -41,6 +42,7 @@ namespace Solver {
             // u = u + omega * d * r
             for (long i = 0; i < n; ++i)
                 u(i) += omega * d(i) * w(i);
+
             // r = f - K * u
             r.Copy(f);
             K.SymSpmv(-1, u, 1, r);

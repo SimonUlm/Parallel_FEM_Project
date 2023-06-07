@@ -15,7 +15,7 @@ namespace Solver {
     constexpr long kMaxItJacobi = 1e6;
     constexpr double kTolJacobi = 1e-5;
 
-    Util::BlasVector SolveCG(Util::SedMatrix &A, Util::BlasVector &r,
+    Util::BlasVector SolveCg(Util::SedMatrix &K, Util::BlasVector &f,
                              long max_it = kMaxItCG, double tol = kTolCG);
     Util::BlasVector SolveJacobi(Util::SedMatrix &K, Util::BlasVector &f,
                                  double omega = kOmegaJacobi, long max_it = kMaxItJacobi, double tol = kTolJacobi);
@@ -23,7 +23,7 @@ namespace Solver {
 #ifdef _MPI
     double ParallelDot(Util::Vector<double> &v_acc, Util::Vector<double> &v_dist);
 
-    Util::BlasVector SolveCGParallel(Util::SedMatrix &K, Util::BlasVector &r,
+    Util::BlasVector SolveCgParallel(Util::SedMatrix &K, Util::BlasVector &r,
                                      Skeleton::Skeleton &local_skel,
                                      long max_it = kMaxItCG, double tol = kTolCG);
     Util::BlasVector SolveJacobiParallel(Util::SedMatrix &K, Util::BlasVector &f,
