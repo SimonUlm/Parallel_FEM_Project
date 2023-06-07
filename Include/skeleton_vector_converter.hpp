@@ -1,5 +1,5 @@
-#ifndef HPC2_VECTOR_CONVERTER_HPP
-#define HPC2_VECTOR_CONVERTER_HPP
+#ifndef HPC2_SKELETON_VECTOR_CONVERTER_HPP
+#define HPC2_SKELETON_VECTOR_CONVERTER_HPP
 
 #ifdef _MPI
 #include <mpi.h>
@@ -81,4 +81,4 @@ namespace Skeleton {
     };
 }
 
-#endif //HPC2_VECTOR_CONVERTER_HPP
+#endif //HPC2_SKELETON_VECTOR_CONVERTER_HPP

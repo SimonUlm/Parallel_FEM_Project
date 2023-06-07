@@ -108,6 +108,10 @@ namespace Mesh{
         
         // Defined in Create.cpp
         void Create(Node bottom_left_node = Node{0, 0}, Node top_right_node = Node{1, 1});
+        void Create(long m, long n, Node bottom_left_node = Node{0, 0}, Node top_right_node = Node{1, 1}) {
+            *this = GlobalMesh(m, n);
+            Create(bottom_left_node, top_right_node);
+        }
 
         // Defined in Refine.cpp
         void Refine();

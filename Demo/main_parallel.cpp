@@ -18,24 +18,25 @@ double u_D( Mesh::Node& node, long typ )
 }
 
 int main(int argc, char **argv) {
+
+    // Initialise MPI
     MPI_Init(&argc, &argv);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    int nof_processes;
-    MPI_Comm_size(MPI_COMM_WORLD, &nof_processes);
 
+    // Define problem size
     int m = 3;
     int n = 2;
-    int refine_factor = 5;
+    int refine_factor = 3;
 
+    // Define variables
     Mesh::GlobalMesh global_mesh;
     Mesh::LocalMesh local_mesh;
     Skeleton::Skeleton skeleton(m, n, refine_factor, MPI_COMM_WORLD, rank);
 
-    // Create problem
+    // Create problem (root only)
     if (rank == 0) {
-        global_mesh = Mesh::GlobalMesh(m, n);
-        global_mesh.Create();
+        global_mesh.Create(m, n);
         global_mesh.Refine(refine_factor);
         skeleton.Create(global_mesh);
     }
@@ -43,21 +44,22 @@ int main(int argc, char **argv) {
     // Scatter problem
     global_mesh.Scatter(local_mesh, skeleton);
 
-    // Solve parallel
+    // Assemble matrix and rhs
     Util::SedMatrix stiffness = local_mesh.CreateStiffness();
     Util::BlasVector rhs = local_mesh.CreateRhs(F_vol, g_Neu);
     local_mesh.AddDirichlet(stiffness, rhs, u_D);
 
-    //Util::BlasVector sol = Solver::SolveCgParallel(stiffness, rhs, skeleton);
-    Util::BlasVector sol = Solver::SolveJacobiParallel(stiffness, rhs, skeleton);
+    // Solve problem
+    Util::BlasVector local_sol = Solver::SolveCgParallel(stiffness, rhs, skeleton);
 
-    Util::BlasVector local_sol_accum;
-    skeleton.GatherAccumulatedVector(sol, local_sol_accum);
+    // Gather solution
+    Util::BlasVector global_sol;
+    skeleton.GatherAccumulatedVector(local_sol, global_sol);
 
-    // Output
+    // Output (root only)
     if (rank == 0) {
-        printf("\n=========== Parallel Solution ===========");
-        local_sol_accum.Print();
+        printf("\n=========== Solution Vector ===========");
+        global_sol.Print();
     }
 
     MPI_Finalize();

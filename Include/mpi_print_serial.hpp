@@ -1,5 +1,5 @@
-#ifndef HPC2_PRINT_SERIAL_HPP
-#define HPC2_PRINT_SERIAL_HPP
+#ifndef HPC2_MPI_PRINT_SERIAL_HPP
+#define HPC2_MPI_PRINT_SERIAL_HPP
 
 #ifdef _MPI
 #include <functional>
@@ -10,4 +10,4 @@ namespace MPI {
 }
 #endif
 
-#endif //HPC2_PRINT_SERIAL_HPP
+#endif //HPC2_MPI_PRINT_SERIAL_HPP
