@@ -1,0 +1,6 @@
+( cd ../Lib ; make )
+make[1]: Entering directory '/home/vdy14/hpc2/Lib'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/vdy14/hpc2/Lib'
+mpiCC    -O3 -I../Include -D_MPI -o hpc_demo0 test_runtime_cg_parallel.cpp  ../Lib/libhpc.a -lm
+mpirun -np 12 ./hpc_demo0 0
