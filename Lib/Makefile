@@ -14,10 +14,7 @@
 #       cd ../Demo ; make
 #
 
-CC = g++
-ifeq ($(MPI), true)
-    CC = mpiCC
-endif
+CC = mpiCC
 
 LIBRARY = libhpc
 
@@ -49,8 +46,17 @@ HPC = \
      mesh_objects_util.o \
      mesh_print.o \
      mesh_refine.o \
+     mesh_scatter.o \
+     mpi_print_serial.o \
+     skeleton_create.o \
+     skeleton_create_local.o \
+     skeleton_print.o \
+     skeleton_scatter.o \
      solver_cg.o \
+     solver_cg_parallel.o \
      solver_jacobi.o \
+     solver_jacobi_parallel.o \
+     solver_parallel_dot.o \
      util_clock.o \
      util_gematrix_from_sed.o \
      util_sedmatrix_add_val.o \
@@ -59,50 +65,11 @@ HPC = \
      util_sedmatrix_zero.o \
      util_sedmatrix_add_val.o \
      util_vector_blas.o \
-
-ifeq ($(MPI), true)
-    HPC = \
-         mesh_collect.o \
-         mesh_create.o \
-         mesh_create_rhs.o \
-         mesh_create_stiffness.o \
-         mesh_objects_print.o \
-         mesh_objects_util.o \
-         mesh_print.o \
-         mesh_refine.o \
-         mesh_scatter.o \
-         mpi_print_serial.o \
-         skeleton_create.o \
-         skeleton_create_local.o \
-         skeleton_print.o \
-         skeleton_scatter.o \
-         solver_cg.o \
-         solver_cg_parallel.o \
-         solver_jacobi.o \
-         solver_jacobi_parallel.o \
-         solver_parallel_dot.o \
-         util_clock.o \
-         util_gematrix_from_sed.o \
-         util_sedmatrix_add_val.o \
-         util_matrix_blas.o \
-         util_matrix_print.o \
-         util_sedmatrix_zero.o \
-         util_sedmatrix_add_val.o \
-         util_vector_blas.o \
-         skeleton_vector_converter.o
-endif
+     skeleton_vector_converter.o
  
 $(HPC): ../Include/hpc.hpp Makefile
 
 ifneq ($(MPI), true)
-    %.o: ../Source/%.cpp ../Include/hpc.hpp
-	$(CC) $(CF) $(I) -c $<
-
-    %.o: ../MPI/%.cpp ../Include/hpc.hpp
-	$(CC) $(CF) $(I) -c $<
-endif
-
-ifeq ($(MPI), true)
     %.o: ../Source/%.cpp ../Include/hpc.hpp
 	$(CC) $(CF) $(I) -D_MPI -c $<
     %.o: ../MPI/%.cpp ../Include/hpc.hpp

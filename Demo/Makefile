@@ -1,6 +1,6 @@
 ifeq ($(CASE),1)
     FILE=testcase1.cpp
-    MPI=false
+    MPI=true
     MIN_REFINES=1
 endif
 
@@ -27,13 +27,12 @@ R_LEVEL4 = $$(( $(MIN_REFINES) + 3))
 R_LEVEL5 = $$(( $(MIN_REFINES) + 4))
 R_LEVEL6 = $$(( $(MIN_REFINES) + 5))
 R_LEVEL7 = $$(( $(MIN_REFINES) + 6))
+R_LEVEL8 = $$(( $(MIN_REFINES) + 7))
+R_LEVEL9 = $$(( $(MIN_REFINES) + 8))
 
 SHELL=/bin/bash
 
-CC = g++
-ifeq ($(MPI), true)
-    CC = mpiCC
-endif
+CC = mpiCC
 
 ifdef OPENMP
   CFLAGS += -fopenmp 
@@ -70,6 +69,8 @@ all: lib hpc_demo0
 	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL5)
 	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL6)
 	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL7)
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL8)
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL9)
 endif
 
 

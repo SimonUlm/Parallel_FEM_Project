@@ -76,8 +76,6 @@ int main(int argc, char* argv[]) {
 	t_setup = t_setup2 - t_setup1;
 	printf("DOF    = %ld\n", global_mesh.n_nodes());
 	printf("----------\n");
-	global_mesh.Print();
-	printf("----------\n\n");
 	printf("time MPI Setup  = %f s\n", t_mpi);	    
 	printf("t_setup_problem = %f s\n", t_setup);
     }
@@ -118,8 +116,6 @@ int main(int argc, char* argv[]) {
 	t_total = t_mpi + t_setup + t_scatter + t_assemble + t_solve + t_gather_sol;
 	printf("t_total         = %f s\n", t_total);
 	printf("----------\n");
-	printf("Solution:\n");
-	local_sol_accum.Print();
 	printf("Global residual (norm) = %.3e\n", error);
 	printf("=======================================\n\n\n");
     }
