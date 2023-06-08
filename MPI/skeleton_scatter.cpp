@@ -1,3 +1,5 @@
+#ifdef _MPI
+
 #include <mpi.h>
 
 #include "hpc.hpp"
@@ -19,4 +21,6 @@ namespace Skeleton {
         CreateLocal(local_mesh, comm, rank);
     }
 }
+
+#endif // _MPI
 

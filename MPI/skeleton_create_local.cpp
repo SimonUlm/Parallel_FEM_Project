@@ -1,5 +1,7 @@
 #include <cstdio>
 #include <iostream>
+
+#ifdef _MPI
 #include <mpi.h>
 
 #include "hpc.hpp"
@@ -108,4 +110,5 @@ namespace Skeleton {
     }
 }
 
+#endif // _MPI
 

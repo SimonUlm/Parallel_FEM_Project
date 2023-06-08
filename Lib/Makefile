@@ -97,6 +97,9 @@ $(HPC): ../Include/hpc.hpp Makefile
 ifneq ($(MPI), true)
     %.o: ../Source/%.cpp ../Include/hpc.hpp
 	$(CC) $(CF) $(I) -c $<
+
+    %.o: ../MPI/%.cpp ../Include/hpc.hpp
+	$(CC) $(CF) $(I) -c $<
 endif
 
 ifeq ($(MPI), true)

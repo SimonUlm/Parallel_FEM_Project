@@ -2,6 +2,8 @@
 
 #include "hpc.hpp"
 
+#ifdef _MPI
+
 namespace Skeleton {
 
     /*
@@ -59,3 +61,5 @@ namespace Skeleton {
         }
     }
 }
+
+#endif // _MPI

@@ -2,6 +2,7 @@
 
 #include "hpc.hpp"
 
+#ifdef _MPI
 
 namespace Skeleton {
 
@@ -107,3 +108,5 @@ namespace Skeleton {
         return (m - 1) * pow(2, r) + 1;
     }
 }
+
+#endif // _MPI
