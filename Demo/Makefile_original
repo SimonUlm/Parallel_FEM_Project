@@ -1,26 +1,8 @@
-ifeq ($(CASE),1)
-    FILE=testcase1.cpp
-    MPI=false
-    MIN_REFINES=1
-endif
-
-ifeq ($(CASE),2)
-    FILE=testcase2.cpp
-    MPI=true
-    MIN_REFINES=1
-    NP=48
-    N_HOSTS = 8	    # must divide NP
-    NP_SINGLE = $( $(NP) / $(N_HOSTS))
-endif
-
-ifeq ($(CASE),3)
-    FILE=testcase2.cpp
-    MPI=true
-    MIN_REFINES=1
-    NP=24
-    N_HOSTS = 8	    # must divide NP
-    NP_SINGLE = $( $(NP) / $(N_HOSTS))
-endif
+FILE = main_test.cpp
+NP = 48		    # number of processes
+N_HOSTS = 8	    # must divide NP
+NP_SINGLE = $( $(NP) / $(N_HOSTS))
+MIN_REFINES = 1
 
 R_LEVEL1 = $(MIN_REFINES)
 R_LEVEL2 = $$(( $(MIN_REFINES) + 1))
@@ -29,7 +11,6 @@ R_LEVEL4 = $$(( $(MIN_REFINES) + 3))
 R_LEVEL5 = $$(( $(MIN_REFINES) + 4))
 R_LEVEL6 = $$(( $(MIN_REFINES) + 5))
 R_LEVEL7 = $$(( $(MIN_REFINES) + 6))
-
 SHELL=/bin/bash
 
 CC = g++
@@ -54,12 +35,6 @@ CS = $(LDFLAGS) ../Lib/libhpc.a $(LDLIBS)
 
 ifneq ($(MPI),true)
 all: lib hpc_demo0
-	- ./hpc_demo0 $(R_LEVEL1)
-	- ./hpc_demo0 $(R_LEVEL2)
-	- ./hpc_demo0 $(MIN_REFINES)
-	- ./hpc_demo0 $(MIN_REFINES)
-	- ./hpc_demo0 $(MIN_REFINES)
-	- ./hpc_demo0 $(MIN_REFINES)
 	- ./hpc_demo0 $(MIN_REFINES)
 endif
 
