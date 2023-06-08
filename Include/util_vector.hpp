@@ -1,8 +1,9 @@
 #ifndef HPC2_UTIL_VECTOR_HPP
 #define HPC2_UTIL_VECTOR_HPP
 
+#ifndef NDEBUG
 #include <cassert>
-#include <cstring>
+#endif
 #include <iostream>
 
 #include "hpc.hpp"

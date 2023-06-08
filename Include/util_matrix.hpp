@@ -2,7 +2,9 @@
 #define HPC2_UTIL_MATRIX_HPP
 
 #include <algorithm>
+#ifndef NDEBUG
 #include <cassert>
+#endif
 #include <cstdio>
 
 #include "hpc.hpp"

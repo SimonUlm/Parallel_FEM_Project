@@ -1,6 +1,7 @@
-#include <cassert>
-
 #include "hpc.hpp"
+
+#ifdef _MPI
+#include <mpi.h>
 
 using namespace Util;
 
@@ -59,3 +60,5 @@ namespace Solver {
         return u;
     }
 }
+
+#endif

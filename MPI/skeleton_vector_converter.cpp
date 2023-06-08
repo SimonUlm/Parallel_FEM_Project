@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "hpc.hpp"
 
 #ifdef _MPI
