@@ -1,4 +1,4 @@
-function [file_c_ComB, file_c_Bele, file_c_fixd, M_coor, M_elem, M_Bord, M_Bele, M_BorN, M_fixNod] = text_extraction_2(file_text)
+function [file_c_ComB, file_c_Bele, file_c_fixd, M_coor, M_elem, M_Bord, M_Bele, M_BorN, M_fixNod] = text_extraction(file_text)
 
 %% Check file for Keywords
 file_c_ComB  = contains(file_text, 'ComBorders:');  % File contains Color opt
