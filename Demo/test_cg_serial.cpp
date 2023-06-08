@@ -21,7 +21,7 @@ int main() {
 
     int m = 12;
     int n = 8;
-    int refine_factor = 5;
+    int refine_factor = 2;
     
     Mesh::GlobalMesh mesh(m,n);
  

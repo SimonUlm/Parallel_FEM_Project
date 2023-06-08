@@ -167,6 +167,10 @@ namespace Mesh {
                 mtrx.add_val(row, col, ax[j]);
             }
         }
+        delete[] tmp;
+        delete[] ptr_ind;
+        delete[] entries_per_col;
+
         return mtrx;
     }
 }
