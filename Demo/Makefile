@@ -8,16 +8,14 @@ ifeq ($(CASE),2)
     FILE=testcase2.cpp
     MPI=true
     MIN_REFINES=1
-    NP=48
-    N_HOSTS = 8	    # must divide NP
-    NP_SINGLE = $( $(NP) / $(N_HOSTS))
+    NP=6
 endif
 
 ifeq ($(CASE),3)
-    FILE=testcase2.cpp
+    FILE=testcase3.cpp
     MPI=true
     MIN_REFINES=1
-    NP=24
+    NP=48
     N_HOSTS = 8	    # must divide NP
     NP_SINGLE = $( $(NP) / $(N_HOSTS))
 endif
@@ -52,7 +50,7 @@ I = -I../Include
 LDLIBS += -lm
 CS = $(LDFLAGS) ../Lib/libhpc.a $(LDLIBS)
 
-ifneq ($(MPI),true)
+ifeq ($(CASE),1)
 all: lib hpc_demo0
 	- ./hpc_demo0 $(R_LEVEL1)
 	- ./hpc_demo0 $(R_LEVEL2)
@@ -63,7 +61,19 @@ all: lib hpc_demo0
 	- ./hpc_demo0 $(R_LEVEL7)
 endif
 
-ifeq ($(MPI),true)
+ifeq ($(CASE),2)
+all: lib hpc_demo0
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL1)
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL2)
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL3)
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL4)
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL5)
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL6)
+	- mpirun -np $(NP) ./hpc_demo0 $(R_LEVEL7)
+endif
+
+
+ifeq ($(CASE),3)
 all: lib hpc_demo0
 	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL1)
 	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL2)
@@ -73,6 +83,8 @@ all: lib hpc_demo0
 	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL6)
 	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL7)
 endif
+
+
 lib:
 	( cd ../Lib ; $(MAKE) )
 

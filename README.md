@@ -13,8 +13,8 @@ the general functionality of the software. The testcase is selected with e.g. 'C
 calling make. The three test cases are:
 
 1. Serial CG solver for 1 - 7x refinement
-2. Parallel CG solver with 48 processors for 1 - 7x refinement
-3. Parallel CG solver with 24 processors for 1 - 7x refinement
+2. Parallel CG solver with 6 processors for 1 - 7x refinement on one machine
+3. Parallel CG solver with 48 processors for 1 - 7x refinement on hosts
 
 For compilation call make like so:
 
@@ -22,8 +22,8 @@ For compilation call make like so:
 make CASE=1
 ```
 
-### Usage with Parallel solver
-The parallel test cases are compiled so the 24/48 are evenly distributed between the
+### Usage with Parallel solver on hosts
+The parallel test cases are compiled so the 48 are evenly distributed between the
 hosts:
 heim, ensinger, multscher, unseld, magirus, krafft and faulhaber
 

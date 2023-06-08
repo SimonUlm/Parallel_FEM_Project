@@ -50,8 +50,8 @@ int main(int argc, char* argv[]) {
     double t_total;
 
     // Problem size
-    int m = 6;
-    int n = 8;
+    int m = 2;
+    int n = 3;
     int refine_factor = std::stoi(argv[1]);
     
     if (refine_factor == MIN_REFINES && rank == 0) {

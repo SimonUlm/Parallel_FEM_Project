@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 	printf("------------------------------------------\n\n");
     }
     
-    double error;
+    double error_out;
 
     // Time stamps
     double t_setup1, t_setup2, t_setup;
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
     printf("t_assemble      = %f s\n", t_assemble);
     
     t_solve1 = Util::get_wall_time();
-    Util::BlasVector sol = Solver::SolveCg(stiffness, rhs);
+    Util::BlasVector sol = Solver::SolveCg(stiffness, rhs, error_out);
     t_solve2 = Util::get_wall_time(); 
 	t_solve = t_solve2 - t_solve1;
 	printf("t_solve         = %f s\n", t_solve);
@@ -78,6 +78,6 @@ int main(int argc, char* argv[]) {
 	printf("----------\n");
 
 
-    printf("Global residual (norm) = %.3e\n", error);
+    printf("Global residual (norm) = %.3e\n", error_out);
 	printf("=======================================\n\n\n");
 }
