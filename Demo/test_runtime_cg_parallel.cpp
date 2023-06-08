@@ -4,7 +4,9 @@
 #include <cstdio>
 #include <iostream>
 
-#define MIN_REFINES 2
+#ifndef MIN_REFINES
+#define MIN_REFINES 0
+#endif
 
 double F_vol( Mesh::Node& node, long typ )
 {
@@ -23,15 +25,16 @@ double u_D( Mesh::Node& node, long typ )
 }
 
 int main(int argc, char* argv[]) {
-    double t1 = Util::get_wall_time();
+    double t_mpi1, t_mpi2, t_mpi;
+    t_mpi1 = Util::get_wall_time();
     MPI_Init(&argc, &argv);
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     int nof_processes;
     MPI_Comm_size(MPI_COMM_WORLD, &nof_processes);
     if (rank == 0) {
-	double t2 = Util::get_wall_time();
-	printf("time MPI Setup = %f s\n", t2 - t1);	    
+	t_mpi2 = Util::get_wall_time();
+	t_mpi = t_mpi2 - t_mpi1;
 
     }
 
@@ -46,7 +49,7 @@ int main(int argc, char* argv[]) {
     double t_total;
 
     // Problem size
-    int m = 12;
+    int m = 6;
     int n = 8;
     int refine_factor = std::stoi(argv[1]);
     
@@ -74,6 +77,7 @@ int main(int argc, char* argv[]) {
 	printf("----------\n");
 	global_mesh.Print();
 	printf("----------\n\n");
+	printf("time MPI Setup  = %f s\n", t_mpi);	    
 	printf("t_setup_problem = %f s\n", t_setup);
     }
 
@@ -110,7 +114,7 @@ int main(int argc, char* argv[]) {
 	t_gather_sol2 = Util::get_wall_time(); 
 	t_gather_sol = t_gather_sol2 - t_gather_sol1;
 	printf("t_gather_sol    = %f s\n", t_gather_sol2 - t_gather_sol1);
-	t_total = t_setup + t_scatter + t_assemble + t_solve + t_gather_sol;
+	t_total = t_mpi + t_setup + t_scatter + t_assemble + t_solve + t_gather_sol;
 	printf("t_total         = %f s\n", t_total);
 	printf("----------\n");
 	printf("Solution:\n");
