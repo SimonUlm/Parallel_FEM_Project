@@ -1,3 +1,5 @@
+CASE=4
+
 ifeq ($(CASE),1)
     FILE=testcase1.cpp
     MPI=true
@@ -15,9 +17,16 @@ ifeq ($(CASE),3)
     FILE=testcase3.cpp
     MPI=true
     MIN_REFINES=1
-    NP=48
-    N_HOSTS = 8	    # must divide NP
+    NP=24
+    N_HOSTS = 4	    # must divide NP
     NP_SINGLE = $( $(NP) / $(N_HOSTS))
+endif
+
+ifeq ($(CASE),4)
+    FILE=main_parallel.cpp
+    MPI=true
+    MIN_REFINES=1
+    NP=6
 endif
 
 R_LEVEL1 = $(MIN_REFINES)
@@ -76,15 +85,20 @@ endif
 
 ifeq ($(CASE),3)
 all: lib hpc_demo0
-	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL1)
-	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL2)
-	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL3)
-	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL4)
-	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL5)
-	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL6)
-	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE),krafft:$(NP_SINGLE),faulhaber:$(NP_SINGLE),syrlin:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL7)
+	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL1)
+	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL2)
+	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL3)
+	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL4)
+	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL5)
+	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL6)
+	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL7)
+	- mpirun -np $(NP) --hostfile hostfileE44 --host heim:$(NP_SINGLE),ensinger:$(NP_SINGLE),multscher:$(NP_SINGLE),unseld:$(NP_SINGLE),magirus:$(NP_SINGLE) ./hpc_demo0 $(R_LEVEL8)
 endif
 
+ifeq ($(CASE),4)
+all: lib hpc_demo0
+	- mpirun -np $(NP) ./hpc_demo0
+endif
 
 lib:
 	( cd ../Lib ; $(MAKE) )

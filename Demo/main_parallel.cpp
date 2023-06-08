@@ -2,19 +2,16 @@
 
 #include "hpc.hpp"
 
-double F_vol( Mesh::Node& node, long typ )
-{
-    return ( 0.0 );
+double F_vol(Mesh::Node &node, long typ) {
+    return (0.0);
 }
 
-double g_Neu( Mesh::Node& node, long typ )
-{
-    return ( node.x * node.y );
+double g_Neu(Mesh::Node &node, long typ) {
+    return (node.x * node.y);
 }
 
-double u_D( Mesh::Node& node, long typ )
-{
-    return ( 5.0 );
+double u_D(Mesh::Node &node, long typ) {
+    return (5.0);
 }
 
 int main(int argc, char **argv) {
@@ -27,7 +24,7 @@ int main(int argc, char **argv) {
     // Define problem size
     int m = 3;
     int n = 2;
-    int refine_factor = 2;
+    int refine_factor = 1;
 
     // Declare data structures
     Mesh::GlobalMesh global_mesh;
@@ -39,6 +36,8 @@ int main(int argc, char **argv) {
         global_mesh.Create(m, n);
         global_mesh.Refine(refine_factor);
         skeleton.Create(global_mesh, m, n);
+        global_mesh.Print();
+        skeleton.Print();
     }
 
     // Scatter problem
@@ -61,7 +60,8 @@ int main(int argc, char **argv) {
     if (rank == 0) {
         printf("\n=========== Solution Vector ===========");
         global_sol.Print();
-        printf("Error = %lf\n", error_out);
+        printf("Global residual (norm) = %.3e\n", error_out);
+        printf("=======================================\n\n\n");
     }
 
     MPI_Finalize();
