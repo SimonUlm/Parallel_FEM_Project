@@ -2,7 +2,7 @@
 
 This repository provides an implementation of two FEM solvers to solve the Poisson's problem on a
 rectangular mesh with Neumann and Dirichlet boundary conditions. The problem is solved with the
-conjugate gradient method and the \omega-Jacobi method. Both can be either be used serial or
+conjugate gradient method and the w-Jacobi method. Both can be either be used serial or
 parallized with MPI. This project was developed during the High Performance Computing II course
 at the University of Ulm.
 
@@ -18,31 +18,24 @@ at the University of Ulm.
 
 ## Usage
 
-The project is compiled with Make. The user can specify the the file with `FILE`, number of processes 
-with `NP` and whether it should be compiled with MPI with `MPI=true`. For testing the following files
-provided:
+The project is compiled with Make. Three pre made testfiles are provided to test
+the general functionality of the software. The testcase is selected with e.g. 'CASE=1' when
+calling make. The three test cases are:
 
-### Usage with Serial solver
-To use it with serial solvers select a test file like so which directly executes the program (missing which refinements)
+1. Serial CG solver for 1 - 7x refinement
+2. Parallel CG solver with 48 processors for 1 - 7x refinement
+3. Parallel CG solver with 24 processors for 1 - 7x refinement
 
+For compilation call make like so:
+
+```console
+make CASE=1
 ```
-make FILE=test_cg_serial.cpp
-```
-
-
 
 ### Usage with Parallel solver
-To use the software with parallized algorithms the number of processes and 
-
-
-## Results
-
-
-
-## References
-
-
-
+The parallel test cases are compiled so the 24/48 are evenly distributed between the
+hosts:
+heim, ensinger, multscher, unseld, magirus, krafft and faulhaber
 
 ## Contributors
 Dominik Aigner, Simon Deutrich, Oliver Kratz, Lukas Ramsperger

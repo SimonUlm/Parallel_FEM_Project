@@ -56,11 +56,11 @@ ifneq ($(MPI),true)
 all: lib hpc_demo0
 	- ./hpc_demo0 $(R_LEVEL1)
 	- ./hpc_demo0 $(R_LEVEL2)
-	- ./hpc_demo0 $(MIN_REFINES)
-	- ./hpc_demo0 $(MIN_REFINES)
-	- ./hpc_demo0 $(MIN_REFINES)
-	- ./hpc_demo0 $(MIN_REFINES)
-	- ./hpc_demo0 $(MIN_REFINES)
+	- ./hpc_demo0 $(R_LEVEL3)
+	- ./hpc_demo0 $(R_LEVEL4)
+	- ./hpc_demo0 $(R_LEVEL5)
+	- ./hpc_demo0 $(R_LEVEL6)
+	- ./hpc_demo0 $(R_LEVEL7)
 endif
 
 ifeq ($(MPI),true)

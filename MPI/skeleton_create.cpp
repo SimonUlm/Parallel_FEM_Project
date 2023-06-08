@@ -2,6 +2,7 @@
 
 #include "hpc.hpp"
 
+
 namespace Skeleton {
 
     long mn_r(long m, long r);
