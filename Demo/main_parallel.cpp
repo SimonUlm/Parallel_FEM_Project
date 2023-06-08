@@ -27,22 +27,22 @@ int main(int argc, char **argv) {
     // Define problem size
     int m = 3;
     int n = 2;
-    int refine_factor = 4;
+    int refine_factor = 0;
 
-    // Define variables
+    // Declare data structures
     Mesh::GlobalMesh global_mesh;
     Mesh::LocalMesh local_mesh;
-    Skeleton::Skeleton skeleton(m, n, refine_factor, MPI_COMM_WORLD, rank);
+    Skeleton::Skeleton skeleton;
 
     // Create problem (root only)
     if (rank == 0) {
         global_mesh.Create(m, n);
         global_mesh.Refine(refine_factor);
-        skeleton.Create(global_mesh);
+        skeleton.Create(global_mesh, m, n);
     }
 
     // Scatter problem
-    global_mesh.Scatter(local_mesh, skeleton);
+    global_mesh.Scatter(local_mesh, skeleton, MPI_COMM_WORLD, rank);
 
     // Assemble matrix and rhs
     Util::SedMatrix stiffness = local_mesh.CreateStiffness();
@@ -50,8 +50,8 @@ int main(int argc, char **argv) {
     local_mesh.AddDirichlet(stiffness, rhs, u_D);
 
     // Solve problem
-    double error;
-    Util::BlasVector local_sol = Solver::SolveCgParallel(stiffness, rhs, skeleton, error);
+    double error_out;
+    Util::BlasVector local_sol = Solver::SolveCgParallel(stiffness, rhs, skeleton, error_out);
 
     // Gather solution
     Util::BlasVector global_sol;
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
     if (rank == 0) {
         printf("\n=========== Solution Vector ===========");
         global_sol.Print();
-        printf("Error = %lf\n", error);
+        printf("Error = %lf\n", error_out);
     }
 
     MPI_Finalize();

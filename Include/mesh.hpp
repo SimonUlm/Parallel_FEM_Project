@@ -62,8 +62,6 @@ namespace Mesh {
 
         const long n_nodes() const { return nodes_.count(); }
 
-        const long refine_factor() const { return refine_factor_; }
-
         // Print data of mesh
         void Print();
 
@@ -84,7 +82,6 @@ namespace Mesh {
 
     protected:
         long m_, n_;                // Number of processors in X/Y-Direction
-        long refine_factor_ = 0;    // Number of refinements performed
 
         Util::Vector<Node> nodes_;               // Vector of Nodes that make up the mesh
         Util::Vector<Element> elements_;         // Vector of Elements that make up the mesh
@@ -196,6 +193,8 @@ namespace Mesh {
 
         GlobalMesh &operator=(const GlobalMesh &) = delete;
 
+        const long refine_factor() const { return refine_factor_; }
+
         // Create rectangular unrefined global mesh
         void Create(Node bottom_left_node = Node{0, 0}, Node top_right_node = Node{1, 1});
 
@@ -219,7 +218,7 @@ namespace Mesh {
         // Defined in mesh_scatter.cpp
 #ifdef _MPI
 
-        void Scatter(LocalMesh &local_mesh, Skeleton::Skeleton &skeleton);
+        void Scatter(LocalMesh &local_mesh, Skeleton::Skeleton &skeleton, MPI_Comm comm, int rank);
 
     private:
         void TransferGlobalToLocal(LocalMesh &local_mesh,
@@ -227,6 +226,7 @@ namespace Mesh {
                                    MPI_Comm comm, int rank);
 
 #endif
+        long refine_factor_ = 0;    // Number of refinements performed
     };
 }
 

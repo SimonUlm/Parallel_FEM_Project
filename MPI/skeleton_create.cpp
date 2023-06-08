@@ -1,4 +1,5 @@
-#include <math.h>
+#include <cmath>
+
 #include "hpc.hpp"
 
 namespace Skeleton {
@@ -15,7 +16,7 @@ namespace Skeleton {
      * mesh: Mesh for which the Skeleton should be created.
      *
      */
-    void Skeleton::Create(Mesh::Mesh &mesh) {
+    void Skeleton::Create(Mesh::GlobalMesh &mesh) {
         long border_index = 0;
         long m = mesh.m();
         long m_n = m + 1;                            // Number of nodes in direction of m

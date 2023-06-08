@@ -86,6 +86,11 @@ namespace Skeleton {
      */
     class ComBorderNodes {
     public:
+        /*
+    	 * Default Constructor
+         *
+    	 */
+        ComBorderNodes() {}
 
         /*
     	 * Constructor for unrefined Mesh
@@ -150,6 +155,12 @@ namespace Skeleton {
     class Skeleton {
     public:
         /*
+         * Default Constructor
+         *
+         */
+        Skeleton() {}
+
+        /*
          * Constructor for unrefined meshes
          *
          * m_: Number of processes in vertical direction
@@ -158,13 +169,11 @@ namespace Skeleton {
          * rank_: MPI process rank
          *
          */
-        Skeleton(long m, long n, MPI_Comm comm, int rank) :
+        Skeleton(long m, long n) :
                 com_borders_(2 * n * m - n - m),
                 com_border_nodes_(2 * n * m - n - m),
                 n_borders_(2 * n * m - n - m),
-                crosspoints_((m + 1) * (n + 1)),
-                comm_(comm),
-                rank_(rank) {}
+                crosspoints_((m + 1) * (n + 1)) {}
 
         /*
          * Constructor for refined meshes
@@ -176,12 +185,11 @@ namespace Skeleton {
          * rank_: MPI process rank
          *
          */
-        Skeleton(long m, long n, long refine_factor, MPI_Comm comm, int rank) :
+        Skeleton(long m, long n, long refine_factor) :
                 com_borders_(2 * n * m - n - m),
                 com_border_nodes_(2 * n * m - n - m, pow(2, refine_factor) - 1),
                 n_borders_(2 * n * m - n - m),
-                crosspoints_((m + 1) * (n + 1)),
-                comm_(comm), rank_(rank) {}
+                crosspoints_((m + 1) * (n + 1)) {}
 
         /*
     	 * Constructor for local meshes
@@ -233,13 +241,18 @@ namespace Skeleton {
         void set_vector_converter(VectorConverter &&converter) { vector_converter_ = std::move(converter); }
 
         // Creating global Skeleton from Mesh
-        void Create(Mesh::Mesh &mesh);
+        void Create(Mesh::GlobalMesh &mesh);
+
+        void Create(Mesh::GlobalMesh &mesh, long m, long n) {
+            *this = Skeleton(m, n, mesh.refine_factor());
+            Create(mesh);
+        }
 
         // Transforms global Skeleton to local Skeleton
-        void CreateLocal(Mesh::LocalMesh &local_mesh);
+        void CreateLocal(Mesh::LocalMesh &local_mesh, MPI_Comm comm, int rank);
 
         // Scatter Skeleton between Processes by MPI
-        void Scatter(Mesh::LocalMesh &local_mesh);
+        void Scatter(Mesh::LocalMesh &local_mesh, long m, long n, long refine_factor, MPI_Comm comm, int rank);
 
         // Vector transformations
         void AccumulatedToDistributed(Util::Vector<double> &local_vector) const {

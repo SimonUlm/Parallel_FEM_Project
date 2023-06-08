@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
     
     Mesh::GlobalMesh global_mesh;
     Mesh::LocalMesh local_mesh;
-    Skeleton::Skeleton skeleton(m, n, refine_factor, MPI_COMM_WORLD, rank);
+    Skeleton::Skeleton skeleton;
 
     if (rank == 0) { 
 	printf("----------\n");
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
 	global_mesh = Mesh::GlobalMesh(m, n);
 	global_mesh.Create();
 	global_mesh.Refine(refine_factor);
-	skeleton.Create(global_mesh);
+	skeleton.Create(global_mesh, m, n);
 	t_setup2 = Util::get_wall_time(); 
 	t_setup = t_setup2 - t_setup1;
 	printf("DOF    = %ld\n", global_mesh.n_nodes());
@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (rank == 0) {t_scatter1 = Util::get_wall_time();} 
-    global_mesh.Scatter(local_mesh, skeleton);
+    global_mesh.Scatter(local_mesh, skeleton, MPI_COMM_WORLD, rank);
     if (rank == 0) {
 	t_scatter2 = Util::get_wall_time(); 
 	t_scatter = t_scatter2 - t_scatter1;

@@ -18,18 +18,16 @@ int main(int argc, char **argv) {
 
     GlobalMesh global_mesh;
     LocalMesh local_mesh;
+    Skeleton::Skeleton skeleton;
 
     if (rank == 0)
     {
-        global_mesh = GlobalMesh(m, n);
-        global_mesh.Create();
+        global_mesh.Create(m, n);
         global_mesh.Refine(refine_factor);
+        skeleton.Create(global_mesh, m, n);
     }
-    Skeleton::Skeleton skeleton(m, n, refine_factor, MPI_COMM_WORLD, rank);
-    if (rank == 0)
-        skeleton.Create(global_mesh);
 
-    global_mesh.Scatter(local_mesh, skeleton);
+    global_mesh.Scatter(local_mesh, skeleton, MPI_COMM_WORLD, rank);
 
     Util::Vector<double> accum_to_distr(local_mesh.n_nodes());
     accum_to_distr.Init(10);

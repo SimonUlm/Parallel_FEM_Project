@@ -16,11 +16,12 @@ namespace Skeleton {
      * local_mesh: LocalMesh to map global and local indexing
      * 
 	 */
-    void Skeleton::CreateLocal(Mesh::LocalMesh &local_mesh) {
+    void Skeleton::CreateLocal(Mesh::LocalMesh &local_mesh, MPI_Comm comm, int rank) {
+
         // Determine size of local skeleton (and remember cross points)
         long n_borders_loc = 0;
         for (long i = 0; i < n_borders_; ++i) {
-            if ((com_borders_(i).L() == rank_) || (com_borders_(i).R() == rank_)) {
+            if ((com_borders_(i).L() == rank) || (com_borders_(i).R() == rank)) {
                 n_borders_loc += 1;
                 crosspoints_(com_borders_(i).c1()) = true;
                 crosspoints_(com_borders_(i).c2()) = true;
@@ -30,7 +31,7 @@ namespace Skeleton {
         // Allocate local skeleton
         long nodes_per_border = com_border_nodes_.n_nodes();
 
-        Skeleton local_skel(n_borders_loc, nodes_per_border, comm_, rank_, LOCAL);
+        Skeleton local_skel(n_borders_loc, nodes_per_border, comm, rank, LOCAL);
 
         // Loop again to generate entries in local_skel
         long local_border_ix = 0;
@@ -40,7 +41,7 @@ namespace Skeleton {
         long length_l2g = local2global.count();
 
         for (long i = 0; i < n_borders_; ++i) {
-            if (com_borders_(i).L() != rank_ && com_borders_(i).R() != rank_)
+            if (com_borders_(i).L() != rank && com_borders_(i).R() != rank)
                 continue;
 
             // Corresponding ComBorder Found -> Copy entries to new local skeleton

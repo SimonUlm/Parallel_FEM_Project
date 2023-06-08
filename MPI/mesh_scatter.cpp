@@ -7,14 +7,9 @@
 
 #include <mpi.h>
 
-#ifndef _SERIAL_SCATTER
 namespace Mesh {
 
-    void GlobalMesh::Scatter(LocalMesh &local_mesh, Skeleton::Skeleton &skeleton) {
-
-        // MPI stuff
-        MPI_Comm comm = skeleton.comm();
-        int rank = skeleton.rank();
+    void GlobalMesh::Scatter(LocalMesh &local_mesh, Skeleton::Skeleton &skeleton, MPI_Comm comm, int rank) {
 
         // Declare temporary global mesh structure that is used by all processes. This approach is chosen to make sure
         // the global mesh gets destructed at the end of the scatter method on all local processes to save memory.
@@ -48,7 +43,9 @@ namespace Mesh {
         local_mesh.CollectFixedNodes();
 
         // Scatter skeleton
-        skeleton.Scatter(local_mesh);
+        long refine_factor = refine_factor_;
+        MPI_Bcast(&refine_factor, 1, MPI_LONG, 0, comm);
+        skeleton.Scatter(local_mesh, mesh_data[0], mesh_data[1], refine_factor, comm, rank);
 
         // Create vector converter
         skeleton.set_vector_converter(Skeleton::VectorConverter(mesh_data[0], mesh_data[1],
@@ -161,6 +158,5 @@ namespace Mesh {
                       MPI_LONG, MPI_SUM, comm);
     }
 }
-#endif // _SERIAL_SCATTER
 
 #endif // _MPI

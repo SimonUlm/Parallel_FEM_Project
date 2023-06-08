@@ -17,20 +17,17 @@ int main(int argc, char **argv) {
 
     GlobalMesh global_mesh;
     LocalMesh local_mesh;
+    Skeleton::Skeleton skeleton;
 
     if (rank == 0)
     {
-        global_mesh = GlobalMesh(m, n);
-        global_mesh.Create();
+        global_mesh.Create(m, n);
         global_mesh.Refine();
         global_mesh.Refine();
+        skeleton.Create(global_mesh, m, n);
     }
 
-    Skeleton::Skeleton skeleton(m, n, 2, MPI_COMM_WORLD, rank);
-    if (rank == 0)
-        skeleton.Create(global_mesh);
-
-    global_mesh.Scatter(local_mesh, skeleton);
+    global_mesh.Scatter(local_mesh, skeleton, MPI_COMM_WORLD, rank);
 
     MPI::PrintSerial(MPI_COMM_WORLD, rank, nof_processes, [&]() {
         local_mesh.Print();
