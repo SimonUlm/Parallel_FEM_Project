@@ -47,6 +47,7 @@ HPC = \
      mesh_print.o \
      mesh_refine.o \
      mesh_scatter.o \
+     mesh_serial_scatter.o \
      mpi_print_serial.o \
      skeleton_create.o \
      skeleton_create_local.o \

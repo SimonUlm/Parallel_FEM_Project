@@ -18,33 +18,28 @@ namespace Mesh {
         MPI_Bcast(&nnodes, 1, MPI_LONG, 0, comm);
 
         // Temporary
-        LocalMesh mesh_sender;
         Util::Vector<long> global_nodes_priority(nnodes);
         std::array<long, 7> mesh_data{};
-        MPI_Request request;
         MPI_Status status;
+        local_mesh.m_ = m_;
+        local_mesh.n_ = n_;
 
         if (rank == 0) {
             for (int process = 1; process < m_ * n_; ++process) {
-                local_mesh.m_ = m_;
-                local_mesh.n_ = n_;
                 TransferGlobalToLocal(local_mesh, global_nodes_priority, comm, process);
-                if (process != 1)
-                    MPI_Wait(&request, &status);
-                mesh_sender = std::move(local_mesh);
-                mesh_data = {mesh_sender.m_, mesh_sender.n_,
-                             mesh_sender.nodes_.count(), mesh_sender.elements_.count(), mesh_sender.boundary_.count(),
-                             mesh_sender.edges_.count(), mesh_sender.fixed_nodes_.count()};
-                MPI_Isend(mesh_data.data(), 7,
-                          MPI_LONG, process, 0, comm, &request);
-                MPI_Isend(mesh_sender.nodes_.data(), (int) mesh_sender.nodes_.count() * 2,
-                         MPI_DOUBLE, process, 0, comm, &request);
-                MPI_Isend(mesh_sender.elements_.data(), (int) mesh_sender.elements_.count() * 7,
-                         MPI_LONG, process, 0, comm, &request);
-                MPI_Isend(mesh_sender.boundary_.data(), (int) mesh_sender.boundary_.count() * 4,
-                         MPI_LONG, process, 0, comm, &request);
-                MPI_Isend(mesh_sender.local_to_global.data(), (int) mesh_sender.local_to_global.count(),
-                          MPI_LONG, process, 0, comm, &request);
+                mesh_data = {local_mesh.m_, local_mesh.n_,
+                             local_mesh.nodes_.count(), local_mesh.elements_.count(), local_mesh.boundary_.count(),
+                             local_mesh.edges_.count(), local_mesh.fixed_nodes_.count()};
+                MPI_Send(mesh_data.data(), 7,
+                          MPI_LONG, process, 0, comm);
+                MPI_Send(local_mesh.nodes_.data(), (int) local_mesh.nodes_.count() * 2,
+                         MPI_DOUBLE, process, 0, comm);
+                MPI_Send(local_mesh.elements_.data(), (int) local_mesh.elements_.count() * 7,
+                         MPI_LONG, process, 0, comm);
+                MPI_Send(local_mesh.boundary_.data(), (int) local_mesh.boundary_.count() * 4,
+                         MPI_LONG, process, 0, comm);
+                MPI_Send(local_mesh.local_to_global.data(), (int) local_mesh.local_to_global.count(),
+                          MPI_LONG, process, 0, comm);
             }
             TransferGlobalToLocal(local_mesh, global_nodes_priority, comm, rank);
         } else {
