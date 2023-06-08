@@ -7,7 +7,8 @@
 #include "hpc.hpp"
 
 
-namespace Mesh{
+namespace Mesh {
+
     struct Node {
         double x; // x coordinate
         double y; // y coordinate
@@ -28,11 +29,11 @@ namespace Mesh{
         }
 
         // Dot product of two nodes interpreted as vectors
-        double dot(Node n) {
-        	return x * n.x + y * n.y;
+        const double Dot(Node n) const {
+            return x * n.x + y * n.y;
         }
-        
-        // Print node data
+
+        // Print node data_
         void Print();
     };
 
@@ -42,18 +43,18 @@ namespace Mesh{
         long t;           // affiliation
 
         // Utility functions for mesh refinement
-        long get_n(long n);
+        const long get_n(long n) const;
 
-        long get_successor_n(long n);
-        
-        long get_predecessor_n(long n); 
+        const long get_successor_n(long n) const;
 
-        long get_m(long m); 
+        const long get_predecessor_n(long n) const;
 
-        long get_successor_m(long m); 
+        const long get_m(long m) const;
 
-        long get_predecessor_m(long m); 
-        
+        const long get_successor_m(long m) const;
+
+        const long get_predecessor_m(long m) const;
+
         // Print element data
         void Print();
     };
@@ -67,11 +68,11 @@ namespace Mesh{
         long n1, n2; // nodes
         long m;      // edge
         long t;      // 0 if Neumann boundary, 1 if Dirichlet boundary
-        
+
         // Print boundary data
         void Print();
     };
-    
+
 }
 
-#endif //HPC2_MESH_OBJECtS_HPP
+#endif //HPC2_MESH_OBJECTS_HPP

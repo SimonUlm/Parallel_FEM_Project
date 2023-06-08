@@ -12,7 +12,7 @@ namespace MPI {
             MPI_Recv(&dummy, 1, MPI_INT, rank - 1, 0, comm, &status);
         }
 
-        // Print data
+        // Print data_
         print();
 
         // Signal next process

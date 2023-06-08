@@ -8,7 +8,7 @@ namespace Solver {
                        double &error,
                        long max_it, double tol) {
 
-        long n = K.get_n();
+        long n = K.n();
 #ifndef NDEBUG
         assert(n == r.count());
 #endif

@@ -31,11 +31,11 @@ int main(int argc, char **argv) {
 
     global_mesh.Scatter(local_mesh, skeleton);
 
-    Util::Vector<double> accum_to_distr(local_mesh.get_n_nodes());
+    Util::Vector<double> accum_to_distr(local_mesh.n_nodes());
     accum_to_distr.Init(10);
     skeleton.AccumulatedToDistributed(accum_to_distr);
 
-    Util::Vector<double> distr_to_accum(local_mesh.get_n_nodes());
+    Util::Vector<double> distr_to_accum(local_mesh.n_nodes());
     distr_to_accum.Init();
     skeleton.DistributedToAccumulated(distr_to_accum);
 
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 
     // Gather accum_to_distr onto root process
     Util::Vector<double> global_vector;
-    Util::Vector<double> test_vector(local_mesh.get_n_nodes());
+    Util::Vector<double> test_vector(local_mesh.n_nodes());
     test_vector.Init(50);
     skeleton.GatherAccumulatedVector(test_vector, global_vector);
     if (rank == 0)

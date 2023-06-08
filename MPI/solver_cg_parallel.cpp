@@ -1,6 +1,7 @@
 #include "hpc.hpp"
 
 #ifdef _MPI
+
 #include <mpi.h>
 
 using namespace Util;
@@ -12,7 +13,7 @@ namespace Solver {
                                double &error,
                                long max_it, double tol) {
 
-        long n = K.get_n();
+        long n = K.n();
 #ifndef NDEBUG
         assert(n == r.count());
 #endif
@@ -36,7 +37,7 @@ namespace Solver {
         // s = w
         s.Copy(w);
         // sigma = <w, w>
-        sigma = Solver::ParallelDot(w, r);
+        sigma = Solver::ParallelDot(w, r, local_skel);
 
         // Iterate
         for (long k = 1; k <= max_it; ++k) {
@@ -46,7 +47,7 @@ namespace Solver {
             // v = K * s
             K.SymSpmv(1, s, 0, v);
             // alpha = sigma / <s, v>
-            alpha = sigma / Solver::ParallelDot(s, v);
+            alpha = sigma / Solver::ParallelDot(s, v, local_skel);
             // u = u + alpha * s;
             u.Axpy(alpha, s);
 
@@ -57,7 +58,7 @@ namespace Solver {
             local_skel.DistributedToAccumulated(w);
             // sigma = <w, r>
             sigma_old = sigma;
-            sigma = Solver::ParallelDot(w, r);
+            sigma = Solver::ParallelDot(w, r, local_skel);
             // s = w + (sigma / sigma_old) * s
             s.Scal(sigma / sigma_old);
             s.Axpy(1, w);

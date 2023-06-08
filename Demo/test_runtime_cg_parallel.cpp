@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 	skeleton.Create(global_mesh);
 	t_setup2 = Util::get_wall_time(); 
 	t_setup = t_setup2 - t_setup1;
-	printf("DOF    = %ld\n", global_mesh.get_n_nodes());
+	printf("DOF    = %ld\n", global_mesh.n_nodes());
 	printf("----------\n");
 	global_mesh.Print();
 	printf("----------\n\n");

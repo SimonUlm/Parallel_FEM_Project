@@ -1,6 +1,7 @@
 #include "hpc.hpp"
 
 #ifdef _MPI
+
 #include <mpi.h>
 
 using namespace Util;
@@ -12,7 +13,7 @@ namespace Solver {
                                          double &error,
                                          double omega, long max_it, double tol) {
 
-        long n = K.get_n();
+        long n = K.n();
 #ifndef NDEBUG
         assert(n == f.count());
 #endif
@@ -28,7 +29,7 @@ namespace Solver {
         // d = diag(K)^-1
         d = K.Diag();
         local_skel.DistributedToAccumulated(d);
-        for (auto &value : d)
+        for (auto &value: d)
             value = 1 / value;
         // r = f - K * u
         r.Copy(f);
@@ -36,7 +37,7 @@ namespace Solver {
         // w = r
         local_skel.DistributedToAccumulated(r, w);
         // sigma = <w, r>
-        sigma = Solver::ParallelDot(w, r);
+        sigma = Solver::ParallelDot(w, r, local_skel);
 
         // Iterate
         for (long k = 1; k <= max_it; ++k) {
@@ -53,7 +54,7 @@ namespace Solver {
             // w = r
             local_skel.DistributedToAccumulated(r, w);
             // sigma = <w, r>
-            sigma = Solver::ParallelDot(w, r);
+            sigma = Solver::ParallelDot(w, r, local_skel);
         }
 
         error = sigma;

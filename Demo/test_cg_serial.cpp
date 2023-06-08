@@ -17,7 +17,7 @@ double u_D( Mesh::Node& node, long typ )
     return ( 5.0 );
 }
 
-int main(int argc, char **argv) {
+int main() {
 
     int m = 12;
     int n = 8;
@@ -39,5 +39,5 @@ int main(int argc, char **argv) {
     printf("\n=========== Solution ===========");
     sol.Print();
 
-    printf("\nProblem size: %ld\n", mesh.get_n_nodes());
+    printf("\nProblem size: %ld\n", mesh.n_nodes());
 }

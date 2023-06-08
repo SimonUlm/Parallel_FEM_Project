@@ -1,6 +1,7 @@
 #include "hpc.hpp"
 
 #ifdef _MPI
+
 #include <mpi.h>
 
 namespace Skeleton {
@@ -16,7 +17,7 @@ namespace Skeleton {
 
     void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector,
                                                    const Skeleton &local_skel) const {
-        DistributedToAccumulated(local_vector,local_vector,local_skel);
+        DistributedToAccumulated(local_vector, local_vector, local_skel);
     }
 
     void VectorConverter::DistributedToAccumulated(Util::Vector<double> &local_vector_send,
@@ -27,15 +28,15 @@ namespace Skeleton {
         assert(local_vector_recv.count() == local_to_global_->count());
 #endif
 
-        MPI_Comm comm = local_skel.get_comm();
-        int rank = local_skel.get_rank();
+        MPI_Comm comm = local_skel.comm();
+        int rank = local_skel.rank();
 
-        // Copy all regular nodes from send vector to recv vector
+        // Copy all regular nodes_ from send vector to recv vector
         local_vector_recv.Copy(local_vector_send);
 
         // Create global cross point vector from local vector
         Util::Vector<double> global_vector_send(n_global_crosspoints_);
-        for (auto &point : local_skel.get_crosspoints())
+        for (auto &point: local_skel.crosspoints())
             global_vector_send((*local_to_global_)(point)) = local_vector_send(point);
 
         // Allreduce
@@ -44,12 +45,12 @@ namespace Skeleton {
                       (int) n_global_crosspoints_, MPI_DOUBLE, MPI_SUM, comm);
 
         // Write entries from global cross point vector back into local vector
-        for (auto &point : local_skel.get_crosspoints())
+        for (auto &point: local_skel.crosspoints())
             local_vector_recv(point) = global_vector_recv((*local_to_global_)(point));
 
         // Exchange interface points with neighbors
         MPI_Status status;
-        long n_border_nodes = local_skel.get_n_border_nodes();
+        long n_border_nodes = local_skel.n_border_nodes();
         Util::Vector<double> border_nodes_vector_send(n_border_nodes);
         Util::Vector<double> border_nodes_vector_recv(n_border_nodes);
 
@@ -58,11 +59,11 @@ namespace Skeleton {
             // Initialise neighbor with own rank
             int neighbor = rank;
             long border_ix;
-            for (long i = 0; i < local_skel.get_n_borders(); ++i) {
+            for (long i = 0; i < local_skel.n_borders(); ++i) {
                 auto &border = local_skel.get_border(i);
-                if (border.get_color() != col)
+                if (border.color() != col)
                     continue;
-                neighbor = (int) ((border.get_L() == rank) ? border.get_R() : border.get_L());
+                neighbor = (int) ((border.L() == rank) ? border.R() : border.L());
                 border_ix = i;
                 break;
             }
@@ -102,8 +103,8 @@ namespace Skeleton {
         assert(local_vector_send.count() == local_to_global_->count());
 #endif
 
-        MPI_Comm comm = local_skel.get_comm();
-        int rank = local_skel.get_rank();
+        MPI_Comm comm = local_skel.comm();
+        int rank = local_skel.rank();
 
         // Create global vector from local vector
         Util::Vector<double> global_vector_send(n_global_nodes_);

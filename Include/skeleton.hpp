@@ -2,234 +2,240 @@
 #define HPC2_SKELETON_HPP
 
 #ifdef _MPI // only needed for parallel algorithms
+
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <mpi.h>
 
 #include "hpc.hpp"
 
-namespace Skeleton{
+namespace Skeleton {
 
     constexpr long kNumberOfColors = 4;     // number of possible colors
-	enum global_or_local { GLOBAL, LOCAL }; // Enum for local skeleton creation
+
+    enum global_or_local {
+        GLOBAL, LOCAL
+    }; // Enum for local skeleton creation
 
 
-    /* ComBorder */
-
-    class ComBorder {
     /*
-     * The ComBorder class contains the two crosspoints for this border and the
+     * ComBorder
+     *
+     * The ComBorder class contains the two cross points for this border and the
      * corresponding processes. Additionally, a color is saved so each border of
      * process has a different color
      *
      */
-    private:
-    	long index; // index of border
-        long c1; 	// starting crosspoint
-        long c2; 	// end crosspoint
-        long L; 	// Left or lower process
-        long R; 	// Right or upper process
-        long color; // Color of to time communication
+    class ComBorder {
     public:
-    	// Set entries of ComBorder
-        void set_entries(long i, long start_node, long end_node, 
+        // Set entries of ComBorder
+        void set_entries(long i, long start_node, long end_node,
                          long left_proc, long right_proc, long couple_color) {
-            index = i;
-            c1 = start_node;
-            c2 = end_node;
-            L = left_proc;
-            R = right_proc;
-            color = couple_color;
+            index_ = i;
+            c1_ = start_node;
+            c2_ = end_node;
+            L_ = left_proc;
+            R_ = right_proc;
+            color_ = couple_color;
         }
-        
+
         // Copy entries from another ComBorder
-        void copy_entries(ComBorder& border) {
-        	border.set_entries(index, c1, c2, L, R, color);
+        void copy_entries(ComBorder &border) const {
+            border.set_entries(index_, c1_, c2_, L_, R_, color_);
         }
-        
+
         // General getter methods
-        const long get_L() const {return L;}
-        const long get_R() const {return R;}
-        const long get_c1() const {return c1;}
-        const long get_c2() const {return c2;}
-        const long get_color() const { return color; }
+        const long L() const { return L_; }
 
-        // Setter for start/end Node
-        void set_c1(long new_c1) {c1 = new_c1;}
-        void set_c2(long new_c2) {c2 = new_c2;}
-        void set_index(long new_ix) {index = new_ix;}
+        const long R() const { return R_; }
 
-        // Print Data of ComBorder
+        const long c1() const { return c1_; }
+
+        const long c2() const { return c2_; }
+
+        const long color() const { return color_; }
+
+        // Setter for start/end node
+        void set_c1(long new_c1) { c1_ = new_c1; }
+
+        void set_c2(long new_c2) { c2_ = new_c2; }
+
+        void set_index(long new_ix) { index_ = new_ix; }
+
+        // Print data_ of ComBorder
         void Print();
-        
+
+    private:
+        long index_; // index of border
+        long c1_;    // starting cross point
+        long c2_;    // end cross point
+        long L_;     // Left or lower process
+        long R_;     // Right or upper process
+        long color_; // Color of to time communication
     };
-    
 
-    /* ComBorderNodes */
 
-    class ComBorderNodes {
     /*
-     * The ComBorderNodes class consists one Vector of nodes. This vector is not
+     * ComBorderNodes
+     *
+     * The ComBorderNodes class consists one Vector of nodes_. This vector is not
      * seperated into the single borders but is handled as one consecutive Vector.
      * The separation into each border is handled by the class itself. So from the
      * outside the Borders look seperated
      *
      */
-    private:
-    	long n_nodes;				// Number of nodes per ComBorder
-    	Util::Vector<long> nodes; 	// Consecutive list of nodes on the ComBorder's
-
+    class ComBorderNodes {
     public:
 
         /*
     	 * Constructor for unrefined Mesh
          *
-         * n_borders: Number of ComBorder's in this Skeleton
+         * n_borders_: Number of ComBorder's in this Skeleton
          *
     	 */
-        ComBorderNodes(long n_borders) :
-        	           nodes(0),
-        	           n_nodes(0) {}
-        
+        explicit ComBorderNodes(long n_borders) :
+                nodes_(0),
+                n_nodes_(0) {}
+
         /*
     	 * Constructor for refined Mesh
          *
-         * n_borders: Number of ComBorder's in this Skeleton
-         * n_nodes: Number of nodes per ComBorder (calculated from refinement factor)
+         * n_borders_: Number of ComBorder's in this Skeleton
+         * n_nodes_: Number of nodes_ per ComBorder (calculated from refinement factor)
          *
     	 */
         ComBorderNodes(long n_borders, long n_nodes) :
-        	           nodes(n_borders*n_nodes),
-        	           n_nodes(n_nodes) {}
+                nodes_(n_borders * n_nodes),
+                n_nodes_(n_nodes) {}
 
         // General getter methods
-        const long get_n_nodes() const { return n_nodes; }
-        const Util::Vector<long> &get_nodes() const { return nodes; }
+        const long n_nodes() const { return n_nodes_; }
+
+        const Util::Vector<long> &nodes() const { return nodes_; }
 
         /*
          * Get/Set node for given border
          *
-         * ix_border: index of border
-         * ix_node: index of node in border
+         * ix_border: index_ of border
+         * ix_node: index_ of node in border
          *
          */
-		const long get_entry(long ix_border, long ix_node) const {
-            return nodes(ix_border*n_nodes + ix_node);
+        const long get_entry(long ix_border, long ix_node) const {
+            return nodes_(ix_border * n_nodes_ + ix_node);
         }
 
         void set_entry(long ix_border, long ix_node, long node) {
-            nodes(ix_border*n_nodes + ix_node) = node;
+            nodes_(ix_border * n_nodes_ + ix_node) = node;
         }
 
-        // Print data ComBorderNodes seperated for each border
-        void Print();	
+        // Print data_ ComBorderNodes seperated for each border
+        void Print();
+
+    private:
+        long n_nodes_;                // Number of nodes_ per ComBorder
+        Util::Vector<long> nodes_;    // Consecutive list of nodes on the ComBorders
     };
 
 
-    /* Skeleton */
-
-    class Skeleton {
     /*
+     * Skeleton
+     *
      * The Skeleton is used for communication between the distributed processes.
      * The class contains a vector of ComBorders which contain the information
-     * of the corresponding processes and the edge nodes. Additionally it contains
+     * of the corresponding processes and the edge nodes. Additionally, it contains
      * an instance of ComBorderNodes which stores all nodes on the communication
      * borders.
      *
      */
-    private:
-        long n_borders; 					    // Number of borders in this Skeleton
-        Util::Vector<ComBorder> com_borders;    // Vector of ComBorders
-        ComBorderNodes com_border_nodes; 	    // List of nodes on the communication borders
-        Util::Vector<long> crosspoints;         // List of cross points between processes
-        int rank = 0;                           // Processor rank
-        MPI_Comm comm = MPI_COMM_WORLD;         // MPI Communicator
-        VectorConverter vector_converter;       // L1-L2 vector converter
-
+    class Skeleton {
     public:
-    	/*
-    	 * Constructor for unrefined meshes
-    	 *
-         * m: Number of processes in vertical direction
-         * n: Number of processes in horizontal direction
-         * comm: MPI communicator
-         * rank: MPI process rank
+        /*
+         * Constructor for unrefined meshes
          *
-    	 */
+         * m_: Number of processes in vertical direction
+         * n_: Number of processes in horizontal direction
+         * comm_: MPI communicator
+         * rank_: MPI process rank
+         *
+         */
         Skeleton(long m, long n, MPI_Comm comm, int rank) :
-                 com_borders(2 * n * m - n - m),
-                 com_border_nodes(2 * n * m - n - m),
-                 n_borders(2*n*m-n-m),
-                 crosspoints((m + 1) * (n + 1)),
-                 comm(comm),
-                 rank(rank) {}
+                com_borders_(2 * n * m - n - m),
+                com_border_nodes_(2 * n * m - n - m),
+                n_borders_(2 * n * m - n - m),
+                crosspoints_((m + 1) * (n + 1)),
+                comm_(comm),
+                rank_(rank) {}
 
-    	/*
-    	 * Constructor for refined meshes
-    	 *
-         * m: Number of processes in vertical direction
-         * n: Number of processes in horizontal direction
-         * refine_factor: number of performed refinements
-         * comm: MPI communicator
-         * rank: MPI process rank
+        /*
+         * Constructor for refined meshes
          *
-    	 */
+         * m_: Number of processes in vertical direction
+         * n_: Number of processes in horizontal direction
+         * refine_factor_: number of performed refinements
+         * comm_: MPI communicator
+         * rank_: MPI process rank
+         *
+         */
         Skeleton(long m, long n, long refine_factor, MPI_Comm comm, int rank) :
-                 com_borders(2 * n * m - n - m),
-                 com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
-                 n_borders(2*n*m-n-m),
-                 crosspoints((m + 1) * (n + 1)),
-                 comm(comm), rank(rank) {}
+                com_borders_(2 * n * m - n - m),
+                com_border_nodes_(2 * n * m - n - m, pow(2, refine_factor) - 1),
+                n_borders_(2 * n * m - n - m),
+                crosspoints_((m + 1) * (n + 1)),
+                comm_(comm), rank_(rank) {}
 
         /*
     	 * Constructor for local meshes
     	 *
-         * n_borders: Number of communication borders
+         * n_borders_: Number of communication borders
          * nodes_per_border: Number of nodes on each communication border
-         * comm: MPI communicator
-         * rank: MPI process rank
+         * comm_: MPI communicator
+         * rank_: MPI process rank
          *
     	 */
         Skeleton(long n_borders, long nodes_per_border, MPI_Comm comm,
                  int rank, enum global_or_local usecase) :
-                 com_borders(n_borders),
-                 com_border_nodes(n_borders, nodes_per_border),
-                 comm(comm), rank(rank),
-                 n_borders(n_borders) {
+                com_borders_(n_borders),
+                com_border_nodes_(n_borders, nodes_per_border),
+                comm_(comm), rank_(rank),
+                n_borders_(n_borders) {
 #ifndef NDEBUG
             assert(usecase == LOCAL);
 #endif
         }
 
         Skeleton(Skeleton &&) = delete;
+
         Skeleton(const Skeleton &) = delete;
-        
-        Skeleton & operator=(Skeleton &&other) = default;
-        Skeleton & operator=(const Skeleton &) = delete;
+
+        Skeleton &operator=(Skeleton &&other) = default;
+
+        Skeleton &operator=(const Skeleton &) = delete;
 
         // General getter methods
-        const long get_n_borders() const { return n_borders; }
-        const long get_n_border_nodes() const { return com_border_nodes.get_n_nodes(); }
+        const long n_borders() const { return n_borders_; }
+
+        const long n_border_nodes() const { return com_border_nodes_.n_nodes(); }
+
+        const Util::Vector<long> &crosspoints() const { return crosspoints_; }
+
+        const MPI_Comm comm() const { return comm_; }
+
+        const int rank() const { return rank_; }
 
         const ComBorder &get_border(long ix_border) const {
-        	return com_borders(ix_border);
+            return com_borders_(ix_border);
         }
 
         const long get_border_node(long ix_border, long ix_node) const {
-            return com_border_nodes.get_entry(ix_border, ix_node);
+            return com_border_nodes_.get_entry(ix_border, ix_node);
         }
 
-        const Util::Vector<long> &get_crosspoints() const { return crosspoints; }
+        void set_vector_converter(VectorConverter &&converter) { vector_converter_ = std::move(converter); }
 
-        const MPI_Comm get_comm() const { return comm; }
-        const int get_rank() const { return rank; }
-
-        void set_vector_converter(VectorConverter &&converter) { vector_converter = std::move(converter); }
-
-    	// Creating global Skeleton from Mesh
+        // Creating global Skeleton from Mesh
         void Create(Mesh::Mesh &mesh);
-        
-    	// Transforms global Skeleton to local Skeleton
+
+        // Transforms global Skeleton to local Skeleton
         void CreateLocal(Mesh::LocalMesh &local_mesh);
 
         // Scatter Skeleton between Processes by MPI
@@ -237,26 +243,39 @@ namespace Skeleton{
 
         // Vector transformations
         void AccumulatedToDistributed(Util::Vector<double> &local_vector) const {
-            vector_converter.AccumulatedToDistributed(local_vector);
-        }
-        void DistributedToAccumulated(Util::Vector<double> &local_vector) const {
-            vector_converter.DistributedToAccumulated(local_vector, *this);
-        }
-        void DistributedToAccumulated(Util::Vector<double> &local_vector_send,
-                                      Util::Vector<double> &local_vector_recv) const {
-            vector_converter.DistributedToAccumulated(local_vector_send, local_vector_recv, *this);
-        }
-        void GatherAccumulatedVector(Util::Vector<double> &local_vector_send,
-                                     Util::Vector<double> &global_vector_recv) const {
-            vector_converter.GatherAccumulatedVector(local_vector_send, global_vector_recv, *this);
-        }
-        void GatherDistributedVector(Util::Vector<double> &local_vector_send,
-                                     Util::Vector<double> &global_vector_recv) const {
-            vector_converter.GatherDistributedVector(local_vector_send, global_vector_recv, *this);
+            vector_converter_.AccumulatedToDistributed(local_vector);
         }
 
-		// Print data of Skeleton
+        void DistributedToAccumulated(Util::Vector<double> &local_vector) const {
+            vector_converter_.DistributedToAccumulated(local_vector, *this);
+        }
+
+        void DistributedToAccumulated(Util::Vector<double> &local_vector_send,
+                                      Util::Vector<double> &local_vector_recv) const {
+            vector_converter_.DistributedToAccumulated(local_vector_send, local_vector_recv, *this);
+        }
+
+        void GatherAccumulatedVector(Util::Vector<double> &local_vector_send,
+                                     Util::Vector<double> &global_vector_recv) const {
+            vector_converter_.GatherAccumulatedVector(local_vector_send, global_vector_recv, *this);
+        }
+
+        void GatherDistributedVector(Util::Vector<double> &local_vector_send,
+                                     Util::Vector<double> &global_vector_recv) const {
+            vector_converter_.GatherDistributedVector(local_vector_send, global_vector_recv, *this);
+        }
+
+        // Print data_ of Skeleton
         void Print();
+
+    private:
+        long n_borders_;                         // Number of borders in this Skeleton
+        Util::Vector<ComBorder> com_borders_;    // Vector of ComBorders
+        ComBorderNodes com_border_nodes_;        // List of nodes on the communication borders
+        Util::Vector<long> crosspoints_;         // List of cross points between processes
+        int rank_ = 0;                           // Processor rank
+        MPI_Comm comm_ = MPI_COMM_WORLD;         // MPI Communicator
+        VectorConverter vector_converter_;       // Vector converter
     };
 }
 

@@ -2,21 +2,24 @@
 #define HPC2_UTIL_VECTOR_HPP
 
 #ifndef NDEBUG
+
 #include <cassert>
+
 #endif
+
 #include <iostream>
 
 #include "hpc.hpp"
 
 
 namespace Util {
-	
+
     template<typename List>
     class SimpleIterator {
     public:
         using ValueType = typename List::ValueType;
-        using PointerType = ValueType*;
-        using ReferenceType = ValueType&;
+        using PointerType = ValueType *;
+        using ReferenceType = ValueType &;
 
         explicit SimpleIterator(ValueType *ptr) :
                 ptr_(ptr) {}
@@ -68,41 +71,40 @@ namespace Util {
     };
 
 
-
-	/* Vector */
-    template<typename T>
-    class Vector {
     /*
+     * Vector
+     *
      * Simple generic vector class which stores elements consectuive in memory for fast
      * memory access
      *
      */
-     
+    template<typename T>
+    class Vector {
     public:
         using ValueType = T;
         using Iterator = SimpleIterator<Vector<T>>;
 
         /*
-    	 * Empty Constructor
+    	 * Default Constructor
          *
     	 */
         explicit Vector() :
                 count_(0), data_(nullptr) {
         }
-		
-		/*
-    	 * Constructor to allocate memory for count elements
-    	 *
-    	 * count: number of elements to be stored
+
+        /*
+         * Constructor to allocate memory for count elements
          *
-    	 */
+         * count_: number of elements to be stored
+         *
+         */
         explicit Vector(long count) :
                 count_(count), data_(nullptr) {
             if (count != 0)
                 data_ = new T[count]{};
         }
-		
-		// Destructor
+
+        // Destructor
         ~Vector() {
             delete[] data_;
         }
@@ -196,15 +198,15 @@ namespace Util {
     };
 
 
-
-    /* BlasVector */
-    class BlasVector : public Vector<double> {
     /*
-     * Vector for Blas operations.
+     * BlasVector
+     *
+     * Vector for Blas operations
      *
      * This class implements various Blas Level 1 operations
      *
      */
+    class BlasVector : public Vector<double> {
     public:
         explicit BlasVector() :
                 Vector::Vector() {}
@@ -212,18 +214,14 @@ namespace Util {
         explicit BlasVector(long count) :
                 Vector::Vector(count) {}
 
-        BlasVector(BlasVector &&other) :
+        BlasVector(BlasVector &&other) noexcept:
                 Vector::Vector(std::move(other)) {}
 
         BlasVector(const BlasVector &) = delete;
 
         // Assignment operators
         BlasVector &operator=(BlasVector &&other) noexcept {
-            delete[] data_;
-            data_ = other.data_;
-            count_ = other.count_;
-            other.data_ = nullptr;
-            other.count_ = 0;
+            Vector::operator=(std::move(other));
             return *this;
         }
 

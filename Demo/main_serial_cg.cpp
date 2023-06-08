@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
     
     // Solve problem
     t1 = Util::get_wall_time();
-    Util::BlasVector sol = Solver::SolveCG(stiffness, rhs);
+    Util::BlasVector sol = Solver::SolveCg(stiffness, rhs);
     t2 = Util::get_wall_time();
     double t_sol = t2 - t1;
 
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
     sol.Print();
 
     // Compute A*u, compare to rhs
-    Util::BlasVector ref_rhs(mesh.get_n_nodes());
+    Util::BlasVector ref_rhs(mesh.n_nodes());
 
     // ref_rhs = A * u with general matrix vector product
     stiffness.SymSpmv(1.0, sol, 0.0, ref_rhs);

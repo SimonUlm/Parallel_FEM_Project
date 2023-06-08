@@ -8,7 +8,7 @@ namespace Solver {
                                  double &error,
                                  double omega, long max_it, double tol) {
 
-        long n = K.get_n();
+        long n = K.n();
 #ifndef NDEBUG
         assert(n == f.count());
 #endif
@@ -22,7 +22,7 @@ namespace Solver {
         // Initialise
         // d = diag(K)^-1
         d = K.Diag();
-        for (auto &value : d)
+        for (auto &value: d)
             value = 1 / value;
         // r = f - K * u
         r.Copy(f);

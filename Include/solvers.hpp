@@ -6,7 +6,9 @@
 #include "hpc.hpp"
 
 #ifdef _MPI
+
 #include <mpi.h>
+
 #endif
 
 namespace Solver {
@@ -21,21 +23,26 @@ namespace Solver {
     Util::BlasVector SolveCg(Util::SedMatrix &K, Util::BlasVector &f,
                              double &error = kInfError,
                              long max_it = kMaxItCG, double tol = kTolCG);
+
     Util::BlasVector SolveJacobi(Util::SedMatrix &K, Util::BlasVector &f,
                                  double &error = kInfError,
                                  double omega = kOmegaJacobi, long max_it = kMaxItJacobi, double tol = kTolJacobi);
 
 #ifdef _MPI
-    double ParallelDot(Util::Vector<double> &v_acc, Util::Vector<double> &v_dist);
+
+    double ParallelDot(Util::Vector<double> &v_acc, Util::Vector<double> &v_dist, Skeleton::Skeleton &skeleton);
 
     Util::BlasVector SolveCgParallel(Util::SedMatrix &K, Util::BlasVector &r,
                                      Skeleton::Skeleton &local_skel,
                                      double &error = kInfError,
                                      long max_it = kMaxItCG, double tol = kTolCG);
+
     Util::BlasVector SolveJacobiParallel(Util::SedMatrix &K, Util::BlasVector &f,
                                          Skeleton::Skeleton &local_skel,
                                          double &error = kInfError,
-                                         double omega = kOmegaJacobi, long max_it = kMaxItJacobi, double tol = kTolJacobi);
+                                         double omega = kOmegaJacobi, long max_it = kMaxItJacobi,
+                                         double tol = kTolJacobi);
+
 #endif
 
 }
