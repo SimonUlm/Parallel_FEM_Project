@@ -199,12 +199,12 @@ namespace Util {
 
     /* BlasVector */
     class BlasVector : public Vector<double> {
-        /*
-         * Vector for Blas operations.
-         *
-         * This class implements various Blas Level 1 operations
-         *
-         */
+    /*
+     * Vector for Blas operations.
+     *
+     * This class implements various Blas Level 1 operations
+     *
+     */
     public:
         explicit BlasVector() :
                 Vector::Vector() {}

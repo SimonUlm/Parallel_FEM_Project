@@ -4,7 +4,7 @@
 
 namespace Mesh {
 
-// Print mesh information
+    // Print mesh information
     void Mesh::Print() {
 
         // Start printing

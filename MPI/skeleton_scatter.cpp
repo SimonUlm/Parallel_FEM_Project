@@ -1,10 +1,9 @@
+#include <array>
 #include <cstdio>
 #include <memory>
-#include <array>
-#include "hpc.hpp"
-
-#ifdef _MPI
 #include <mpi.h>
+
+#include "hpc.hpp"
 
 namespace Skeleton {
 
@@ -18,5 +17,5 @@ namespace Skeleton {
 		
 		CreateLocal(local_mesh);
 	}
-}
-#endif // _MPI
+} // Namespace Skeleton
+

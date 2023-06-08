@@ -1,11 +1,9 @@
-#include <iostream>
 #include <cstdio>
+#include <iostream>
+#include <mpi.h>
 
 #include "hpc.hpp"
 
-#ifdef _MPI
-#include <mpi.h>
-#endif
 
 namespace Skeleton {
 
@@ -32,11 +30,8 @@ namespace Skeleton {
 
         // Allocate local skeleton
         long nodes_per_border = com_border_nodes.get_n_nodes();
-#ifdef _MPI
+
         Skeleton local_skel(n_borders_loc, nodes_per_border, comm, rank, LOCAL);
-#else
-        Skeleton local_skel(n_borders_loc, nodes_per_border, LOCAL);
-#endif
 
         // Loop again to generate entries in local_skel
         long local_border_ix = 0;
@@ -113,4 +108,5 @@ namespace Skeleton {
         *this = std::move(local_skel);
     }
 } // Namespace Skeleton
+
 

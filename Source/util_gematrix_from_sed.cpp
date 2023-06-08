@@ -6,7 +6,6 @@ namespace Util {
 	 * Initialize Matrix from Sed Matrix
      *
      * sed: Reference to SedMatrix
-     * sym: Is SedMatrix symmetric
      *
 	 */
 	void GeMatrix::FromSed(SedMatrix &sed) {

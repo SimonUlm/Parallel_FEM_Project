@@ -2,6 +2,13 @@
 
 namespace Mesh {
 
+    /*
+     * Refine global mesh by splitting each edge into two edges with a new node in
+     * the middle. Nodes with the same coordinates after the refinement have still
+     * the same index as before. All other elements are completly new numbered.
+     * The mesh is overwritten with the new refined mesh
+     *
+     */
     void GlobalMesh::Refine() {
         // Allocate new mesh
         long nnodes = nodes.count() + edges.count();

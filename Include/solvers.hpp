@@ -1,6 +1,8 @@
 #ifndef HPC2_SOLVERS_HPP
 #define HPC2_SOLVERS_HPP
 
+#include <limits>
+
 #include "hpc.hpp"
 
 #ifdef _MPI

@@ -4,11 +4,21 @@
 #include "mesh_objects.hpp"
 
 namespace Mesh {
+    
+    // Placeholder function for possible material parameters
     double kappa(Node &n, long typ) {
 		return ( 1.0 );
 	}
 	
-    
+    /*
+     * Generate stiffness matrix for single element
+     *
+     * n1, n2, n3: Nodes of element
+     * typ: affiliation of element (no functionallity yet)
+     * ax, dx: Arrays for returned element stiffnessmatrix 
+     *         (ax: superdiagonal entries, dx diagonal entries)
+     *
+     */
     void stima_laplace(Node &n1, Node &n2, Node &n3, 
     				   long typ, double dx[3], double ax[3]) {
 
@@ -30,6 +40,12 @@ namespace Mesh {
 		dx[2] = fac * n21.dot(n21);			    					   
     } 
 
+    /*
+     * Generate stiffness matrix from mesh
+     *
+     * return: Stiffnessmatrix in SED format
+     *
+     */
     Util::SedMatrix Mesh::CreateStiffness() {
 
         long col = 0;
@@ -75,7 +91,7 @@ namespace Mesh {
         
         // Insert indices
         // tmp contains column offsets which are individually increment
-        //     to fill in all entries of column on an other position
+        // to fill in all entries of column on an other position
         for (long k = 0; k < nElem; ++k) {
         	ind[0] = elements(k).n1;
         	ind[1] = elements(k).n2;
@@ -133,6 +149,7 @@ namespace Mesh {
         	ind[1] = elements(k).n2;
         	ind[2] = elements(k).n3;
         	
+        	// Calculate stiffnessmatrix of element
         	stima_laplace(nodes(ind[0]), nodes(ind[1]), nodes(ind[2]), elements(k).t, dx, ax);
         	
         	// Add local stiffness diag to global

@@ -1,25 +1,26 @@
 #ifndef HPC2_SKELETON_HPP
 #define HPC2_SKELETON_HPP
-#include <math.h>
-#include <cstdio>
 
-#ifdef _MPI
+#ifdef _MPI // only needed for parallel algorithms
+#include <cstdio>
+#include <math.h>
 #include <mpi.h>
-#endif
 
 #include "hpc.hpp"
 
 namespace Skeleton{
 
-    constexpr long kNumberOfColors = 4;
-	enum global_or_local { GLOBAL, LOCAL };
+    constexpr long kNumberOfColors = 4;     // number of possible colors
+	enum global_or_local { GLOBAL, LOCAL }; // Enum for local skeleton creation
+
 
     /* ComBorder */
 
     class ComBorder {
     /*
-     * The ComBorder class contains the two crosspoints for this border and the corresponding
-     * processes. Additionally a color is saved so border of each process is different
+     * The ComBorder class contains the two crosspoints for this border and the
+     * corresponding processes. Additionally, a color is saved so each border of
+     * process has a different color
      *
      */
     private:
@@ -46,7 +47,7 @@ namespace Skeleton{
         	border.set_entries(index, c1, c2, L, R, color);
         }
         
-        // Getter Methods
+        // General getter methods
         const long get_L() const {return L;}
         const long get_R() const {return R;}
         const long get_c1() const {return c1;}
@@ -63,18 +64,20 @@ namespace Skeleton{
         
     };
     
+
     /* ComBorderNodes */
 
     class ComBorderNodes {
     /*
-     * The ComBorderNodes class consists one Vector of nodes. This list is not seperated into
-     * the single borders but is handled as one consectuive Vector. The seperation into each
-     * border is handled by the class itself. So from the outside the Borders look seperated
+     * The ComBorderNodes class consists one Vector of nodes. This vector is not
+     * seperated into the single borders but is handled as one consecutive Vector.
+     * The separation into each border is handled by the class itself. So from the
+     * outside the Borders look seperated
      *
      */
     private:
     	long n_nodes;				// Number of nodes per ComBorder
-    	Util::Vector<long> nodes; 	// Consecutive list of all nodes on the ComBorder's
+    	Util::Vector<long> nodes; 	// Consecutive list of nodes on the ComBorder's
 
     public:
 
@@ -85,7 +88,8 @@ namespace Skeleton{
          *
     	 */
         ComBorderNodes(long n_borders) :
-        	nodes(0), n_nodes(0) {}
+        	           nodes(0),
+        	           n_nodes(0) {}
         
         /*
     	 * Constructor for refined Mesh
@@ -95,14 +99,15 @@ namespace Skeleton{
          *
     	 */
         ComBorderNodes(long n_borders, long n_nodes) :
-        	nodes(n_borders*n_nodes), n_nodes(n_nodes) {}
+        	           nodes(n_borders*n_nodes),
+        	           n_nodes(n_nodes) {}
 
-        // Getter Methods
+        // General getter methods
         const long get_n_nodes() const { return n_nodes; }
         const Util::Vector<long> &get_nodes() const { return nodes; }
 
         /*
-         * Get node from given border
+         * Get/Set node for given border
          *
          * ix_border: index of border
          * ix_node: index of node in border
@@ -112,13 +117,6 @@ namespace Skeleton{
             return nodes(ix_border*n_nodes + ix_node);
         }
 
-        /*
-         * Set node to given border
-         *
-         * ix_border: index of border
-         * ix_node: index of node in border
-         *
-         */
         void set_entry(long ix_border, long ix_node, long node) {
             nodes(ix_border*n_nodes + ix_node) = node;
         }
@@ -126,6 +124,7 @@ namespace Skeleton{
         // Print data ComBorderNodes seperated for each border
         void Print();	
     };
+
 
     /* Skeleton */
 
@@ -139,62 +138,68 @@ namespace Skeleton{
      *
      */
     private:
-        long n_borders; 						// Number of borders in this Skeleton
-        Util::Vector<ComBorder> com_borders;	// Vector of ComBorders
-        ComBorderNodes com_border_nodes; 		// List of nodes on the communication borders
+        long n_borders; 					    // Number of borders in this Skeleton
+        Util::Vector<ComBorder> com_borders;    // Vector of ComBorders
+        ComBorderNodes com_border_nodes; 	    // List of nodes on the communication borders
         Util::Vector<long> crosspoints;         // List of cross points between processes
-        int rank = 0;
-#ifdef _MPI
-        MPI_Comm comm = MPI_COMM_WORLD;
-        VectorConverter vector_converter;
-#endif
+        int rank = 0;                           // Processor rank
+        MPI_Comm comm = MPI_COMM_WORLD;         // MPI Communicator
+        VectorConverter vector_converter;       // L1-L2 vector converter
 
     public:
-#ifdef _MPI
     	/*
     	 * Constructor for unrefined meshes
     	 *
          * m: Number of processes in vertical direction
          * n: Number of processes in horizontal direction
+         * comm: MPI communicator
+         * rank: MPI process rank
          *
     	 */
         Skeleton(long m, long n, MPI_Comm comm, int rank) :
-                com_borders(2 * n * m - n - m), com_border_nodes(2 * n * m - n - m),
-                n_borders(2*n*m-n-m),
-                crosspoints((m + 1) * (n + 1)),
-                comm(comm), rank(rank) {}
+                 com_borders(2 * n * m - n - m),
+                 com_border_nodes(2 * n * m - n - m),
+                 n_borders(2*n*m-n-m),
+                 crosspoints((m + 1) * (n + 1)),
+                 comm(comm),
+                 rank(rank) {}
 
+    	/*
+    	 * Constructor for refined meshes
+    	 *
+         * m: Number of processes in vertical direction
+         * n: Number of processes in horizontal direction
+         * refine_factor: number of performed refinements
+         * comm: MPI communicator
+         * rank: MPI process rank
+         *
+    	 */
         Skeleton(long m, long n, long refine_factor, MPI_Comm comm, int rank) :
-                com_borders(2 * n * m - n - m),
-                com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
-                n_borders(2*n*m-n-m),
-                crosspoints((m + 1) * (n + 1)),
-                comm(comm), rank(rank) {}
+                 com_borders(2 * n * m - n - m),
+                 com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
+                 n_borders(2*n*m-n-m),
+                 crosspoints((m + 1) * (n + 1)),
+                 comm(comm), rank(rank) {}
 
-        Skeleton(long n_borders, long nodes_per_border, MPI_Comm comm, int rank, enum global_or_local usecase) :
-                com_borders(n_borders), com_border_nodes(n_borders, nodes_per_border),
-                comm(comm), rank(rank),
-                n_borders(n_borders) {
+        /*
+    	 * Constructor for local meshes
+    	 *
+         * n_borders: Number of communication borders
+         * nodes_per_border: Number of nodes on each communication border
+         * comm: MPI communicator
+         * rank: MPI process rank
+         *
+    	 */
+        Skeleton(long n_borders, long nodes_per_border, MPI_Comm comm,
+                 int rank, enum global_or_local usecase) :
+                 com_borders(n_borders),
+                 com_border_nodes(n_borders, nodes_per_border),
+                 comm(comm), rank(rank),
+                 n_borders(n_borders) {
 #ifndef NDEBUG
             assert(usecase == LOCAL);
 #endif
         }
-#else
-        Skeleton(long m, long n) :
-                        com_borders(2 * n * m - n - m), com_border_nodes(2 * n * m - n - m),
-                        n_borders(2*n*m-n-m),
-                        crosspoints((m + 1) * (n + 1)){}
-
-        Skeleton(long m, long n, long refine_factor) :
-                    com_borders(2 * n * m - n - m),
-                    com_border_nodes(2 * n * m - n - m, pow(2, refine_factor) - 1),
-                    n_borders(2*n*m-n-m),
-                    crosspoints((m + 1) * (n + 1)){}
-
-        Skeleton(long n_borders, long nodes_per_border, enum global_or_local usecase) :
-                    com_borders(n_borders), com_border_nodes(n_borders, nodes_per_border),
-                    n_borders(n_borders) {assert(usecase == LOCAL);}
-#endif
 
         Skeleton(Skeleton &&) = delete;
         Skeleton(const Skeleton &) = delete;
@@ -202,6 +207,7 @@ namespace Skeleton{
         Skeleton & operator=(Skeleton &&other) = default;
         Skeleton & operator=(const Skeleton &) = delete;
 
+        // General getter methods
         const long get_n_borders() const { return n_borders; }
         const long get_n_border_nodes() const { return com_border_nodes.get_n_nodes(); }
 
@@ -215,24 +221,21 @@ namespace Skeleton{
 
         const Util::Vector<long> &get_crosspoints() const { return crosspoints; }
 
-#ifdef _MPI
         const MPI_Comm get_comm() const { return comm; }
         const int get_rank() const { return rank; }
 
         void set_vector_converter(VectorConverter &&converter) { vector_converter = std::move(converter); }
-#endif
-        
+
     	// Creating global Skeleton from Mesh
         void Create(Mesh::Mesh &mesh);
         
-    	//Transforms global Skeleton to local Skeleton
+    	// Transforms global Skeleton to local Skeleton
         void CreateLocal(Mesh::LocalMesh &local_mesh);
-        
-#ifdef _MPI
+
         // Scatter Skeleton between Processes by MPI
         void Scatter(Mesh::LocalMesh &local_mesh);
 
-        // Call vector transformations from Skeleton
+        // Vector transformations
         void AccumulatedToDistributed(Util::Vector<double> &local_vector) const {
             vector_converter.AccumulatedToDistributed(local_vector);
         }
@@ -251,11 +254,12 @@ namespace Skeleton{
                                      Util::Vector<double> &global_vector_recv) const {
             vector_converter.GatherDistributedVector(local_vector_send, global_vector_recv, *this);
         }
-#endif
 
 		// Print data of Skeleton
         void Print();
     };
 }
+
+#endif //_MPI
 
 #endif //HPC2_SKELETON_HPP

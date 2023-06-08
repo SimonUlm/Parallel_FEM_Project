@@ -1,7 +1,15 @@
 #include "hpc.hpp"
 
 namespace Mesh {
-
+    
+    /*
+     * Creation of an unrefined global mesh as a rectangle which is defined by the
+     * two given nodes (default (0,0) (1,1)
+     *
+     * bottom_left_node: node to determine coordinates of bottom left point of mesh
+     * top_right_node: node to determine coordinates of top right point of mesh
+     *
+     */
     void GlobalMesh::Create(Node bottom_left_node, Node top_right_node) {
         long node_index = 0;
         long fixed_index = 0;
@@ -76,6 +84,7 @@ namespace Mesh {
 
                 // Write boundary and boundary edges
                 if (i == 0) {
+                    // boundaries of first processor row are defined as dirichlet
                     long bdry_index = j;
                     boundary(bdry_index) = BoundaryEdge{node_bl1, node_br2,
                                                         edge_bottom, dirichlet};
@@ -87,6 +96,7 @@ namespace Mesh {
                                                         edge_top, empty_aff};
                 }
                 if (j == 0) {
+                    // boundaries of first processor col are defined as dirichlet
                     long bdry_index = n + i * 2;
                     boundary(bdry_index) = BoundaryEdge{node_bl1, node_tl4,
                                                         edge_left, dirichlet};

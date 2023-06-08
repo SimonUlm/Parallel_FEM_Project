@@ -4,7 +4,10 @@
 
 namespace Mesh {
 
-    // Collects edges from elements
+    /*
+     * Function to automatically generate a vector of new edges after a refinement
+     *
+     */
     void Mesh::CollectEdges() {
 
         // Get the number of edges
@@ -26,8 +29,12 @@ namespace Mesh {
                 };
     }
 
-    // Checks for each Node, if it is part of a Boundary element
-    // and create a new vector within the mesh object
+    /*
+     * Function to automatically generate a vector of new edges after a refinement
+     *
+     * global_nbdry: number of global boundaries (0 if called from local mesh)
+     *
+     */
     void Mesh::CollectFixedNodes(long global_nbdry) {
 
         // Use the affiliation to set a flag for each dirichlet node

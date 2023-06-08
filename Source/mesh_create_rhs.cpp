@@ -1,18 +1,12 @@
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <utility>
-#include <cmath>
 
 #include "hpc.hpp"
 #include "mesh_objects.hpp"
 
 namespace Mesh {
-    /*
-    double fvol( Node &node, long typ )
-    {
-      return ( 0.0 );
-    }
-    */
     
     void mesh_Neumann(Node &n1, Node &n2, long typ, double (*fc)(Node&, long), double m[2]) {
 	Node center_of_edge = n1 + n2;

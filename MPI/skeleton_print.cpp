@@ -3,8 +3,8 @@
 #include "hpc.hpp"
 
 namespace Skeleton {
-	/*!
-     *   Prints Data of Skeleton
+	/*
+     * Prints Data of Skeleton
      */
     void Skeleton::Print() {
         long brief = 0;
@@ -57,4 +57,4 @@ namespace Skeleton {
             printf("\n");
         }
     } 
-}
+} // Namespace Skeleton

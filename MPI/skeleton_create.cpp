@@ -2,6 +2,7 @@
 #include "hpc.hpp"
 
 namespace Skeleton {
+
     long mn_r(long m, long r);
 	
 	/*
@@ -61,7 +62,7 @@ namespace Skeleton {
             	
             	// Skip first row of porcesses
             	if (i != 0) {
-            	    // initialize low horizontal couple
+            	    // initialize lower horizontal couple
             	    long c1 = nodes_per_row * i + j + 1;	// lower right node
             	    long c2 = nodes_per_row * i + j;		// lower left node
             	    long l_proc = (i - 1) * n + j;			// lower process
@@ -103,4 +104,4 @@ namespace Skeleton {
     	// m = number of nodes in one dimension
     	return (m - 1) * pow(2, r) + 1;
     }
-}
+} // Namespace Skeleton

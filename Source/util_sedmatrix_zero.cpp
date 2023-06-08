@@ -2,14 +2,13 @@
 
 namespace Util {
 
-
+    /*
+	 * Set column j to zero except the diagonal entry
+	 *
+	 * j: column index
+	 *
+	 */
 	void SedMatrix::zero_col(long j) {
-		/*
-		 * Set column j to zero except the diagonal entry
-		 *
-		 * j: column index
-		 *
-		 */
     	long col_start = ptr_ind[j];
     	long col_end = ptr_ind[j+1];
 		
@@ -21,15 +20,13 @@ namespace Util {
 		}	
 	}
 	
-	
+	/*
+	 * Set the given row to zero except the diagonal entry
+	 *
+	 * i: row index
+	 *
+	 */
 	void SedMatrix::zero_row(long i) {
-		/*
-		 * Set the given row to zero except the diagonal entry
-		 *
-		 * i: row index
-		 *
-		 */
-	
 		long col_start;
     	long col_end;
 		
