@@ -6,16 +6,6 @@ conjugate gradient method and the w-Jacobi method. Both can be either be used se
 parallized with MPI. This project was developed during the High Performance Computing II course
 at the University of Ulm.
 
-## Table of Contents
-
-- [Summary](#summary)
-- [Usage](#usage)
-- [Results](#results)
-- [References](#references)
-
-## Summary
-
-
 ## Usage
 
 The project is compiled with Make. Three pre made testfiles are provided to test
