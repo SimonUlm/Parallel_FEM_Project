@@ -14,10 +14,10 @@
 namespace Solver {
 
     static double kInfError = std::numeric_limits<double>::max();
-    constexpr long kMaxItCG = 1e3;
+    constexpr long kMaxItCG = 1e10;
     constexpr double kTolCG = 1e-5;
     constexpr double kOmegaJacobi = 1;
-    constexpr long kMaxItJacobi = 1e6;
+    constexpr long kMaxItJacobi = 1e10;
     constexpr double kTolJacobi = 1e-5;
 
     Util::BlasVector SolveCg(Util::SedMatrix &K, Util::BlasVector &f,
