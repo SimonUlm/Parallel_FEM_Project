@@ -187,7 +187,7 @@ namespace Skeleton {
          */
         Skeleton(long m, long n, long refine_factor) :
                 com_borders_(2 * n * m - n - m),
-                com_border_nodes_(2 * n * m - n - m, pow(2, refine_factor) - 1),
+                com_border_nodes_(2 * n * m - n - m, std::pow(long(2), refine_factor) - 1),
                 n_borders_(2 * n * m - n - m),
                 crosspoints_((m + 1) * (n + 1)) {}
 

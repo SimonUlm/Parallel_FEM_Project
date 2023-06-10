@@ -48,10 +48,6 @@ ifdef OPENMP
   LDFLAGS += -fopenmp
 endif
 
-ifdef OPT
-  CFLAGS += -O3 -funroll-loops -DNDEBUG # -Wpedantic
-endif
-
 CF = $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -O3
 I = -I../Include
 
@@ -105,12 +101,12 @@ lib:
 
 ifneq ($(MPI), true)
     hpc_demo0: lib $(FILE) Makefile
-	    $(CC) $(CF) $(I) -o hpc_demo0 $(FILE) $(CS)
+	    $(CC) $(CF) $(I) -DNEDBUG -o hpc_demo0 $(FILE) $(CS)
 endif
 
 ifeq ($(MPI), true)
     hpc_demo0: lib $(FILE) Makefile
-	    $(CC) $(CF) $(I) -D_MPI -DMIN_REFINES=$(MIN_REFINES) -o hpc_demo0 $(FILE) $(CS)
+	    $(CC) $(CF) $(I) -DNEDBUG -D_MPI -DMIN_REFINES=$(MIN_REFINES) -o hpc_demo0 $(FILE) $(CS)
 endif
 
 

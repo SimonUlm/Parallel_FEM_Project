@@ -52,9 +52,9 @@ namespace Skeleton {
                     // Check documentation for additional information about the formula
                     for (long r = refine; r > 0; --r) {
                         long node = mn_r(m_n, r - 1) * mn_r(n_n, r - 1) + (mn_r(n_n, r - 1) - 1) * m_n;
-                        node += pow(2, r - 1) * j;            // accounting column
-                        node += pow(2, r - 1) * n_n * i;        // accounting row
-                        for (long k = 0; k < pow(2, r - 1); ++k) {
+                        node += std::pow(long(2), r - 1) * j;            // accounting column
+                        node += std::pow(long(2), r - 1) * n_n * i;        // accounting row
+                        for (long k = 0; k < std::pow(long(2), r - 1); ++k) {
                             com_border_nodes_.set_entry(border_index, index, node);
                             node += 1;
                             index += 1;
@@ -81,9 +81,9 @@ namespace Skeleton {
                     // Check documentation for additional information about the formula
                     for (long r = refine; r > 0; --r) {
                         long node = mn_r(m_n, r - 1) * mn_r(n_n, r - 1);
-                        node += pow(2, r - 1) * j;            // accounting column
-                        node += pow(2, r - 1) * n * i;        // accounting row
-                        for (long k = 0; k < pow(2, r - 1); ++k) {
+                        node += std::pow(long(2), r - 1) * j;            // accounting column
+                        node += std::pow(long(2), r - 1) * n * i;        // accounting row
+                        for (long k = 0; k < std::pow(long(2), r - 1); ++k) {
                             com_border_nodes_.set_entry(border_index, index, node);
                             node += 1;
                             index += 1;
@@ -105,7 +105,7 @@ namespace Skeleton {
      */
     long mn_r(long m, long r) {
         // m_ = number of nodes_ in one dimension
-        return (m - 1) * pow(2, r) + 1;
+        return (m - 1) * std::pow(long(2), r) + 1;
     }
 }
 
