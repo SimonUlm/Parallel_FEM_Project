@@ -32,8 +32,7 @@ namespace Solver {
         // r = r - K * u
         K.SymSpmv(-1, u, 1, r);
         // w = r
-        w.Copy(r);
-        local_skel.DistributedToAccumulated(w);
+        local_skel.DistributedToAccumulated(r, w);
         // s = w
         s.Copy(w);
         // sigma = <w, w>
@@ -54,8 +53,7 @@ namespace Solver {
             // r = r - alpha * v
             r.Axpy(-alpha, v);
             // w = r
-            w.Copy(r);
-            local_skel.DistributedToAccumulated(w);
+            local_skel.DistributedToAccumulated(r, w);
             // sigma = <w, r>
             sigma_old = sigma;
             sigma = Solver::ParallelDot(w, r, local_skel);
