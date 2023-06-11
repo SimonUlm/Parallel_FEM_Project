@@ -115,15 +115,9 @@ namespace Mesh {
 
             // set row to zero
             stiff_matrix.zero_row(ind);
-        }
 
-        // Second modification of rhs
-        for (long k = 0; k < n_fxd; ++k) {
-            // Check if k-th boundary_ is part of dirichlet boundaries
-            ind = fixed_nodes_(k);
+	    // write drichlet values to rhs
             b(ind) = u(ind);
         }
-
-
     }
 }
